@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תפריט ספקים – המגדלור לרשויות מקומיות</title>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#07173A;--navy-mid:#0d2555;--navy-light:#1a3a6e;
+  --slate:#4A556C;--slate-light:#8896B3;--white:#fff;--off-white:#F5F7FA;
+  --accent:#E8851C;--accent-hover:#c96f10;--whatsapp:#25D366;
+  --radius:12px;--shadow:0 4px 24px rgba(7,23,58,.12);--shadow-lg:0 8px 40px rgba(7,23,58,.2);
+  --t:.22s ease}
+body{font-family:'Assistant',sans-serif;background:var(--off-white);color:var(--navy);min-height:100vh;font-size:16px;line-height:1.6}
+
+/* HEADER */
+.site-header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.25)}
+.header-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.site-logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--white);cursor:pointer}
+.site-logo img{height:36px;filter:brightness(0) invert(1)}
+.logo-text{font-size:1.1rem;font-weight:700;color:var(--white);line-height:1.2}
+.logo-text span{display:block;font-size:.75rem;font-weight:400;opacity:.8}
+.header-back{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:var(--white);padding:8px 18px;border-radius:8px;cursor:pointer;font-family:'Assistant',sans-serif;font-size:.9rem;font-weight:600;display:none;align-items:center;gap:6px;transition:var(--t)}
+.header-back:hover{background:rgba(255,255,255,.22)}
+.header-back.visible{display:flex}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);color:var(--white);padding:56px 24px 48px;text-align:center}
+.hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;margin-bottom:12px;line-height:1.2}
+.hero p{font-size:1.1rem;opacity:.85;max-width:600px;margin:0 auto;font-weight:400}
+
+/* CATEGORIES */
+.categories-section{max-width:1200px;margin:0 auto;padding:48px 24px 56px}
+.section-title{font-size:1.4rem;font-weight:700;color:var(--navy);margin-bottom:28px;display:flex;align-items:center;gap:10px}
+.section-title::after{content:'';flex:1;height:2px;background:linear-gradient(to left,transparent,var(--slate-light))}
+.categories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+.cat-card{background:var(--white);border-radius:var(--radius);padding:32px 24px;cursor:pointer;transition:var(--t);box-shadow:var(--shadow);border:2px solid transparent;text-align:center;position:relative;overflow:hidden}
+.cat-card::before{content:'';position:absolute;top:0;right:0;width:5px;height:100%;background:var(--accent);opacity:0;transition:var(--t)}
+.cat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.cat-card:hover::before{opacity:1}
+.cat-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.8rem}
+.cat-name{font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:8px}
+.cat-count{font-size:.85rem;color:var(--slate);font-weight:500}
+.cat-count .highlight{color:var(--accent);font-weight:700}
+
+/* FILTERS */
+.cat-page-header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);color:var(--white);padding:40px 24px 36px}
+.cat-page-header-inner{max-width:1200px;margin:0 auto}
+.cat-page-title{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;margin-bottom:8px}
+.cat-page-subtitle{font-size:1rem;opacity:.8}
+.filters-bar{background:var(--white);border-bottom:1px solid #E0E6EF;padding:16px 24px;position:sticky;top:68px;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.filters-bar-inner{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.filter-label{font-size:.85rem;font-weight:700;color:var(--slate);white-space:nowrap}
+.filter-select{padding:7px 32px 7px 12px;border:1.5px solid #D0D8E8;border-radius:8px;background:var(--white);font-family:'Assistant',sans-serif;font-size:.88rem;font-weight:500;color:var(--navy);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2307173A' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 10px center;transition:var(--t);min-width:160px}
+.filter-select:hover{border-color:var(--navy-light)}
+.filter-select:focus{outline:none;border-color:var(--navy)}
+.results-count{margin-right:auto;font-size:.85rem;color:var(--slate);font-weight:500}
+
+/* ITEMS */
+.items-section{max-width:1200px;margin:0 auto;padding:32px 24px 56px}
+.items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.item-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:var(--t);border:2px solid transparent;display:flex;flex-direction:column}
+.item-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+.item-card-top{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);padding:18px 20px;position:relative}
+.item-type-badge{position:absolute;top:12px;left:12px;padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:700}
+.badge-supplier{background:var(--accent);color:var(--white)}
+.badge-doc{background:rgba(255,255,255,.2);color:var(--white);border:1px solid rgba(255,255,255,.4)}
+.item-name{color:var(--white);font-size:1rem;font-weight:700;line-height:1.3;padding-left:60px}
+.item-card-body{padding:16px 20px;flex:1;display:flex;flex-direction:column;gap:10px}
+.item-meta{display:flex;flex-wrap:wrap;gap:6px}
+.meta-tag{padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:600;background:#EEF2FA;color:var(--navy)}
+.meta-tag.topic{background:#FEF3E2;color:#8B4A00}
+.item-contact-preview{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--slate);margin-top:auto}
+.item-contact-preview .contact-name{font-weight:600;color:var(--navy)}
+.item-files-count{display:flex;align-items:center;gap:5px;font-size:.78rem;color:var(--accent);font-weight:600}
+.item-card-footer{padding:12px 20px;border-top:1px solid #EEF2FA;display:flex;align-items:center;justify-content:space-between}
+.view-btn{font-size:.85rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:4px}
+.gafan-badge{display:inline-flex;align-items:center;gap:4px;background:#E8F5E9;color:#1B5E20;padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:700}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(7,23,58,.65);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--white);border-radius:16px;max-width:760px;width:100%;margin:auto;box-shadow:var(--shadow-lg);overflow:hidden;transform:translateY(20px);transition:transform .25s ease}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);padding:28px 28px 24px;position:relative}
+.modal-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);border:none;color:var(--white);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:var(--t)}
+.modal-close:hover{background:rgba(255,255,255,.3)}
+.modal-type-badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:.75rem;font-weight:700;margin-bottom:10px}
+.modal-title{font-size:1.35rem;font-weight:800;color:var(--white);line-height:1.3}
+.modal-body{padding:28px}
+.modal-section{margin-bottom:24px}
+.modal-section-title{font-size:.82rem;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #E8EDF5}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.info-item{background:var(--off-white);border-radius:8px;padding:10px 12px}
+.info-item-label{font-size:.72rem;font-weight:600;color:var(--slate);margin-bottom:3px}
+.info-item-value{font-size:.88rem;font-weight:600;color:var(--navy)}
+.tags-row{display:flex;flex-wrap:wrap;gap:6px}
+.tag{padding:4px 12px;border-radius:20px;font-size:.8rem;font-weight:600}
+.tag-navy{background:#EEF2FA;color:var(--navy)}
+.tag-green{background:#E8F5E9;color:#1B5E20}
+.contact-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.contact-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:8px;font-family:'Assistant',sans-serif;font-size:.9rem;font-weight:700;text-decoration:none;transition:var(--t);cursor:pointer;border:none}
+.btn-email{background:var(--navy);color:var(--white)}
+.btn-email:hover{background:var(--navy-light)}
+.btn-phone{background:#1a73e8;color:var(--white)}
+.btn-phone:hover{background:#1557b0}
+.btn-whatsapp{background:var(--whatsapp);color:var(--white)}
+.btn-whatsapp:hover{background:#1eb354}
+
+/* FILES */
+.files-list{display:flex;flex-direction:column;gap:10px}
+.file-item{background:var(--off-white);border-radius:8px;border:1px solid #E0E6EF;overflow:hidden;transition:var(--t)}
+.file-item:hover{border-color:var(--accent)}
+.file-item-header{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer}
+.file-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.file-icon-pdf{background:#FDECEA}
+.file-icon-word{background:#E3F2FD}
+.file-icon-ppt{background:#FFF3E0}
+.file-icon-img{background:#F3E5F5}
+.file-icon-other{background:#F5F5F5}
+.file-info{flex:1;min-width:0}
+.file-name{font-size:.88rem;font-weight:600;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file-ext{font-size:.72rem;color:var(--slate);text-transform:uppercase}
+.file-actions{display:flex;gap:8px;flex-shrink:0}
+.file-view-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:var(--navy);color:var(--white);border-radius:6px;font-family:'Assistant',sans-serif;font-size:.8rem;font-weight:700;text-decoration:none;transition:var(--t);cursor:pointer;border:none}
+.file-view-btn:hover{background:var(--accent)}
+.file-view-btn.secondary{background:transparent;color:var(--navy);border:1.5px solid #D0D8E8}
+.file-view-btn.secondary:hover{background:#EEF2FA;border-color:var(--navy)}
+
+/* INLINE VIEWER */
+.file-viewer{display:none;border-top:1px solid #E0E6EF;background:#000}
+.file-viewer.open{display:block}
+.file-viewer iframe,.file-viewer img{width:100%;border:none;display:block}
+.file-viewer iframe{height:500px}
+.file-viewer img{max-height:600px;object-fit:contain;background:#fff}
+.viewer-loading{padding:24px;text-align:center;color:var(--slate);font-size:.9rem}
+
+/* EMPTY / UTILS */
+.empty-state{text-align:center;padding:64px 24px;color:var(--slate)}
+.empty-state-icon{font-size:3rem;margin-bottom:16px}
+.empty-state h3{font-size:1.2rem;font-weight:700;margin-bottom:8px;color:var(--navy)}
+.home-view{display:block}
+.cat-view{display:none}
+body.in-category .home-view{display:none}
+body.in-category .cat-view{display:block}
+body.modal-open{overflow:hidden}
+.site-footer{background:var(--navy);color:rgba(255,255,255,.7);text-align:center;padding:24px;font-size:.85rem}
+.site-footer a{color:rgba(255,255,255,.85)}
+@media(max-width:640px){
+  .hero{padding:36px 16px 32px}
+  .categories-section{padding:32px 16px 40px}
+  .items-section{padding:20px 16px 40px}
+  .filters-bar{padding:12px 16px}
+  .modal-body{padding:18px}
+  .modal-header{padding:20px}
+  .info-grid{grid-template-columns:1fr}
+  .items-grid{grid-template-columns:1fr}
+  .categories-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .cat-card{padding:20px 14px}
+  .filter-select{min-width:120px}
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="site-logo" onclick="goHome()">
+      <img src="https://ha-migdalor.co.il/wp-content/uploads/2023/04/menu_icon_new.svg" alt="המגדלור" onerror="this.style.display='none'">
+      <div class="logo-text">המגדלור<span>תפריט ספקים לרשויות מקומיות</span></div>
+    </div>
+    <button class="header-back" id="backBtn" onclick="goHome()">&#8592; חזרה לתפריט הראשי</button>
+  </div>
+</header>
+
+<div class="home-view">
+  <div class="hero">
+    <h1>תפריט ספקים ומשאבים</h1>
+    <p>בחרו תחום ראשי כדי לגלות את כל הספקים, התוכניות והמשאבים הרלוונטיים לרשות המקומית שלכם</p>
+  </div>
+  <div class="categories-section">
+    <div class="section-title">תחומים ראשיים</div>
+    <div class="categories-grid" id="categoriesGrid"></div>
+  </div>
+</div>
+
+<div class="cat-view">
+  <div class="cat-page-header">
+    <div class="cat-page-header-inner">
+      <div class="cat-page-title" id="catPageTitle"></div>
+      <div class="cat-page-subtitle" id="catPageSubtitle"></div>
+    </div>
+  </div>
+  <div class="filters-bar">
+    <div class="filters-bar-inner">
+      <span class="filter-label">סנן לפי:</span>
+      <select class="filter-select" id="filterDept" onchange="applyFilters()"><option value="">כל המחלקות</option></select>
+      <select class="filter-select" id="filterTopic" onchange="applyFilters()"><option value="">כל הנושאים</option></select>
+      <select class="filter-select" id="filterAudience" onchange="applyFilters()"><option value="">כל קהלי היעד</option></select>
+      <select class="filter-select" id="filterType" onchange="applyFilters()">
+        <option value="">כל הסוגים</option>
+        <option value="ספק">ספקים</option>
+        <option value="מסמך המלצות">מסמכים</option>
+      </select>
+      <span class="results-count" id="resultsCount"></span>
+    </div>
+  </div>
+  <div class="items-section">
+    <div class="items-grid" id="itemsGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="empty-state-icon">🔍</div>
+      <h3>לא נמצאו פריטים</h3>
+      <p>נסו לשנות את הפילטרים</p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-type-badge" id="modalBadge"></div>
+      <div class="modal-title" id="modalTitle"></div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  המגדלור – חינוך פוליטי לדמוקרטיה ליברלית בישראל &nbsp;|&nbsp;
+  <a href="https://ha-migdalor.co.il" target="_blank">ha-migdalor.co.il</a>
+</footer>
+
+<script>
+const DATA = {"categories": ["חזון ויעוד", "כח אדם", "תכניות חינוכיות וקהילתיות", "תרבות ארגונית", "שותפויות ומשאבים"], "items": [{"name": "הצעה לתהליך לכתיבת חזון/ הכשרה", "category": "חזון ויעוד", "dept": "מטה", "contactName": "", "phone": "", "email": "", "audience": "צוות רשותי", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008418978/ייעוד וייחוד - הצעה לתהליך כתיבת חזון רשותי.docx", "name": "ייעוד וייחוד - הצעה לתהליך כתיבת חזון רשותי.docx"}, {"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008421021/תהליך גיבוש חזון רשותי.pdf", "name": "תהליך גיבוש חזון רשותי.pdf"}, {"url": "https://idea819588.monday.com/protected_static/14953797/resources/3073126957/תהליך גיבוש חזון.pptm", "name": "תהליך גיבוש חזון.pptm"}]}, {"name": "צ'ק ליסט ליברלי למרחב הציבורי", "category": "חזון ויעוד", "dept": "רב זירתי", "contactName": "", "phone": "", "email": "", "audience": "צוות רשותי", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008421413/העשיריה הפותחת.docx", "name": "העשיריה הפותחת.docx"}]}, {"name": "הצעה להקמת גלריה חברתית קהילתית", "category": "חזון ויעוד", "dept": "תרבות", "contactName": "", "phone": "", "email": "", "audience": "צוות רשותי", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008419155/הגלריה הקהילתית.docx", "name": "הגלריה הקהילתית.docx"}]}, {"name": "שילוט עירוני", "category": "חזון ויעוד", "dept": "דוברות", "contactName": "", "phone": "", "email": "", "audience": "צוות רשותי", "topic": "זהות", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008420839/יוצריםות מרחב ליברלי- תהליך למועצת נוער.docx", "name": "יוצריםות מרחב ליברלי- תהליך למועצת נוער.docx"}, {"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008420840/קול קורא לנבחרת מייעצת לוועדת השמות.pdf", "name": "קול קורא לנבחרת מייעצת לוועדת השמות.pdf"}, {"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008420919/ברחובות שלנו - מיזם קהילתי להעלאת מודעות לשמות רחובות.docx", "name": "ברחובות שלנו - מיזם קהילתי להעלאת מודעות לשמות רחובות.docx"}, {"url": "https://idea819588.monday.com/protected_static/14953797/resources/3073127009/וועדת בחירת שמות.pptx", "name": "וועדת בחירת שמות.pptx"}]}, {"name": "תו תקן ליברלי למוסדות ועסקים", "category": "חזון ויעוד", "dept": "רב זירתי", "contactName": "", "phone": "", "email": "", "audience": "צוות רשותי", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008421748/מרחב לכולםן הצעה לתו תקן רשותי.docx", "name": "מרחב לכולםן הצעה לתו תקן רשותי.docx"}]}, {"name": "פנייה לציבור", "category": "חזון ויעוד", "dept": "דוברות", "contactName": "", "phone": "", "email": "", "audience": "צוות רשותי", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008422026/תבנית לנאום של בעלי תפקידים.docx", "name": "תבנית לנאום של בעלי תפקידים.docx"}, {"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008422027/תבנית לתגובה לאירוע.docx", "name": "תבנית לתגובה לאירוע.docx"}]}, {"name": "תקנון פרסום בלוחות רשותיים", "category": "חזון ויעוד", "dept": "דוברות", "contactName": "", "phone": "", "email": "", "audience": "צוות רשותי", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008422855/תקנון לפרסום בלוחות הפרסום העירוניים.docx", "name": "תקנון לפרסום בלוחות הפרסום העירוניים.docx"}]}, {"name": "הכשרות לכח אדם ברשות", "category": "כח אדם", "dept": "רב זירתי", "contactName": "", "phone": "", "email": "", "audience": "צוות רשותי", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3134869335/הכשרות כח אדם- ארגונים להכשרות המשך.docx", "name": "הכשרות כח אדם- ארגונים להכשרות המשך.docx"}, {"url": "https://idea819588.monday.com/protected_static/14953797/resources/3134869336/הכשרות כח אדם- הכשרה כללית.docx", "name": "הכשרות כח אדם- הכשרה כללית.docx"}]}, {"name": "הכשרות לצוותי חינוך", "category": "כח אדם", "dept": "חינוך", "contactName": "", "phone": "", "email": "", "audience": "צוותי חינוך", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3134875501/הכשרות לצוותי חינוך.docx", "name": "הכשרות לצוותי חינוך.docx"}]}, {"name": "השתלמות מורים לחינוך לדמוקרטיה", "category": "כח אדם", "dept": "חינוך", "contactName": "שלו", "phone": "546776654", "email": "", "audience": "צוותי חינוך", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": []}, {"name": "פורום מקצועיים למען הדמוקרטיה", "category": "כח אדם", "dept": "", "contactName": "ניסיון", "phone": "54555555", "email": "nono@gmail.com", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3134919971/פורום מקצועי רשותי לקידום דמוקרטיה ליברלית.docx", "name": "פורום מקצועי רשותי לקידום דמוקרטיה ליברלית.docx"}]}, {"name": "הגדרת תפקיד רכז חינוך לדמוקרטיה", "category": "כח אדם", "dept": "", "contactName": "אור זמיר", "phone": "530535387", "email": "or@gmail.com", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3089688751/תיאור תפקיד - רכזת חינוך לדמוקרטיה.docx", "name": "תיאור תפקיד - רכזת חינוך לדמוקרטיה.docx"}]}, {"name": "הגדרת תפקיד רכז מעורבות חברתית", "category": "כח אדם", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "תיכון", "topic": "מנהיגות", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008428434/תיאור תפקיד רכז.ת מעורבות חברתית.docx", "name": "תיאור תפקיד רכז.ת מעורבות חברתית.docx"}]}, {"name": "הגדרת תפקיד רכז.ת הכנה לצהל", "category": "כח אדם", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "תיכון", "topic": "הכנה לצה\"ל", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008420200/תיאור תפקיד רכז.ת הכנה לצהל.docx", "name": "תיאור תפקיד רכז.ת הכנה לצהל.docx"}]}, {"name": "קוד אתי ארגוני", "category": "כח אדם", "dept": "", "contactName": "ניסיון", "phone": "545555555", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008422252/תקנון ארגוני – קוד אתי רשותי.docx", "name": "תקנון ארגוני – קוד אתי רשותי.docx"}]}, {"name": "לוח אירועים למנהלות משאן רשותיות", "category": "כח אדם", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3008422375/לוח מועדים וחגים למנהלות משאן ברשויות.pdf", "name": "לוח מועדים וחגים למנהלות משאן ברשויות.pdf"}, {"url": "https://idea819588.monday.com/protected_static/14953797/resources/3073127434/לוח מועדים וחגים למנהלות משאן ברשויות.pptx", "name": "לוח מועדים וחגים למנהלות משאן ברשויות.pptx"}]}, {"name": "פורום רכזי ארגונים ותוכניות חבפ", "category": "כח אדם", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3072762653/פורום רכזי תוכניות וארגונים.docx", "name": "פורום רכזי תוכניות וארגונים.docx"}]}, {"name": "מסמך מכוון ליצירה ובחירה של תכניות", "category": "תכניות חינוכיות וקהילתיות", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3134888372/עקרונות מנחים לכתיבה ובחירה של תוכניות חינוכיות וקהילתיות לקידום דמוקרטיה ליברלית ברשות המקומית.docx", "name": "עקרונות מנחים לכתיבה ובחירה של תוכניות חינוכיות וקהילתיות לקידום דמוקרטיה ליברלית ברשות המקומית.docx"}]}, {"name": "לוח שנה דמוקרטי ליברלי מפורט על פי מועדים שבועיים ושנתיים לפי מרכזים וקהלי יעד", "category": "תכניות חינוכיות וקהילתיות", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": []}, {"name": "מגמות על אזוריות דמוקרטיות ליברליות", "category": "תכניות חינוכיות וקהילתיות", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "תיכון", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3089687319/מגמות על אזוריות.docx", "name": "מגמות על אזוריות.docx"}]}, {"name": "מרחבי אקטיביזם לנוער", "category": "תכניות חינוכיות וקהילתיות", "dept": "", "contactName": "ניסיון- תכניתת פלג", "phone": "", "email": "", "audience": "תיכון", "topic": "מנהיגות", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3134914965/מרחב אקטיביזם לנוער.docx", "name": "מרחב אקטיביזם לנוער.docx"}]}, {"name": "הצעה לפעילות ספריה דמוקרטית ליברלי", "category": "תכניות חינוכיות וקהילתיות", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3134917323/הספרייה הרשותית.docx", "name": "הספרייה הרשותית.docx"}]}, {"name": "תכניות מנהיגות וצטיינים  לדוגמא תכניות לנערות ונשים בתחום מנהיגות פוליטית.", "category": "תכניות חינוכיות וקהילתיות", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3089688044/תוכניות מצטיינים ומצטיינות.docx", "name": "תוכניות מצטיינים ומצטיינות.docx"}]}, {"name": "פורומים של הורים ומועצות תלמידים פעילות", "category": "תכניות חינוכיות וקהילתיות", "dept": "", "contactName": "משמר החינוך -ליאור", "phone": "545555555", "email": "", "audience": "הורים", "topic": "מנהיגות", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3134924183/פורום הורים רשותי לקידום דמוקרטיה ליברלית.docx", "name": "פורום הורים רשותי לקידום דמוקרטיה ליברלית.docx"}]}, {"name": "דוגמא לתכנית חינוכית של מרכז דמוקרטיה רשותית", "category": "תכניות חינוכיות וקהילתיות", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": []}, {"name": "תהלכים שיתוף נוער בסוגיות פוליטיות מקומיות שונות", "category": "תרבות ארגונית", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3089689191/הצעה לתהליך שיתוף נוער בסוגיות פוליטיות.docx", "name": "הצעה לתהליך שיתוף נוער בסוגיות פוליטיות.docx"}]}, {"name": "נהלים למניעת גזענות ויצירת שיוון ברשות וסובלנות ברשות לצד קביעת הגבולות האדומים של הרשות", "category": "תרבות ארגונית", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3089689817/מדיניות רשותית למניעת גזענות", "name": "מדיניות רשותית למניעת גזענות"}]}, {"name": "פלטפורמות לעידוד חופש הביטוי ברשתות ובמרחבים ציבוריים שונים ומול הרשות", "category": "תרבות ארגונית", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3155950144/במה מקומית.docx", "name": "במה מקומית.docx"}]}, {"name": "עידוד ויצירת לגיטימציה פעולה בתחום כלפי בעלי תפקידים  לצד גיבוי במידת הצורך", "category": "תרבות ארגונית", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3155964087/יצירת לגיטימציה ארגונית לקידום דמוקרטיה ליברלית ברשות.docx", "name": "יצירת לגיטימציה ארגונית לקידום דמוקרטיה ליברלית ברשות.docx"}]}, {"name": "קריטריונים לבחינת שותפויות", "category": "שותפויות ומשאבים", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": []}, {"name": "דוגמאות לניהול משאבים עירוני באופן מוצאם לערכי הדמוקרטיה (לדוגמא חלקות משאבי הסופרט באופן שווה מגדרית", "category": "שותפויות ומשאבים", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3155981220/כלי להערכת שוויוניות בהקצאת משאבים ברשות.docx", "name": "כלי להערכת שוויוניות בהקצאת משאבים ברשות.docx"}]}, {"name": "דוגמאות לשותפויות בין מועצות דמוקרטיות, יהודיות וערביות", "category": "שותפויות ומשאבים", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3089690140/שיתופי פעולה בין רשויות לקידום חיים משותפים.docx", "name": "שיתופי פעולה בין רשויות לקידום חיים משותפים.docx"}]}, {"name": "מרכז דמוקרטיה רשותי", "category": "שותפויות ומשאבים", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": []}, {"name": "תבחיני גפ\"ן לארגונים", "category": "שותפויות ומשאבים", "dept": "חינוך", "contactName": "", "phone": "", "email": "", "audience": "צוותי חינוך", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3072763774/קריטריונים לבחירת ספקי גפן.docx", "name": "קריטריונים לבחירת ספקי גפן.docx"}]}, {"name": "מאגר תכניות גפ\"ן מומלצות", "category": "שותפויות ומשאבים", "dept": "", "contactName": "", "phone": "", "email": "", "audience": "", "topic": "", "gafan": "", "type": "מסמך המלצות", "files": [{"url": "https://mishmarhinuch.com/gefen/", "name": ""}]}, {"name": "ירושלים שווה", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "נעמה שלם", "phone": "0525552758", "email": "naama@canthink.org.il", "audience": "גילאי חטיבה, גילאי יסודי, נוער (גיל תיכון)", "topic": "זהות דמוקרטית", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3051172915/תפריט סיורים  תשפז.jpg", "name": "תפריט סיורים  תשפז.jpg"}]}, {"name": "יום בנושא צדק חברתי בבית הספר", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064263991/יופ צדק חברתי ואני בבית ספר.pdf", "name": "יופ צדק חברתי ואני בבית ספר.pdf"}]}, {"name": "יום בנושא מרכז ופריפריה בחברה הישראלית", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064270486/יום בנושא פריפריה ומרכז.pdf", "name": "יום בנושא פריפריה ומרכז.pdf"}]}, {"name": "מי צריך את זה בכלל?! יום בנושא תרבות הצריכה", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "אקלים וסביבה", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064275736/-9927~1.PDF", "name": "-9927~1.PDF"}]}, {"name": "סיור חקר פערים חברתיים בשכונת מרכז הכרמל והדר- חיפה", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064280033/סיור חקר פערים חברתיים.pdf", "name": "סיור חקר פערים חברתיים.pdf"}]}, {"name": "סיור חברה וכלכלה בדרום ת\"א", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064284473/סיור החצר האחורית בדרום תל אביב.pdf", "name": "סיור החצר האחורית בדרום תל אביב.pdf"}]}, {"name": "פסיפס ישראלי רב תרבותי- תהליך בכיתה", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064288766/פסיפס ישראלי רב תרבותי בביהס.pdf", "name": "פסיפס ישראלי רב תרבותי בביהס.pdf"}]}, {"name": "חיים משותפים- יום סיור חוויתי בעכו העתיקה.", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064293758/משחק משימות בעכו - הכרות עם החברה הערבית בישראל.pdf", "name": "משחק משימות בעכו - הכרות עם החברה הערבית בישראל.pdf"}]}, {"name": "יום סיור בנושא החברה החרדית בחיפה", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064296798/חברה חרדית בחיפה.pdf", "name": "חברה חרדית בחיפה.pdf"}]}, {"name": "יום סיור בנושא החברה החרדית בבני ברק.", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064299510/סיור היכרות עם החברה החרדית.pdf", "name": "סיור היכרות עם החברה החרדית.pdf"}]}, {"name": "פסיפס ישראלי רב תרבותי- יום סיור בחיפה", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064302754/יום פסיפס ישראלי - חיפה (1).pdf", "name": "יום פסיפס ישראלי - חיפה (1).pdf"}]}, {"name": "זיכרון אישי וקולקטיבי- יום סיור בהר הרצל", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "אזרחות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064305800/זהות ישראלית הר הרצל.pdf", "name": "זהות ישראלית הר הרצל.pdf"}]}, {"name": "מסע \"בשבילנו\" בשבילי הזהות הישראלית", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "זהות דמוקרטית", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064309038/מסע בשבילנו להגשה לסל נעלה לירושלים.pdf", "name": "מסע בשבילנו להגשה לסל נעלה לירושלים.pdf"}]}, {"name": "דמוקרטיה ופלורליזם- בעקבות רצח רבין", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "זהות דמוקרטית", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064312543/יום בנושא דמוקרטיה וגבולות השיח.pdf", "name": "יום בנושא דמוקרטיה וגבולות השיח.pdf"}]}, {"name": "להיות אזרחים משפיעים בישראל", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שחר שגיא", "phone": "0508341982", "email": "info@pardesnet.org", "audience": "נוער (גיל תיכון)", "topic": "מעורבות ואקטיביזם", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064315485/יום אזרחות פעילה.pdf", "name": "יום אזרחות פעילה.pdf"}]}, {"name": "השתלמות מורים \"בית ודרך\"", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "רונית לוי", "phone": "0526102979", "email": "ronitlevy@msd.org.il", "audience": "צוות חינוכי", "topic": "חינוך פוליטי", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3064320305/פרסום בית ודרך על יסודי תשפז.pdf", "name": "פרסום בית ודרך על יסודי תשפז.pdf"}]}, {"name": "מפחיתים קיטוב, דעות קדומות וגזענות בשיטת 'מצמיחים'", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "דיצה טייכמן", "phone": "0508895695", "email": "move@soscenter.org.il", "audience": "גילאי חטיבה, נוער (גיל תיכון), צוות חינוכי", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3073097708/פלייר למגדלור- הפחתת גזענות וקיטוב.pdf", "name": "פלייר למגדלור- הפחתת גזענות וקיטוב.pdf"}, {"url": "https://idea819588.monday.com/protected_static/14953797/resources/3073100785/יום עיון לבכירים ברשות- המגדלור.pdf", "name": "יום עיון לבכירים ברשות- המגדלור.pdf"}]}, {"name": "\"מוזיאון הדמוקרטיה\" - חברה דמוקרטית  (31458)", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "לירז ג'יבלי", "phone": "0503346463", "email": "chavaya@hamidrasha.email", "audience": "נוער (גיל תיכון)", "topic": "זהות דמוקרטית", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3074615418/מוזיאון הדמוקרטיה תיכון.jpg", "name": "מוזיאון הדמוקרטיה תיכון.jpg"}]}, {"name": "דמוקרטיה: האמנם? - דמוקרטיה מהותית  (31473)", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "לירז ג'יבלי", "phone": "0503346463", "email": "chavaya@hamidrasha.email", "audience": "נוער (גיל תיכון)", "topic": "זהות דמוקרטית", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3074636125/דמוקרטיה האמנם תיכון.jpg", "name": "דמוקרטיה האמנם תיכון.jpg"}]}, {"name": "סדנת זהות (14000)", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "לירז ג'יבלי", "phone": "0503346463", "email": "chavaya@hamidrasha.email", "audience": "נוער (גיל תיכון)", "topic": "אזרחות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3074649983/סדנת זהות תיכון.jpg", "name": "סדנת זהות תיכון.jpg"}]}, {"name": "פסיפס ישראלי (13242)", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "לירז ג'יבלי", "phone": "0503346463", "email": "chavaya@hamidrasha.email", "audience": "נוער (גיל תיכון), גילאי חטיבה, צעירים", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3074656754/פסיפס ישראלי תיכון.jpg", "name": "פסיפס ישראלי תיכון.jpg"}]}, {"name": "בית מדרש מהו\"ת: מורים, הורים, תלמידים  (14011)", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "לירז ג'יבלי", "phone": "0503346463", "email": "chavaya@hamidrasha.email", "audience": "גילאי חטיבה, נוער (גיל תיכון), צוות חינוכי, הורים, צעירים", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3074666078/בית מדרש מהות תיכון.jpg", "name": "בית מדרש מהות תיכון.jpg"}]}, {"name": "זרעים של שותפות:  מפגשי נוער יהודי-ערבי (45486)", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "אסי גרברז", "phone": "0525809908", "email": "asi@hechalutz.com", "audience": "גילאי חטיבה, נוער (גיל תיכון)", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": []}, {"name": "תוכנית \"קול מקומי\" לליווי והכשרה של חברי מועצות עירוניות", "category": "תרבות ארגונית", "dept": "אחר", "contactName": "רותם בר ישראל", "phone": "0524745227", "email": "rotem.b@merkazim.org", "audience": "עובדי הרשות", "topic": "מנהיגות", "gafan": "לא", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3075714934/דיווח שנתי 2026 - קול מקומי.pdf", "name": "דיווח שנתי 2026 - קול מקומי.pdf"}]}, {"name": "השתלמות\\ סדנאות בנושא חינוך נגד גזענות", "category": "תכניות חינוכיות וקהילתיות", "dept": "אחר", "contactName": "סוהיר ג'רג'ורה \\ מסי אייצ'יק", "phone": "0547823131", "email": "suhair@acri.org.il", "audience": "צוות חינוכי, מנהלים בכירים, צעירים", "topic": "חינוך פוליטי", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3074128135/פלייר_השתלמות.png", "name": "פלייר_השתלמות.png"}]}, {"name": "הצעד הבא", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך בלתי פורמאלי", "contactName": "גל ביטון", "phone": "0502608085", "email": "Gal.B@shomerhtz.org.il", "audience": "נוער (גיל תיכון)", "topic": "חינוך פוליטי", "gafan": "בתהליכים", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3083850044/קול קורא רשויות- הצעד הבא.pdf", "name": "קול קורא רשויות- הצעד הבא.pdf"}]}, {"name": "אלף בית בדמוקרטיה - חינוך לאורח חיים דמוקרטי בבית הספר היסודי בגיל הצעיר גן-ו'", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "יולנדה גרינהוט", "phone": "0547222594", "email": "yolanda@adaminstitute.org.il", "audience": "גילאי יסודי, הגיל הרך, צוות חינוכי", "topic": "זהות דמוקרטית", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3084274982/אלף בית בדמוקרטיה - חינוך לאורח חיים דמוקרטי בבית הספר היסודי ובגנים.pdf", "name": "אלף בית בדמוקרטיה - חינוך לאורח חיים דמוקרטי בבית הספר היסודי ובגנים.pdf"}]}, {"name": "קול מקומי - מגוון תוכניות הכשרה ורשת עמיתים עבור חברי וחברות מועצות ומליאות ברשויות, לקידום שוויון, דמוקרטיה וצדק חברתי.", "category": "חזון ויעוד", "dept": "אחר", "contactName": "טלי רביד", "phone": "0526166859", "email": "tali.r@merkazim.org", "audience": "אחר", "topic": "מנהיגות", "gafan": "לא", "type": "ספק", "files": []}, {"name": "הכשרת בני ובנות נוער למנהיגות ולמעורבות חברתית על בסיס ערכי הדמוקרטיה", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "יולנדה גרינהוט", "phone": "0547222594", "email": "yolanda@adaminstitute.org.il", "audience": "נוער (גיל תיכון), צוות חינוכי, גילאי חטיבה", "topic": "מנהיגות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3088686113/הכשרת מנהיגות דמוקרטית צעירה - הכשרת מנהיגות בני ובנות נוער דמוקרטית.pdf", "name": "הכשרת מנהיגות דמוקרטית צעירה - הכשרת מנהיגות בני ובנות נוער דמוקרטית.pdf"}]}, {"name": "אין קצת דמוקרטיה – טיפוח תרבות דמוקרטית ואזרחות פעילה", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "יולנדה גרינהוט", "phone": "0547222594", "email": "yolanda@adaminstitute.org.il", "audience": "גילאי חטיבה, נוער (גיל תיכון), צוות חינוכי", "topic": "חינוך פוליטי", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3088691137/אין קצת דמוקרטיה - טיפוח תרבות דמוקרטית ואזרחות פעילה - רציונל ותכנים.pdf", "name": "אין קצת דמוקרטיה - טיפוח תרבות דמוקרטית ואזרחות פעילה - רציונל ותכנים.pdf"}]}, {"name": "לגדול עם ערכים –חינוך ערכי לגיל הצעיר", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך בלתי פורמאלי", "contactName": "נעמי שלוש מנכ\"לית הזנק 800", "phone": "0587300955", "email": "naomi@start800.org.il", "audience": "הגיל הרך, גילאי יסודי", "topic": "זהות דמוקרטית", "gafan": "בתהליכים", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3088711292/לגדול עם ערכים.docx", "name": "לגדול עם ערכים.docx"}]}, {"name": "להוביל ערכים- תוכנית לפיתוח מקצוע של צוותי חינוך בצהרונים", "category": "כח אדם", "dept": "חינוך בלתי פורמאלי", "contactName": "נעמי שלוש מנכ\"לית הזנק 800", "phone": "0587300955", "email": "naomi@start800.org.il", "audience": "צוות חינוכי", "topic": "מעורבות ואקטיביזם", "gafan": "בתהליכים", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3088714308/להוביל ערכים.docx", "name": "להוביל ערכים.docx"}]}, {"name": "ערכת הדרכה | לציון יום השנה לרצח ראש הממשלה ושר הביטחון יצחק רבין ז\"ל", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "נוער (גיל תיכון), צוות חינוכי, גילאי חטיבה", "topic": "זהות דמוקרטית", "gafan": "כן", "type": "ספק", "files": []}, {"name": "פוליטיקה אחרת: לבנות מחדש את האמון", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "צוות חינוכי, גילאי חטיבה, נוער (גיל תיכון)", "topic": "חינוך פוליטי", "gafan": "כן", "type": "ספק", "files": []}, {"name": "סיור בעקבות מחלוקות בירושלים", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "צוות חינוכי, נוער (גיל תיכון)", "topic": "זהות דמוקרטית", "gafan": "כן", "type": "ספק", "files": []}, {"name": "סמינר לפגוש את האחר", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "נוער (גיל תיכון), צוות חינוכי, גילאי חטיבה", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": []}, {"name": "סמינר אכפת לי", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "גילאי חטיבה", "topic": "אקלים וסביבה", "gafan": "כן", "type": "ספק", "files": []}, {"name": "סמינר יש מקום לכולם.ן", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "נוער (גיל תיכון), גילאי חטיבה, הורים, גילאי יסודי", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": []}, {"name": "סיור ערים מעורבות בעכו", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "צוות חינוכי, נוער (גיל תיכון), גילאי חטיבה", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": []}, {"name": "סמינר לציון יום השנה לרצח ראש הממשלה ושר הביטחון יצחק רבין ז״ל", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "צוות חינוכי, נוער (גיל תיכון), גילאי חטיבה, גילאי יסודי", "topic": "זהות דמוקרטית", "gafan": "כן", "type": "ספק", "files": []}, {"name": "סמינר האדם הדמוקרטי", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "צוות חינוכי, נוער (גיל תיכון), גילאי חטיבה", "topic": "חינוך פוליטי", "gafan": "כן", "type": "ספק", "files": []}, {"name": "חלונות לחברה הישראלית", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "צוות חינוכי, נוער (גיל תיכון), גילאי חטיבה", "topic": "מעורבות ואקטיביזם", "gafan": "כן", "type": "ספק", "files": []}, {"name": "סיור גיוון תרבותי בחיפה", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "צוות חינוכי, נוער (גיל תיכון), הורים", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": []}, {"name": "עמיתים – דמוקרטיה", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "נוער (גיל תיכון), צוות חינוכי, גילאי חטיבה", "topic": "חינוך פוליטי", "gafan": "כן", "type": "ספק", "files": []}, {"name": "סיור “זכות הצעקה” בתל אביב", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "צוות חינוכי, נוער (גיל תיכון)", "topic": "חינוך פוליטי", "gafan": "כן", "type": "ספק", "files": []}, {"name": "סיור צדק חברתי שפירא, תל-אביב", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "נוער (גיל תיכון), צוות חינוכי", "topic": "זהות דמוקרטית", "gafan": "כן", "type": "ספק", "files": []}, {"name": "פדגוגיה של תקווה – השתלמות", "category": "חזון ויעוד", "dept": "חינוך פורמאלי", "contactName": "שמואל לוי", "phone": "0546734156", "email": "meorer@meorer.co.il", "audience": "צוות חינוכי", "topic": "חינוך פוליטי", "gafan": "כן", "type": "ספק", "files": []}, {"name": "בשביל הדיאלוג : חינוך לדמוקרטיה, לסובלנות והתמודדות עם תופעת הגזענות וההסתה ולהגנה על חופש הביטוי", "category": "תכניות חינוכיות וקהילתיות", "dept": "", "contactName": "יולנדה גרינהוט", "phone": "0547222594", "email": "yolanda@adaminstitute.org.il", "audience": "נוער (גיל תיכון), צוות חינוכי, גילאי חטיבה, צעירים", "topic": "מעורבות ואקטיביזם", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3088755718/בשביל הדיאלוג - חינוך לדמוקרטיה", "name": "בשביל הדיאלוג - חינוך לדמוקרטיה"}]}, {"name": "תוכנית הכשרה להנחיית קבוצות בשיטת מדרשת אדם \"בצוותא – המרה של קונפליקט בדילמה\"", "category": "חזון ויעוד", "dept": "חינוך בלתי פורמאלי", "contactName": "יולנדה גרינהוט", "phone": "0547222594", "email": "yolanda@adaminstitute.org.il", "audience": "צוות חינוכי, הורים, עובדי הרשות, מנהלים בכירים, תושבים- כללי", "topic": "חינוך פוליטי", "gafan": "לא", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3088835006/תוכנית הכשרה להנחיית קבוצות בשיטת מדרשת אדם - בצוותא המרה של קונפליקט בדילמה.pdf", "name": "תוכנית הכשרה להנחיית קבוצות בשיטת מדרשת אדם - בצוותא המרה של קונפליקט בדילמה.pdf"}]}, {"name": "עתיד הדמוקרטיה בידיים שלנו", "category": "שותפויות ומשאבים", "dept": "חינוך בלתי פורמאלי", "contactName": "יולנדה גרינהוט", "phone": "0547222594", "email": "yolanda@adaminstitute.org.il", "audience": "צוות חינוכי, הורים, הגיל השלישי, צעירים, עובדי הרשות, מנהלים בכירים, אחר", "topic": "חינוך פוליטי", "gafan": "לא", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3088849472/דמוקרטיה בידיים שלנו - רציונל ויישום התוכנית .pdf", "name": "דמוקרטיה בידיים שלנו - רציונל ויישום התוכנית .pdf"}]}, {"name": "סיור 'כלים שלובים'", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "Naama Shelem", "phone": "0525552758", "email": "naama@canthink.org.il", "audience": "גילאי יסודי, גילאי חטיבה, נוער (גיל תיכון)", "topic": "יהדות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3089821720/כלים שלובים.png", "name": "כלים שלובים.png"}]}, {"name": "סיור 'מתכון למעורב(ות) ירושלמי(ת)'", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "Naama Shelem", "phone": "0525552758", "email": "naama@canthink.org.il", "audience": "נוער (גיל תיכון), גילאי חטיבה", "topic": "אזרחות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3089834305/מתכון למעורב ירושלמי.png", "name": "מתכון למעורב ירושלמי.png"}]}, {"name": "סיור 'לא איחרנו את הרכבת'", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "Naama Shelem", "phone": "0525552758", "email": "naama@canthink.org.il", "audience": "גילאי יסודי, גילאי חטיבה", "topic": "מנהיגות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3089862042/לא איחרנו את הרכבת.png", "name": "לא איחרנו את הרכבת.png"}]}, {"name": "סיור 'לִצְפּוֹת וּלְצַפּוֹת'", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "Naama Shelem", "phone": "0525552758", "email": "naama@canthink.org.il", "audience": "נוער (גיל תיכון)", "topic": "יחסים בין בקבוצות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3089879074/לצפות ולצפות.png", "name": "לצפות ולצפות.png"}]}, {"name": "סיור 'סליחות עם שחר'", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "נעמה שלם", "phone": "0525552758", "email": "naama@canthink.org.il", "audience": "גילאי חטיבה, נוער (גיל תיכון)", "topic": "יהדות", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3089898858/סליחות עם שחר.png", "name": "סליחות עם שחר.png"}]}, {"name": "סיור ככלי חינוכי", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "נעמה שלם", "phone": "0525552758", "email": "naama@canthink.org.il", "audience": "צוות חינוכי, הורים, הגיל השלישי", "topic": "מנהיגות", "gafan": "כן", "type": "ספק", "files": []}, {"name": "סדנת סיפור אישי", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "", "phone": "0525603000", "email": "office@hoshen.org", "audience": "גילאי חטיבה, נוער (גיל תיכון)", "topic": "מגדר", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3096147293/קטלוג סדנאות חושן.pdf", "name": "קטלוג סדנאות חושן.pdf"}]}, {"name": "הכשרה לנותני שירות ומקבלי קהל", "category": "כח אדם", "dept": "מרחב ציבורי", "contactName": "מעיין שלם", "phone": "0506888053", "email": "pt@hoshen.org", "audience": "עובדי הרשות", "topic": "מגדר", "gafan": "לא", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3096272052/קטלוג לרשויות - המגדלור.pdf", "name": "קטלוג לרשויות - המגדלור.pdf"}]}, {"name": "הכשרה למנהלים ולאגף משאבי אנוש -  כלים ישומיים ליצירת סביבת עבודה מכלילה עבור להט\"ב", "category": "כח אדם", "dept": "אחר", "contactName": "מעיין שלם", "phone": "0506888053", "email": "pt@hoshen.org", "audience": "מנהלים בכירים, עובדי הרשות", "topic": "מגדר", "gafan": "לא", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3096287418/קטלוג לרשויות - המגדלור.pdf", "name": "קטלוג לרשויות - המגדלור.pdf"}]}, {"name": "עולם התעסוקה בדגש טרנס*", "category": "כח אדם", "dept": "אחר", "contactName": "מעיין שלם", "phone": "0506888053", "email": "pt@hoshen.org", "audience": "עובדי הרשות, מנהלים בכירים", "topic": "מגדר", "gafan": "לא", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3096293625/קטלוג לרשויות - המגדלור.pdf", "name": "קטלוג לרשויות - המגדלור.pdf"}]}, {"name": "סדנת מבוא - סוגיות פסיכו-סוציאליות בעבודה עם להט\"ב", "category": "תכניות חינוכיות וקהילתיות", "dept": "רווחה", "contactName": "מעיין שלם", "phone": "0506888053", "email": "pt@hoshen.org", "audience": "צוות חינוכי, עובדי הרשות", "topic": "מגדר", "gafan": "לא", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3096299573/קטלוג לרשויות - המגדלור.pdf", "name": "קטלוג לרשויות - המגדלור.pdf"}]}, {"name": "סדנת המשך - גורמי ומאפייני סיכון ייחודיים בקהילת הלהט\"ב", "category": "תכניות חינוכיות וקהילתיות", "dept": "רווחה", "contactName": "מעיין שלם", "phone": "0506888053", "email": "pt@hoshen.org", "audience": "צוות חינוכי, עובדי הרשות", "topic": "מגדר", "gafan": "לא", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3096304700/קטלוג לרשויות - המגדלור.pdf", "name": "קטלוג לרשויות - המגדלור.pdf"}]}, {"name": "להט\"ב זהב", "category": "תכניות חינוכיות וקהילתיות", "dept": "קהילה", "contactName": "מעיין שלם", "phone": "0506888053", "email": "pt@hoshen.org", "audience": "עובדי הרשות, הגיל השלישי", "topic": "מגדר", "gafan": "לא", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3096312657/קטלוג לרשויות - המגדלור.pdf", "name": "קטלוג לרשויות - המגדלור.pdf"}]}, {"name": "הכשרה בתחום להט״ב לכוחות הביטחון", "category": "חזון ויעוד", "dept": "מרחב ציבורי", "contactName": "מעיין שלם", "phone": "0506888053", "email": "pt@hoshen.org", "audience": "עובדי הרשות", "topic": "מגדר", "gafan": "לא", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3096322748/קטלוג לרשויות - המגדלור.pdf", "name": "קטלוג לרשויות - המגדלור.pdf"}]}, {"name": "סדנת הסיפור האישי", "category": "תכניות חינוכיות וקהילתיות", "dept": "תרבות", "contactName": "מעיין שלם", "phone": "0506888053", "email": "pt@hoshen.org", "audience": "הורים, הגיל השלישי, צעירים, עובדי הרשות, תושבים- כללי", "topic": "מגדר", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3096346171/קטלוג לרשויות - המגדלור.pdf", "name": "קטלוג לרשויות - המגדלור.pdf"}]}, {"name": "הרצאת המסע להורות", "category": "תכניות חינוכיות וקהילתיות", "dept": "תרבות", "contactName": "מעיין שלם", "phone": "0506888053", "email": "pt@hoshen.org", "audience": "הורים, צעירים, תושבים- כללי", "topic": "מגדר", "gafan": "לא", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3096358250/קטלוג לרשויות - המגדלור.pdf", "name": "קטלוג לרשויות - המגדלור.pdf"}]}, {"name": "להט\"ב לחט\"ב", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "ניב", "phone": "0525603000", "email": "office@hoshen.org", "audience": "גילאי חטיבה", "topic": "מגדר", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3098080812/קטלוג סדנאות חושן.pdf", "name": "קטלוג סדנאות חושן.pdf"}]}, {"name": "סדנת חדר מורות ליצירת מרחבים בטוחים בבית הספר", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "ניב", "phone": "0525603000", "email": "office@hoshen.org", "audience": "צוות חינוכי", "topic": "מגדר", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3098089335/קטלוג סדנאות חושן.pdf", "name": "קטלוג סדנאות חושן.pdf"}]}, {"name": "אם לא נשאל איך נדע - סל כלים לשיח עם בני נוער", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "ניב", "phone": "0525603000", "email": "office@hoshen.org", "audience": "צוות חינוכי", "topic": "מגדר", "gafan": "כן", "type": "ספק", "files": [{"url": "https://idea819588.monday.com/protected_static/14953797/resources/3098095574/קטלוג סדנאות חושן.pdf", "name": "קטלוג סדנאות חושן.pdf"}]}, {"name": "סדנת חדר מורים יסודי", "category": "תכניות חינוכיות וקהילתיות", "dept": "חינוך פורמאלי", "contactName": "ניב", "phone": "0525603000", "email": "office@hoshen.org", "audience": "צוות חינוכי", "topic": "מגדר", "gafan": "כן", "type": "ספק", "files": []}]};
+
+const CAT_ICONS = {'חזון ויעוד':'🏛️','כח אדם':'👥','תכניות חינוכיות וקהילתיות':'📚','תרבות ארגונית':'🌱','שותפויות ומשאבים':'🤝'};
+function getCatIcon(c){return CAT_ICONS[c]||'📂'}
+
+function fileInfo(name){
+  const ext=(name.split('.').pop()||'').toLowerCase();
+  if(ext==='pdf') return{emoji:'📄',cls:'file-icon-pdf',type:'pdf'};
+  if(['doc','docx'].includes(ext)) return{emoji:'📝',cls:'file-icon-word',type:'doc'};
+  if(['ppt','pptx','pptm'].includes(ext)) return{emoji:'📊',cls:'file-icon-ppt',type:'ppt'};
+  if(['jpg','jpeg','png','gif'].includes(ext)) return{emoji:'🖼️',cls:'file-icon-img',type:'img'};
+  return{emoji:'📎',cls:'file-icon-other',type:'other'};
+}
+
+function getViewerUrl(url, type){
+  if(type==='pdf') return url; // iframe direct
+  if(type==='img') return url;
+  // Google Docs Viewer for DOCX/PPTX
+  return 'https://docs.google.com/viewer?url='+encodeURIComponent(url)+'&embedded=true';
+}
+
+let _renderedItems=[];
+
+/* ---- HOME ---- */
+function renderHome(){
+  const grid=document.getElementById('categoriesGrid');
+  const cats=DATA.categories.filter(c=>c&&c!=='nan');
+  grid.innerHTML=cats.map(cat=>{
+    const items=DATA.items.filter(i=>i.category===cat);
+    const sup=items.filter(i=>i.type==='ספק').length;
+    const doc=items.filter(i=>i.type==='מסמך המלצות').length;
+    return `<div class="cat-card" onclick="openCategory('${escH(cat)}')">
+      <div class="cat-icon">${getCatIcon(cat)}</div>
+      <div class="cat-name">${escH(cat)}</div>
+      <div class="cat-count">
+        ${sup>0?`<span class="highlight">${sup}</span> ספקים`:''}
+        ${sup>0&&doc>0?' · ':''}
+        ${doc>0?`<span class="highlight">${doc}</span> מסמכים`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ---- CATEGORY ---- */
+let currentItems=[];
+function openCategory(cat){
+  currentItems=DATA.items.filter(i=>i.category===cat);
+  document.getElementById('catPageTitle').textContent=cat;
+  const sup=currentItems.filter(i=>i.type==='ספק').length;
+  document.getElementById('catPageSubtitle').textContent=`${currentItems.length} פריטים · ${sup} ספקים`;
+  buildFilters();
+  applyFilters();
+  document.body.classList.add('in-category');
+  document.getElementById('backBtn').classList.add('visible');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildFilters(){
+  const depts=[...new Set(currentItems.map(i=>i.dept).filter(Boolean))].sort();
+  const topics=[...new Set(currentItems.map(i=>i.topic).filter(Boolean))].sort();
+  const auds=[...new Set(currentItems.flatMap(i=>(i.audience||'').split(',').map(a=>a.trim())).filter(Boolean))].sort();
+  fillSel('filterDept',depts,'כל המחלקות');
+  fillSel('filterTopic',topics,'כל הנושאים');
+  fillSel('filterAudience',auds,'כל קהלי היעד');
+  document.getElementById('filterType').value='';
+}
+
+function fillSel(id,opts,ph){
+  const s=document.getElementById(id);
+  s.innerHTML=`<option value="">${ph}</option>`+opts.map(o=>`<option value="${escA(o)}">${escH(o)}</option>`).join('');
+}
+
+function applyFilters(){
+  const dept=document.getElementById('filterDept').value;
+  const topic=document.getElementById('filterTopic').value;
+  const aud=document.getElementById('filterAudience').value;
+  const type=document.getElementById('filterType').value;
+  const filtered=currentItems.filter(i=>{
+    if(dept&&i.dept!==dept) return false;
+    if(topic&&i.topic!==topic) return false;
+    if(aud&&!(i.audience||'').includes(aud)) return false;
+    if(type&&i.type!==type) return false;
+    return true;
+  });
+  renderItems(filtered);
+  document.getElementById('resultsCount').textContent=filtered.length+' פריטים';
+  document.getElementById('emptyState').style.display=filtered.length===0?'block':'none';
+}
+
+function renderItems(items){
+  _renderedItems=items;
+  const grid=document.getElementById('itemsGrid');
+  if(!items.length){grid.innerHTML='';return;}
+  grid.innerHTML=items.map((item,idx)=>{
+    const isS=item.type==='ספק';
+    const tags=[
+      item.dept?`<span class="meta-tag">${escH(item.dept)}</span>`:'',
+      item.topic?`<span class="meta-tag topic">${escH(item.topic)}</span>`:''
+    ].filter(Boolean).join('');
+    const hasContact=item.contactName||item.phone;
+    const contact=hasContact?`<div class="item-contact-preview"><span>👤</span><span class="contact-name">${escH(item.contactName||'')}</span>${item.phone?`<span>📞 ${escH(item.phone)}</span>`:''}</div>`:'';
+    const fc=item.files?item.files.length:0;
+    const files=fc>0?`<div class="item-files-count">📎 ${fc} ${fc===1?'קובץ':'קבצים'}</div>`:'';
+    return `<div class="item-card" onclick="openModal(${idx})">
+      <div class="item-card-top">
+        <span class="item-type-badge ${isS?'badge-supplier':'badge-doc'}">${isS?'ספק':'מסמך המלצות'}</span>
+        <div class="item-name">${escH(item.name)}</div>
+      </div>
+      <div class="item-card-body">
+        <div class="item-meta">${tags}</div>
+        ${contact}${files}
+      </div>
+      <div class="item-card-footer">
+        <span class="view-btn">לפרטים נוספים ←</span>
+        ${item.gafan==='כן'?'<span class="gafan-badge">✓ גפ"ן</span>':''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ---- MODAL ---- */
+function openModal(idx){
+  const item=_renderedItems[idx];
+  if(!item) return;
+  const isS=item.type==='ספק';
+  const badge=document.getElementById('modalBadge');
+  badge.textContent=isS?'ספק':'מסמך המלצות';
+  badge.className='modal-type-badge '+(isS?'badge-supplier':'badge-doc');
+  document.getElementById('modalTitle').textContent=item.name;
+
+  let html='';
+
+  // Info
+  const info=[
+    item.category?{l:'תחום ראשי',v:item.category}:null,
+    item.dept?{l:'שיוך מחלקתי',v:item.dept}:null,
+    item.topic?{l:'נושא תוכן',v:item.topic}:null,
+    item.gafan==='כן'?{l:'מאגר גפ"ן',v:'✓ קיים'}:null
+  ].filter(Boolean);
+  if(info.length){
+    html+=`<div class="modal-section"><div class="modal-section-title">פרטי הפריט</div><div class="info-grid">${info.map(i=>`<div class="info-item"><div class="info-item-label">${escH(i.l)}</div><div class="info-item-value">${escH(i.v)}</div></div>`).join('')}</div></div>`;
+  }
+
+  // Audience
+  if(item.audience){
+    const auds=item.audience.split(',').map(a=>a.trim()).filter(Boolean);
+    html+=`<div class="modal-section"><div class="modal-section-title">קהל יעד</div><div class="tags-row">${auds.map(a=>`<span class="tag tag-green">👥 ${escH(a)}</span>`).join('')}</div></div>`;
+  }
+
+  // Contact
+  const hasC=item.contactName||item.phone||item.email;
+  if(hasC){
+    html+=`<div class="modal-section"><div class="modal-section-title">יצירת קשר</div>`;
+    if(item.contactName) html+=`<div style="font-weight:700;font-size:1rem;margin-bottom:12px">👤 ${escH(item.contactName)}</div>`;
+    html+=`<div class="contact-buttons">`;
+    if(item.email) html+=`<a href="mailto:${escA(item.email)}" class="contact-btn btn-email">✉️ ${escH(item.email)}</a>`;
+    if(item.phone){
+      const c=item.phone.replace(/\D/g,'');
+      const wa=c.startsWith('0')?'972'+c.slice(1):c;
+      html+=`<a href="tel:${escA(item.phone)}" class="contact-btn btn-phone">📞 ${escH(item.phone)}</a>`;
+      html+=`<a href="https://wa.me/${wa}" target="_blank" class="contact-btn btn-whatsapp">💬 וואטסאפ</a>`;
+    }
+    html+=`</div></div>`;
+  }
+
+  // Files
+  if(item.files&&item.files.length>0){
+    html+=`<div class="modal-section"><div class="modal-section-title">קבצים ומסמכים</div><div class="files-list">`;
+    item.files.forEach((f,fi)=>{
+      const inf=fileInfo(f.name);
+      const ext=(f.name.split('.').pop()||'').toUpperCase();
+      const viewUrl=getViewerUrl(f.url, inf.type);
+      const fid=`fv-${idx}-${fi}`;
+      html+=`<div class="file-item">
+        <div class="file-item-header" onclick="toggleViewer('${fid}','${escA(viewUrl)}','${inf.type}')">
+          <div class="file-icon ${inf.cls}">${inf.emoji}</div>
+          <div class="file-info">
+            <div class="file-name">${escH(f.name)}</div>
+            <div class="file-ext">${ext}</div>
+          </div>
+          <div class="file-actions">
+            <button class="file-view-btn" onclick="event.stopPropagation();toggleViewer('${fid}','${escA(viewUrl)}','${inf.type}')">👁 צפה</button>
+            <a href="${escA(f.url)}" target="_blank" class="file-view-btn secondary" onclick="event.stopPropagation()">⬇ הורד</a>
+          </div>
+        </div>
+        <div class="file-viewer" id="${fid}">
+          <div class="viewer-loading">טוען מסמך...</div>
+        </div>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  }
+
+  document.getElementById('modalBody').innerHTML=html;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.classList.add('modal-open');
+}
+
+function toggleViewer(id, url, type){
+  const viewer=document.getElementById(id);
+  if(viewer.classList.contains('open')){
+    viewer.classList.remove('open');
+    return;
+  }
+  // Close other open viewers
+  document.querySelectorAll('.file-viewer.open').forEach(v=>v.classList.remove('open'));
+
+  viewer.classList.add('open');
+  if(!viewer.dataset.loaded){
+    viewer.dataset.loaded='1';
+    if(type==='img'){
+      viewer.innerHTML=`<img src="${url}" alt="תמונה" loading="lazy">`;
+    } else {
+      viewer.innerHTML=`<iframe src="${url}" allowfullscreen></iframe>`;
+    }
+  }
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.classList.remove('modal-open');
+  // Reset viewers
+  document.querySelectorAll('.file-viewer.open').forEach(v=>{v.classList.remove('open');v.dataset.loaded='';v.innerHTML='<div class="viewer-loading">טוען מסמך...</div>';});
+}
+
+function closeModalOnOverlay(e){if(e.target===document.getElementById('modalOverlay'))closeModal()}
+
+/* ---- NAV ---- */
+function goHome(){
+  document.body.classList.remove('in-category');
+  document.getElementById('backBtn').classList.remove('visible');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ---- UTILS ---- */
+function escH(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''}
+function escA(s){return s?String(s).replace(/"/g,'&quot;'):''}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(document.getElementById('modalOverlay').classList.contains('open'))closeModal();
+    else if(document.body.classList.contains('in-category'))goHome();
+  }
+});
+
+renderHome();
+</script>
+</body>
+</html>
