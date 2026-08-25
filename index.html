@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>תפריט ספקים – המגדלור לרשויות מקומיות</title>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Secular+One&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -46,15 +46,15 @@ body{font-family:'Heebo',sans-serif;background:var(--off-white);color:var(--navy
 
 /* ── HERO ────────────────────────────────────────────── */
 .hero{background:linear-gradient(150deg,var(--navy-mid) 0%,var(--navy) 45%,var(--teal) 100%);color:var(--white);padding:56px 24px 48px;text-align:center;position:relative;overflow:hidden}
-.hero-beam{position:absolute;inset:0;pointer-events:none;opacity:.18}
+.hero-beam{position:absolute;inset:0;pointer-events:none;opacity:.42}
 .hero-beam svg{width:100%;height:100%}
-.hero h1{position:relative;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:900;margin-bottom:14px;line-height:1.15;letter-spacing:-.01em}
+.hero h1{position:relative;font-family:'Secular One',sans-serif;font-size:clamp(2.2rem,5vw,3.6rem);font-weight:400;margin-bottom:14px;line-height:1.15;letter-spacing:.01em}
 .hero p{position:relative;font-size:1.1rem;opacity:.88;max-width:600px;margin:0 auto;font-weight:400}
 .hero-badge{position:relative;display:inline-flex;align-items:center;gap:8px;background:rgba(252,184,79,.18);border:1px solid rgba(252,184,79,.45);border-radius:20px;padding:6px 16px;font-size:.84rem;font-weight:700;margin-top:18px;color:var(--gold)}
 
 /* ── CATEGORIES ──────────────────────────────────────── */
 .categories-section{max-width:1200px;margin:0 auto;padding:48px 24px 56px}
-.section-title{font-size:1.25rem;font-weight:800;color:var(--navy);margin-bottom:28px;display:flex;align-items:center;gap:12px;letter-spacing:.01em}
+.section-title{font-family:'Secular One',sans-serif;font-size:1.3rem;font-weight:400;color:var(--navy);margin-bottom:28px;display:flex;align-items:center;gap:12px;letter-spacing:.02em}
 .section-title::after{content:'';flex:1;height:2px;background:linear-gradient(to left,transparent,var(--gold))}
 .categories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
 .cat-card{background:var(--white);border-radius:var(--radius);padding:32px 20px 24px;cursor:pointer;transition:transform var(--t),box-shadow var(--t),border-color var(--t);box-shadow:var(--shadow);border:2px solid transparent;text-align:center;position:relative;overflow:hidden}
@@ -66,7 +66,7 @@ body{font-family:'Heebo',sans-serif;background:var(--off-white);color:var(--navy
 .cat-card:active{transform:translateY(-2px)}
 .cat-icon{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--navy) 0%,var(--teal-mid) 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:2rem;transition:transform var(--t),box-shadow var(--t);box-shadow:0 4px 16px rgba(46,54,143,.25)}
 .cat-card:hover .cat-icon{transform:scale(1.1) rotate(-3deg);box-shadow:0 6px 24px rgba(46,54,143,.35)}
-.cat-name{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:10px;line-height:1.3}
+.cat-name{font-family:'Secular One',sans-serif;font-size:1.1rem;font-weight:400;color:var(--navy);margin-bottom:10px;line-height:1.3}
 .cat-count{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
 .cat-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:700}
 .cat-pill-sup{background:rgba(252,184,79,.2);color:#7a4e00}
@@ -76,7 +76,7 @@ body{font-family:'Heebo',sans-serif;background:var(--off-white);color:var(--navy
 .cat-page-header{background:linear-gradient(150deg,var(--navy-mid) 0%,var(--navy) 55%,var(--teal) 100%);color:var(--white);padding:40px 24px 36px;position:relative;overflow:hidden}
 .cat-page-header::after{content:'';position:absolute;top:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(252,184,79,.15) 0%,transparent 70%);pointer-events:none}
 .cat-page-header-inner{max-width:1200px;margin:0 auto;position:relative}
-.cat-page-title{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;margin-bottom:8px;letter-spacing:-.01em}
+.cat-page-title{font-family:'Secular One',sans-serif;font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:400;margin-bottom:8px;letter-spacing:.01em}
 .cat-page-subtitle{font-size:1rem;opacity:.8}
 .filters-bar{background:var(--white);border-bottom:2px solid rgba(46,54,143,.08);padding:14px 24px;position:sticky;top:68px;z-index:50;box-shadow:0 2px 12px rgba(46,54,143,.08)}
 .filters-bar-inner{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
@@ -130,7 +130,7 @@ body{font-family:'Heebo',sans-serif;background:var(--off-white);color:var(--navy
 .modal-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
 .modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
 .modal-type-badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:.75rem;font-weight:700;margin-bottom:10px}
-.modal-title{font-size:1.35rem;font-weight:900;color:var(--white);line-height:1.3;letter-spacing:-.01em}
+.modal-title{font-family:'Secular One',sans-serif;font-size:1.4rem;font-weight:400;color:var(--white);line-height:1.3;letter-spacing:.01em}
 .modal-body{padding:28px;background:var(--white)}
 .modal-section{margin-bottom:22px}
 .modal-section-title{font-size:.8rem;font-weight:700;color:var(--teal-mid);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid rgba(46,54,143,.1);display:flex;align-items:center;gap:6px}
@@ -223,12 +223,32 @@ body.modal-open{overflow:hidden}
 <div class="home-view">
   <div class="hero anim-hero">
     <div class="hero-beam" aria-hidden="true">
-      <svg viewBox="0 0 1200 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="0,0 420,340 0,340" fill="#fcb84f" opacity=".55"/>
-        <polygon points="0,0 280,340 0,340" fill="#fff" opacity=".25"/>
-        <polygon points="1200,0 780,340 1200,340" fill="#38d1d6" opacity=".3"/>
-        <circle cx="100" cy="40" r="120" fill="#fcb84f" opacity=".2"/>
-        <circle cx="1100" cy="60" r="90" fill="#38d1d6" opacity=".15"/>
+      <svg viewBox="0 0 1200 360" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="hglow" cx="50%" cy="0%" r="65%">
+            <stop offset="0%" stop-color="#fcb84f" stop-opacity=".35"/>
+            <stop offset="100%" stop-color="#fcb84f" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <!-- Radial glow from top-center (light source) -->
+        <rect width="1200" height="360" fill="url(#hglow)"/>
+        <!-- Main wide gold fan beam from top-center -->
+        <polygon points="600,0 0,360 1200,360" fill="#fcb84f" opacity=".28"/>
+        <!-- Focused inner beam -->
+        <polygon points="600,0 310,360 890,360" fill="#fff" opacity=".15"/>
+        <!-- Sharp core beam -->
+        <polygon points="600,0 480,360 720,360" fill="#fcb84f" opacity=".22"/>
+        <!-- Left teal accent panel -->
+        <polygon points="0,0 0,360 260,360" fill="#38d1d6" opacity=".22"/>
+        <!-- Right medium teal panel -->
+        <polygon points="1200,0 1200,360 940,360" fill="#2b9eb5" opacity=".18"/>
+        <!-- Light source corona top-center -->
+        <circle cx="600" cy="0" r="170" fill="#fcb84f" opacity=".22"/>
+        <circle cx="600" cy="0" r="80"  fill="#fff"    opacity=".18"/>
+        <!-- Floating decorative circles (brand motif) -->
+        <circle cx="110" cy="290" r="75" fill="#38d1d6" opacity=".14"/>
+        <circle cx="1085" cy="255" r="95" fill="#2b9eb5" opacity=".12"/>
+        <circle cx="600"  cy="200" r="40" fill="#fcb84f" opacity=".09"/>
       </svg>
     </div>
     <h1>תפריט ספקים ומשאבים</h1>
