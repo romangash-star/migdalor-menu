@@ -49,9 +49,9 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .hero{background:linear-gradient(150deg,#00586f 0%,#1c7d8f 50%,#2b9eb5 100%);color:var(--white);padding:22px 24px 18px;text-align:center;position:relative;overflow:hidden}
 .hero-beam{position:absolute;inset:0;pointer-events:none;opacity:.38}
 .hero-beam svg{width:100%;height:100%}
-.hero-logo-wrap{position:relative;margin-bottom:10px}
-.hero-logo-img{max-height:72px;max-width:220px;width:auto;border-radius:8px;background:rgba(255,255,255,.96);padding:7px 18px;box-shadow:0 4px 18px rgba(0,0,0,.2)}
-.hero h1{position:relative;font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.3rem,3vw,1.9rem);font-weight:400;margin-bottom:6px;line-height:1.2;letter-spacing:.01em}
+.hero-logo-wrap{display:none}
+.hero-logo-img{display:none}
+.hero h1{position:relative;font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:400;margin-bottom:8px;line-height:1.2;letter-spacing:.01em}
 .hero p{position:relative;font-size:.92rem;opacity:.85;max-width:640px;margin:0 auto;font-family:'BrandText','Heebo',sans-serif}
 /* ── INTRO ───────────────────────────────────────────── */
 .intro-section{background:var(--white);padding:20px 24px;border-bottom:2px solid rgba(0,88,111,.08)}
@@ -70,12 +70,16 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .cat-gold{color:#3a2800!important}
 .cat-gold .cat-pill-sup,.cat-gold .cat-pill-doc{background:rgba(58,40,0,.14)!important;color:#3a2800!important}
 .cat-icon{display:none}
-.cat-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1rem,1.6vw,1.35rem);font-weight:400;line-height:1.3;position:relative}
-.cat-desc{font-size:.83rem;line-height:1.6;opacity:.9;flex:1;text-align:right;position:relative;overflow:hidden;display:-webkit-box;-webkit-line-clamp:8;-webkit-box-orient:vertical}
-.cat-count{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:auto;position:relative}
+.cat-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.2rem,2vw,1.7rem);font-weight:400;line-height:1.3;position:relative;z-index:1}
+.cat-desc{font-size:.82rem;line-height:1.6;opacity:.88;flex:1;text-align:right;position:relative;z-index:1;display:none}
+.cat-tooltip{position:absolute;inset:0;border-radius:18px;background:rgba(0,0,0,.78);color:#fff;padding:18px 16px;opacity:0;pointer-events:none;transition:opacity .22s ease;display:flex;align-items:center;font-size:.82rem;line-height:1.65;text-align:right;overflow-y:auto}
+.cat-card:hover .cat-tooltip{opacity:1;pointer-events:none}
+.cat-count{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:auto;position:relative;z-index:1}
 .cat-pill{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:14px;font-size:.78rem;font-weight:700}
 .cat-pill-sup{background:rgba(255,255,255,.25);color:#fff}
 .cat-pill-doc{background:rgba(255,255,255,.15);color:#fff}
+/* Category page description */
+.cat-page-desc{margin-top:12px;font-size:.95rem;opacity:.85;line-height:1.8;max-width:760px}
 
 /* ── CATEGORY PAGE ───────────────────────────────────── */
 .cat-page-header{background:linear-gradient(150deg,var(--navy-mid) 0%,var(--navy) 55%,var(--teal) 100%);color:var(--white);padding:40px 24px 36px;position:relative;overflow:hidden}
@@ -83,7 +87,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .cat-page-header-inner{max-width:1200px;margin:0 auto;position:relative}
 .cat-page-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:400;margin-bottom:8px;letter-spacing:.01em}
 .cat-page-subtitle{font-size:1rem;opacity:.8}
-.filters-bar{background:var(--white);border-bottom:2px solid rgba(46,54,143,.08);padding:14px 24px;position:sticky;top:68px;z-index:50;box-shadow:0 2px 12px rgba(46,54,143,.08)}
+.filters-bar{background:var(--white);border-bottom:2px solid rgba(46,54,143,.08);padding:14px 24px;position:sticky;top:52px;z-index:50;box-shadow:0 2px 12px rgba(46,54,143,.08)}
 .filters-bar-inner{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .filter-label{font-size:.85rem;font-weight:700;color:var(--slate);white-space:nowrap}
 .filter-select{padding:7px 32px 7px 12px;border:1.5px solid rgba(0,88,111,.2);border-radius:8px;background:var(--white);font-family:'BrandText','Heebo',sans-serif;font-size:.88rem;font-weight:500;color:#1a3340;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300586f' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 10px center;transition:border-color var(--t),box-shadow var(--t);min-width:150px}
@@ -138,7 +142,15 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
 .modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
 .modal-type-badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:.75rem;font-weight:700;margin-bottom:10px}
-.modal-title{font-family:'Secular One',sans-serif;font-size:1.4rem;font-weight:400;color:var(--white);line-height:1.3;letter-spacing:.01em}
+.modal-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.4rem;font-weight:400;color:var(--white);line-height:1.3;letter-spacing:.01em}
+.modal-item-desc{margin-top:10px;font-size:.88rem;line-height:1.72;color:rgba(255,255,255,.88);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;transition:all .2s ease}
+.modal-item-desc.expanded{display:block;-webkit-line-clamp:unset}
+.modal-desc-more{background:none;border:none;color:var(--gold);cursor:pointer;font-size:.82rem;font-weight:700;padding:4px 0 0;margin-top:2px;display:block;font-family:'BrandText','Heebo',sans-serif}
+.modal-header-actions{display:flex;align-items:center;gap:8px;justify-content:flex-start;margin-bottom:12px;flex-direction:row-reverse}
+.modal-close{position:static;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
+.modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
+.modal-share-btn{background:rgba(37,211,102,.2);border:1.5px solid rgba(37,211,102,.5);color:#fff;padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:'BrandText','Heebo',sans-serif;transition:background var(--t)}
+.modal-share-btn:hover{background:rgba(37,211,102,.4)}
 .modal-body{padding:28px;background:var(--white)}
 .modal-section{margin-bottom:22px}
 .modal-section-title{font-size:.8rem;font-weight:700;color:var(--teal-mid);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid rgba(46,54,143,.1);display:flex;align-items:center;gap:6px}
@@ -215,8 +227,9 @@ body.modal-open{overflow:hidden}
   .items-grid{grid-template-columns:1fr}
   .categories-grid{grid-template-columns:1fr!important;gap:12px}
   .cat-card{min-height:200px;padding:26px 18px 18px}
+  .cat-desc{display:-webkit-box}
+  .cat-tooltip{display:none!important}
   .filter-select{min-width:120px}
-  .hero-logo-img{max-height:56px}
 }
 </style>
 </head>
@@ -289,6 +302,7 @@ body.modal-open{overflow:hidden}
     <div class="cat-page-header-inner">
       <div class="cat-page-title" id="catPageTitle"></div>
       <div class="cat-page-subtitle" id="catPageSubtitle"></div>
+      <div class="cat-page-desc" id="catPageDesc"></div>
     </div>
   </div>
   <div class="filters-bar anim-filters">
@@ -318,17 +332,30 @@ body.modal-open{overflow:hidden}
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
   <div class="modal" id="modal">
     <div class="modal-header">
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-header-actions">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <button class="modal-share-btn" id="modalShareBtn" onclick="shareItem()">שתף בוואטסאפ</button>
+      </div>
       <div class="modal-type-badge" id="modalBadge"></div>
       <div class="modal-title" id="modalTitle"></div>
+      <div id="modalDescWrap"></div>
     </div>
     <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
 
 <footer class="site-footer">
-  <strong>המגדלור</strong> – חינוך פוליטי לדמוקרטיה ליברלית בישראל &nbsp;|&nbsp;
-  <a href="https://ha-migdalor.co.il" target="_blank">ha-migdalor.co.il</a>
+  <div style="margin-bottom:8px">
+    להצטרפות לתפריט הרשויות או לכל שאלה בנושא ניתן לכתוב ל
+    <a href="mailto:tamar@idea.org.il">tamar@idea.org.il</a>
+  </div>
+  <div style="margin-bottom:14px">
+    לפרטים נוספים אודות המגדלור וכלים נוספים בקידום חינוך פוליטי לדמוקרטיה &mdash;
+    <a href="https://ha-migdalor.co.il" target="_blank">ha-migdalor.co.il</a>
+  </div>
+  <div style="opacity:.6;font-size:.8rem">
+    <strong>המגדלור</strong> – חינוך פוליטי לדמוקרטיה ליברלית בישראל
+  </div>
 </footer>
 
 <script>
@@ -391,10 +418,13 @@ function resolveUrl(localPath){
 
 function getViewerUrl(localPath, mondayUrl){
   const e = ext(localPath || mondayUrl || '');
-  const rawUrl = localPath ? resolveUrl(localPath) : mondayUrl;
-  if(!rawUrl) return null;
-  if(['pdf','jpg','jpeg','png','gif'].includes(e)) return rawUrl;
-  return 'https://docs.google.com/viewer?url='+encodeURIComponent(rawUrl)+'&embedded=true';
+  if(['jpg','jpeg','png','gif'].includes(e)){
+    return localPath ? resolveUrl(localPath) : mondayUrl;
+  }
+  // קבצי PDF ומסמכים מקומיים — הדפדפן מציג ישירות; קבצים מ-Monday — דרך Google Docs
+  if(localPath) return resolveUrl(localPath);
+  if(mondayUrl) return 'https://docs.google.com/viewer?url='+encodeURIComponent(mondayUrl)+'&embedded=true';
+  return null;
 }
 
 let _renderedItems = [];
@@ -418,6 +448,7 @@ function renderHome(){
         ${sup>0?`<span class="cat-pill cat-pill-sup">${sup} ספקים</span>`:''}
         ${doc>0?`<span class="cat-pill cat-pill-doc">${doc} מסמכים</span>`:''}
       </div>
+      <div class="cat-tooltip">${escH(desc)}</div>
     </div>`;
   }).join('');
 }
@@ -426,9 +457,11 @@ function renderHome(){
 let currentItems = [];
 function openCategory(cat){
   currentItems = DATA.items.filter(i=>i.category===cat);
-  document.getElementById('catPageTitle').textContent = cat;
+  document.getElementById('catPageTitle').textContent = CAT_DISPLAY[cat]||cat;
   const sup = currentItems.filter(i=>i.type==='ספק').length;
   document.getElementById('catPageSubtitle').textContent = `${currentItems.length} פריטים · ${sup} ספקים`;
+  const descEl = document.getElementById('catPageDesc');
+  if(descEl) descEl.textContent = CAT_DESC[cat]||'';
   buildFilters();
   applyFilters();
   document.body.classList.add('in-category');
@@ -520,7 +553,9 @@ function renderItems(items){
 }
 
 /* ── MODAL ──────────────────────────────────────────────── */
+let _currentModalIdx = -1;
 function openModal(idx){
+  _currentModalIdx = idx;
   const item = _renderedItems[idx];
   if(!item) return;
   const isS = item.type==='ספק';
@@ -528,6 +563,14 @@ function openModal(idx){
   badge.textContent = isS?'ספק':'מסמך המלצות';
   badge.className   = 'modal-type-badge '+(isS?'badge-supplier':'badge-doc');
   document.getElementById('modalTitle').textContent = item.name;
+  const descWrap = document.getElementById('modalDescWrap');
+  if(descWrap){
+    if(item.description){
+      descWrap.innerHTML = `<div class="modal-item-desc" id="modalItemDesc">${escH(item.description)}</div><button class="modal-desc-more" id="modalDescBtn" onclick="toggleModalDesc()">קרא עוד ↓</button>`;
+    } else {
+      descWrap.innerHTML = '';
+    }
+  }
 
   let html = '';
 
@@ -629,6 +672,21 @@ function toggleViewer(id, url, type){
       viewer.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
     }
   }
+}
+
+function toggleModalDesc(){
+  const el  = document.getElementById('modalItemDesc');
+  const btn = document.getElementById('modalDescBtn');
+  if(!el) return;
+  el.classList.toggle('expanded');
+  btn.textContent = el.classList.contains('expanded') ? 'הצג פחות ↑' : 'קרא עוד ↓';
+}
+
+function shareItem(){
+  const item = _renderedItems[_currentModalIdx];
+  if(!item) return;
+  const text = `*${item.name}*\n${item.category ? 'תחום: '+item.category+'\n' : ''}${item.description ? item.description.slice(0,200)+(item.description.length>200?'...':'')+'\n' : ''}תפריט המגדלור: https://romangash-star.github.io/migdalor-menu/`;
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
 }
 
 function closeModal(){
