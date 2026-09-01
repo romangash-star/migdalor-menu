@@ -38,9 +38,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .header-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;gap:16px}
 .site-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--white);cursor:pointer;transition:opacity var(--t)}
 .site-logo:hover{opacity:.85}
-.logo-text{font-family:'BrandTitle',sans-serif;font-size:1.35rem;font-weight:400;color:var(--white);line-height:1.2;letter-spacing:.01em}
-.logo-text span{display:block;font-size:.72rem;font-weight:400;opacity:.8;font-family:'BrandText','Heebo',sans-serif;letter-spacing:0}
-.logo-beam{width:32px;height:32px;flex-shrink:0}
+.logo-img{height:42px;width:auto;display:block;object-fit:contain}
 .header-back{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:var(--white);padding:8px 18px;border-radius:8px;cursor:pointer;font-family:'BrandText','Heebo',sans-serif;font-size:.9rem;font-weight:600;display:none;align-items:center;gap:6px;transition:var(--t)}
 .header-back:hover{background:rgba(255,255,255,.22);transform:translateX(2px)}
 .header-back.visible{display:flex}
@@ -248,12 +246,7 @@ body.modal-open{overflow:hidden}
 <header class="site-header">
   <div class="header-inner">
     <div class="site-logo" onclick="goHome()">
-      <svg class="logo-beam" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="16" cy="5" r="4" fill="#fcb84f" opacity=".9"/>
-        <polygon points="16,8 2,30 30,30" fill="#fcb84f" opacity=".55"/>
-        <polygon points="16,8 8,30 24,30" fill="#fff" opacity=".35"/>
-      </svg>
-      <div class="logo-text">המגדלור<span>חינוך לדמוקרטיה בשלטון המקומי</span></div>
+      <img src="logo.png" alt="המגדלור" class="logo-img">
     </div>
     <button class="header-back" id="backBtn" onclick="goHome()">&#8592; חזרה לתפריט הראשי</button>
   </div>
@@ -365,7 +358,7 @@ body.modal-open{overflow:hidden}
     <a href="https://ha-migdalor.co.il" target="_blank">ha-migdalor.co.il</a>
   </div>
   <div style="opacity:.6;font-size:.8rem">
-    <strong>המגדלור</strong> – חינוך פוליטי לדמוקרטיה ליברלית בישראל
+    <strong>המגדלור</strong> – חינוך פוליטי לדמוקרטיה ליברלית
   </div>
 </footer>
 
