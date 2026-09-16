@@ -78,7 +78,6 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .cat-list-item.active .cat-list-name{font-size:1.7rem}
 .cat-list-desc{max-height:0;overflow:hidden;opacity:0;font-size:.85rem;line-height:1.7;color:var(--slate);transition:max-height .3s ease,opacity .25s ease,margin-top .25s ease}
 .cat-list-item.active .cat-list-desc{max-height:220px;opacity:1;margin-top:8px}
-.cat-enter-hint{display:none;margin-top:10px;font-family:'BrandText','Heebo',sans-serif;font-weight:700;font-size:.85rem;color:var(--navy)}
 /* Category page description */
 .cat-page-desc{margin-top:12px;font-size:.95rem;opacity:.85;line-height:1.8;max-width:760px}
 
@@ -224,19 +223,27 @@ body.modal-open{overflow:hidden}
 .site-footer strong{color:var(--white);font-weight:800}
 
 @media(max-width:1024px){.cat-graphic{flex:0 0 300px;max-width:300px}}
-/* Touch devices have no hover: the list becomes a horizontal swipeable carousel —
-   each category's full text shows immediately, no tap needed to reveal it, and a
-   sliver of the next card peeks in on the side to invite swiping. */
+/* Touch devices have no hover, and the overlapping-houses graphic needs a mouse to
+   reveal anything. So on touch the graphic itself becomes the swipeable carousel:
+   one house at a time, full size, name + count already inside it — the next house
+   peeks in from the side to invite swiping — with a single description block below
+   that updates to match whichever house is currently centered. */
+.house-carousel{display:none}
+.cat-current-desc{display:none}
 @media(hover:none){
-  .cat-list{flex-direction:row;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:14px;padding:4px 4px 12px;scrollbar-width:none;-ms-overflow-style:none}
-  .cat-list::-webkit-scrollbar{display:none}
-  .cat-list-item{flex:0 0 83%;scroll-snap-align:center;border-bottom:none;background:var(--white);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow)}
-  .cat-list-item.active .cat-list-name{font-size:1.15rem}
-  .cat-list-desc{max-height:none;overflow:visible;opacity:1;margin-top:8px}
-  .cat-enter-hint{display:block}
+  .showcase{display:none}
+  .house-carousel{display:flex;flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:16px;padding:10px 4px 14px;scrollbar-width:none;-ms-overflow-style:none}
+  .house-carousel::-webkit-scrollbar{display:none}
+  .house-card{flex:0 0 62%;aspect-ratio:480/560;scroll-snap-align:center;clip-path:polygon(50% 0%,100% 30%,100% 100%,0% 100%,0% 30%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:26px;color:#fff;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.2);cursor:pointer}
+  .house-card-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.25rem;font-weight:400;padding:0 10px}
+  .house-card-count{font-size:.8rem;font-weight:700;margin-top:6px;opacity:.92}
+  .cat-current-desc{display:block;background:var(--white);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);margin-top:16px}
+  .cat-current-desc-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.2rem;margin-bottom:8px}
+  .cat-current-desc-text{font-size:.9rem;line-height:1.75;color:var(--slate)}
+  .cat-current-desc-enter{display:block;margin-top:10px;font-family:'BrandText','Heebo',sans-serif;font-weight:700;font-size:.85rem;color:var(--navy)}
 }
 @keyframes swipeNudge{0%,15%,100%{transform:translateX(0)}45%{transform:translateX(-22px)}70%{transform:translateX(-22px)}}
-.cat-list.swipe-hint{animation:swipeNudge 1.1s ease}
+.house-carousel.swipe-hint{animation:swipeNudge 1.1s ease}
 @media(max-width:640px){
   .hero{padding:16px 16px 14px}
   .categories-section{padding:22px 14px 36px}
@@ -309,6 +316,8 @@ body.modal-open{overflow:hidden}
       </div>
       <div class="cat-list" id="catList"></div>
     </div>
+    <div class="house-carousel" id="houseCarousel"></div>
+    <div class="cat-current-desc" id="catCurrentDesc"></div>
   </div>
   <div class="intro-section anim-title">
     <div class="intro-inner">
@@ -470,11 +479,14 @@ const IS_TOUCH = window.matchMedia('(hover:none)').matches;
 // touch we don't wire mouseenter/mouseleave at all.
 const HOVER_ATTRS = idx => IS_TOUCH ? '' : `onmouseenter="setActiveCat(${idx})" onmouseleave="clearActiveCat()"`;
 
+let _homeCats = [];
+
 function renderHome(){
-  const cats = DATA.categories.filter(c=>c&&c!=='nan');
-  const svg    = document.getElementById('houseSvg');
-  const labels = document.getElementById('houseLabels');
-  const list   = document.getElementById('catList');
+  const cats = _homeCats = DATA.categories.filter(c=>c&&c!=='nan');
+  const svg      = document.getElementById('houseSvg');
+  const labels   = document.getElementById('houseLabels');
+  const list     = document.getElementById('catList');
+  const carousel = document.getElementById('houseCarousel');
 
   svg.innerHTML = cats.map((cat, i) => {
     const s = HOUSE_SHAPES[i % HOUSE_SHAPES.length];
@@ -501,14 +513,26 @@ function renderHome(){
       ${HOVER_ATTRS(i)} onclick="openCategory('${escH(cat)}')">
       <div class="cat-list-name" style="color:${color}">${escH(displayName)}</div>
       <div class="cat-list-desc">${escH(desc)}</div>
-      <div class="cat-enter-hint">כניסה לתחום ←</div>
+    </div>`;
+  }).join('');
+
+  // Mobile: the graphic itself is the swipeable carousel — one house at a time,
+  // full size, name + count already inside it.
+  carousel.innerHTML = cats.map((cat, i) => {
+    const color = CAT_COLORS[cat]||'#00586f';
+    const count = DATA.items.filter(it=>it.category===cat).length;
+    const displayName = CAT_DISPLAY[cat]||cat;
+    return `<div class="house-card" id="houseCard${i}" style="background:${color}" onclick="openCategory('${escH(cat)}')">
+      <div class="house-card-name">${escH(displayName)}</div>
+      <div class="house-card-count">‹ ${count} מסמכים ›</div>
     </div>`;
   }).join('');
 
   if(IS_TOUCH){
     setActiveCat(0);
+    updateCurrentDesc(0);
     initSwipeSync();
-    setTimeout(() => list.classList.add('swipe-hint'), 700);
+    setTimeout(() => carousel.classList.add('swipe-hint'), 700);
   }
 }
 
@@ -527,15 +551,27 @@ function clearActiveCat(){
   document.querySelectorAll('.cat-list-item').forEach(el=>el.classList.remove('active'));
 }
 
-// While swiping the mobile carousel, keep the house graphic in sync with whichever
-// card is currently centered in view.
+// Mobile: refresh the single description block to match whichever house card is
+// currently centered in the swipe carousel.
+function updateCurrentDesc(idx){
+  const box = document.getElementById('catCurrentDesc');
+  const cat = _homeCats[idx];
+  if(!box || !cat) return;
+  const displayName = CAT_DISPLAY[cat]||cat;
+  const desc = CAT_DESC[cat]||'';
+  box.innerHTML = `<div class="cat-current-desc-name">${escH(displayName)}</div><div class="cat-current-desc-text">${escH(desc)}</div><div class="cat-current-desc-enter">כניסה לתחום ←</div>`;
+  box.onclick = () => openCategory(cat);
+}
+
+// While swiping the mobile carousel, keep the house cards and the description block
+// in sync with whichever card is currently centered in view.
 function initSwipeSync(){
-  const list = document.getElementById('catList');
-  if(!list) return;
+  const carousel = document.getElementById('houseCarousel');
+  if(!carousel) return;
   let debounceTimer = null;
   const sync = () => {
-    const items = [...list.querySelectorAll('.cat-list-item')];
-    const mid = list.getBoundingClientRect().left + list.getBoundingClientRect().width/2;
+    const items = [...carousel.querySelectorAll('.house-card')];
+    const mid = carousel.getBoundingClientRect().left + carousel.getBoundingClientRect().width/2;
     let closest = 0, minDist = Infinity;
     items.forEach((el, i) => {
       const r = el.getBoundingClientRect();
@@ -543,8 +579,9 @@ function initSwipeSync(){
       if(dist < minDist){ minDist = dist; closest = i; }
     });
     setActiveCat(closest);
+    updateCurrentDesc(closest);
   };
-  list.addEventListener('scroll', () => {
+  carousel.addEventListener('scroll', () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(sync, 60);
   }, {passive:true});
