@@ -77,7 +77,8 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .cat-list-name{font-family:'BrandTitle','Secular One',sans-serif;font-weight:400;font-size:1.15rem;transition:font-size .25s ease;letter-spacing:.01em}
 .cat-list-item.active .cat-list-name{font-size:1.7rem}
 .cat-list-desc{max-height:0;overflow:hidden;opacity:0;font-size:.85rem;line-height:1.7;color:var(--slate);transition:max-height .3s ease,opacity .25s ease,margin-top .25s ease}
-.cat-list-item.active .cat-list-desc{max-height:200px;opacity:1;margin-top:8px}
+.cat-list-item.active .cat-list-desc{max-height:220px;opacity:1;margin-top:8px}
+.cat-enter-btn{display:none;margin-top:10px;font-family:'BrandText','Heebo',sans-serif;font-weight:700;font-size:.85rem;color:var(--navy)}
 /* Category page description */
 .cat-page-desc{margin-top:12px;font-size:.95rem;opacity:.85;line-height:1.8;max-width:760px}
 
@@ -226,8 +227,7 @@ body.modal-open{overflow:hidden}
 /* Touch devices have no hover: show descriptions inline instead of hiding them behind a hover that can never fire */
 @media(hover:none){
   .cat-list-item{padding:12px 4px}
-  .cat-list-desc{max-height:200px;opacity:1;margin-top:8px}
-  .house-shape{opacity:.55}
+  .cat-enter-btn{display:block}
 }
 @media(max-width:640px){
   .hero{padding:16px 16px 14px}
@@ -454,6 +454,16 @@ const HOUSE_SHAPES = [
   {pts:'340,280 470,389.2 470,540 210,540 210,389.2',     cx:70.83, cy:76.79}
 ];
 
+// Touch devices have no hover, so the mouse-driven "preview then click" pattern
+// can't work the same way. On touch: first tap previews (lights the house, expands
+// the description), a second tap on the same item — or its "כניסה" link — enters it.
+const IS_TOUCH = window.matchMedia('(hover:none)').matches;
+// On touch, mobile Safari/Chrome fire a synthetic mouseenter right before the click
+// (to let :hover styles apply to the first tap), which would mark the item "already
+// active" before handleCatTap ever runs and skip straight to navigating. So on touch
+// we don't wire mouseenter/mouseleave at all — only the tap-driven handler below.
+const HOVER_ATTRS = idx => IS_TOUCH ? '' : `onmouseenter="setActiveCat(${idx})" onmouseleave="clearActiveCat()"`;
+
 function renderHome(){
   const cats = DATA.categories.filter(c=>c&&c!=='nan');
   const svg    = document.getElementById('houseSvg');
@@ -464,7 +474,7 @@ function renderHome(){
     const s = HOUSE_SHAPES[i % HOUSE_SHAPES.length];
     const color = CAT_COLORS[cat]||'#00586f';
     return `<polygon class="house-shape" data-idx="${i}" points="${s.pts}" fill="${color}"
-      onmouseenter="setActiveCat(${i})" onmouseleave="clearActiveCat()" onclick="openCategory('${escH(cat)}')"></polygon>`;
+      ${HOVER_ATTRS(i)} onclick="handleCatTap(${i},'${escH(cat)}')"></polygon>`;
   }).join('');
 
   labels.innerHTML = cats.map((cat, i) => {
@@ -482,9 +492,9 @@ function renderHome(){
     const displayName = CAT_DISPLAY[cat]||cat;
     const desc = CAT_DESC[cat]||'';
     return `<div class="cat-list-item anim-card" id="catListItem${i}" style="animation-delay:${i*0.08}s"
-      onmouseenter="setActiveCat(${i})" onmouseleave="clearActiveCat()" onclick="openCategory('${escH(cat)}')">
+      ${HOVER_ATTRS(i)} onclick="handleCatTap(${i},'${escH(cat)}')">
       <div class="cat-list-name" style="color:${color}">${escH(displayName)}</div>
-      <div class="cat-list-desc">${escH(desc)}</div>
+      <div class="cat-list-desc">${escH(desc)}<span class="cat-enter-btn" onclick="event.stopPropagation();openCategory('${escH(cat)}')">כניסה לתחום ←</span></div>
     </div>`;
   }).join('');
 }
@@ -499,9 +509,18 @@ function setActiveCat(idx){
   if(item)  item.classList.add('active');
 }
 function clearActiveCat(){
+  if(IS_TOUCH) return; // keep the tapped preview open on touch until another one is tapped
   document.querySelectorAll('.house-shape').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.house-label').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.cat-list-item').forEach(el=>el.classList.remove('active'));
+}
+// Mouse: hover already previewed it, so a click always enters. Touch: first tap
+// previews, a second tap on the already-active item enters.
+function handleCatTap(idx, cat){
+  if(!IS_TOUCH){ openCategory(cat); return; }
+  const item = document.getElementById('catListItem'+idx);
+  if(item.classList.contains('active')) openCategory(cat);
+  else setActiveCat(idx);
 }
 
 /* ── CATEGORY ──────────────────────────────────────────── */
