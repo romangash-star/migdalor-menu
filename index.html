@@ -60,25 +60,24 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .categories-section{max-width:1280px;margin:0 auto;padding:32px 24px 56px}
 .section-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.5rem;font-weight:400;color:var(--navy);margin-bottom:20px;display:flex;align-items:center;gap:12px;letter-spacing:.02em}
 .section-title::after{content:'';flex:1;height:2px;background:linear-gradient(to left,transparent,var(--gold))}
-.categories-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
-.cat-card{border-radius:18px;padding:32px 18px 24px;cursor:pointer;transition:transform var(--t),box-shadow var(--t),filter var(--t);box-shadow:0 6px 24px rgba(0,0,0,.22);text-align:center;color:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px;min-height:280px}
-.cat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;background:linear-gradient(to bottom,rgba(255,255,255,.12),transparent);pointer-events:none}
-.cat-card:hover{transform:translateY(-6px);box-shadow:0 10px 36px rgba(0,0,0,.28);filter:brightness(1.08)}
-.cat-card:active{transform:translateY(-2px)}
-.cat-gold{color:#3a2800!important}
-.cat-gold .cat-pill-sup,.cat-gold .cat-pill-doc{background:rgba(58,40,0,.14)!important;color:#3a2800!important}
-.cat-bright{color:#003d4f!important}
-.cat-bright .cat-pill-sup,.cat-bright .cat-pill-doc{background:rgba(0,61,79,.18)!important;color:#003d4f!important}
-.cat-bright .cat-tooltip{color:#003d4f!important;background:rgba(255,255,255,.88)!important}
-.cat-icon{display:none}
-.cat-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.2rem,2vw,1.7rem);font-weight:400;line-height:1.3;position:relative;z-index:1}
-.cat-desc{font-size:.82rem;line-height:1.6;opacity:.88;flex:1;text-align:right;position:relative;z-index:1;display:none}
-.cat-tooltip{position:absolute;inset:0;border-radius:18px;background:rgba(0,0,0,.78);color:#fff;padding:18px 16px;opacity:0;pointer-events:none;transition:opacity .22s ease;display:flex;align-items:center;font-size:.82rem;line-height:1.65;text-align:right;overflow-y:auto}
-.cat-card:hover .cat-tooltip{opacity:1;pointer-events:none}
-.cat-count{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:auto;position:relative;z-index:1}
-.cat-pill{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:14px;font-size:.78rem;font-weight:700}
-.cat-pill-sup{background:rgba(255,255,255,.25);color:#fff}
-.cat-pill-doc{background:rgba(255,255,255,.15);color:#fff}
+/* ── HOME SHOWCASE (list + interactive house graphic) ─── */
+.showcase{display:flex;align-items:center;gap:40px;flex-wrap:wrap}
+.cat-graphic{position:relative;flex:0 0 380px;max-width:380px;width:100%;aspect-ratio:480/560}
+.cat-graphic svg{width:100%;height:100%;display:block;overflow:visible}
+.house-shape{opacity:.42;transition:opacity .3s ease,filter .3s ease;cursor:pointer;transform-box:fill-box;transform-origin:center}
+.house-shape.active{opacity:1;filter:drop-shadow(0 6px 18px rgba(0,0,0,.25))}
+.house-labels{position:absolute;inset:0;pointer-events:none}
+.house-label{position:absolute;transform:translate(-50%,-50%);text-align:center;opacity:0;transition:opacity .25s ease;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.4);pointer-events:none;width:120px}
+.house-label.active{opacity:1}
+.house-label-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.05rem;font-weight:400;line-height:1.2}
+.house-label-count{font-size:.72rem;font-weight:700;margin-top:5px;opacity:.92}
+.cat-list{flex:1;min-width:260px;display:flex;flex-direction:column}
+.cat-list-item{cursor:pointer;padding:11px 4px;border-bottom:1px solid rgba(0,88,111,.08)}
+.cat-list-item:last-child{border-bottom:none}
+.cat-list-name{font-family:'BrandTitle','Secular One',sans-serif;font-weight:400;font-size:1.15rem;transition:font-size .25s ease;letter-spacing:.01em}
+.cat-list-item.active .cat-list-name{font-size:1.7rem}
+.cat-list-desc{max-height:0;overflow:hidden;opacity:0;font-size:.85rem;line-height:1.7;color:var(--slate);transition:max-height .3s ease,opacity .25s ease,margin-top .25s ease}
+.cat-list-item.active .cat-list-desc{max-height:200px;opacity:1;margin-top:8px}
 /* Category page description */
 .cat-page-desc{margin-top:12px;font-size:.95rem;opacity:.85;line-height:1.8;max-width:760px}
 
@@ -223,7 +222,7 @@ body.modal-open{overflow:hidden}
 .site-footer a:hover{color:var(--white)}
 .site-footer strong{color:var(--white);font-weight:800}
 
-@media(max-width:1024px){.categories-grid{grid-template-columns:repeat(3,1fr);gap:14px}}
+@media(max-width:1024px){.cat-graphic{flex:0 0 300px;max-width:300px}}
 @media(max-width:640px){
   .hero{padding:16px 16px 14px}
   .categories-section{padding:22px 14px 36px}
@@ -234,10 +233,9 @@ body.modal-open{overflow:hidden}
   .modal-header{padding:20px}
   .info-grid{grid-template-columns:1fr}
   .items-grid{grid-template-columns:1fr}
-  .categories-grid{grid-template-columns:1fr!important;gap:12px}
-  .cat-card{min-height:200px;padding:26px 18px 18px}
-  .cat-desc{display:-webkit-box}
-  .cat-tooltip{display:none!important}
+  .showcase{flex-direction:column;gap:20px}
+  .cat-graphic{flex:0 0 auto;max-width:240px}
+  .cat-list-item.active .cat-list-name{font-size:1.35rem}
   .filter-select{min-width:120px}
 }
 </style>
@@ -297,7 +295,13 @@ body.modal-open{overflow:hidden}
   </div>
   <div class="categories-section">
     <div class="section-title anim-title">תחומי פעולה</div>
-    <div class="categories-grid anim-grid" id="categoriesGrid"></div>
+    <div class="showcase anim-grid">
+      <div class="cat-graphic">
+        <svg viewBox="0 0 480 560" id="houseSvg" aria-hidden="true"></svg>
+        <div class="house-labels" id="houseLabels"></div>
+      </div>
+      <div class="cat-list" id="catList"></div>
+    </div>
   </div>
 </div>
 
@@ -434,28 +438,64 @@ function getViewerUrl(localPath, mondayUrl){
 let _renderedItems = [];
 
 /* ── HOME ──────────────────────────────────────────────── */
+// Overlapping "house" pentagon slots for the showcase graphic (viewBox 480x560).
+// Each slot: outline points + label center as % of the graphic box.
+const HOUSE_SHAPES = [
+  {pts:'210,20 280,78.8 280,170 140,170 140,78.8',        cx:43.75, cy:16.96},
+  {pts:'270,125 370,209 370,335 170,335 170,209',         cx:56.25, cy:41.07},
+  {pts:'175,170 290,266.6 290,410 60,410 60,266.6',       cx:36.46, cy:51.79},
+  {pts:'280,280 385,368.2 385,500 175,500 175,368.2',     cx:58.33, cy:69.64},
+  {pts:'340,280 470,389.2 470,540 210,540 210,389.2',     cx:70.83, cy:76.79}
+];
+
 function renderHome(){
-  const grid = document.getElementById('categoriesGrid');
   const cats = DATA.categories.filter(c=>c&&c!=='nan');
-  grid.innerHTML = cats.map((cat, ci) => {
-    const items = DATA.items.filter(i=>i.category===cat);
-    const sup = items.filter(i=>i.type==='ספק').length;
-    const doc = items.filter(i=>i.type==='מסמך המלצות').length;
+  const svg    = document.getElementById('houseSvg');
+  const labels = document.getElementById('houseLabels');
+  const list   = document.getElementById('catList');
+
+  svg.innerHTML = cats.map((cat, i) => {
+    const s = HOUSE_SHAPES[i % HOUSE_SHAPES.length];
     const color = CAT_COLORS[cat]||'#00586f';
-    const isGold   = color==='#fcb84f';
-    const isBright = color==='#38d1d6';
+    return `<polygon class="house-shape" data-idx="${i}" points="${s.pts}" fill="${color}"
+      onmouseenter="setActiveCat(${i})" onmouseleave="clearActiveCat()" onclick="openCategory('${escH(cat)}')"></polygon>`;
+  }).join('');
+
+  labels.innerHTML = cats.map((cat, i) => {
+    const s = HOUSE_SHAPES[i % HOUSE_SHAPES.length];
+    const count = DATA.items.filter(it=>it.category===cat).length;
     const displayName = CAT_DISPLAY[cat]||cat;
-    const desc = CAT_DESC[cat]||'';
-    return `<div class="cat-card${isGold?' cat-gold':''}${isBright?' cat-bright':''} anim-card" style="background:${color};animation-delay:${ci*0.08}s" onclick="openCategory('${escH(cat)}')">
-      <div class="cat-name">${escH(displayName)}</div>
-      <div class="cat-desc">${escH(desc)}</div>
-      <div class="cat-count">
-        ${sup>0?`<span class="cat-pill cat-pill-sup">${sup} ספקים</span>`:''}
-        ${doc>0?`<span class="cat-pill cat-pill-doc">${doc} מסמכים</span>`:''}
-      </div>
-      <div class="cat-tooltip">${escH(desc)}</div>
+    return `<div class="house-label" id="houseLabel${i}" style="left:${s.cx}%;top:${s.cy}%">
+      <div class="house-label-name">${escH(displayName)}</div>
+      <div class="house-label-count">‹ ${count} מסמכים ›</div>
     </div>`;
   }).join('');
+
+  list.innerHTML = cats.map((cat, i) => {
+    const color = CAT_COLORS[cat]||'#00586f';
+    const displayName = CAT_DISPLAY[cat]||cat;
+    const desc = CAT_DESC[cat]||'';
+    return `<div class="cat-list-item anim-card" id="catListItem${i}" style="animation-delay:${i*0.08}s"
+      onmouseenter="setActiveCat(${i})" onmouseleave="clearActiveCat()" onclick="openCategory('${escH(cat)}')">
+      <div class="cat-list-name" style="color:${color}">${escH(displayName)}</div>
+      <div class="cat-list-desc">${escH(desc)}</div>
+    </div>`;
+  }).join('');
+}
+
+function setActiveCat(idx){
+  document.querySelectorAll('.house-shape').forEach(el=>el.classList.toggle('active', +el.dataset.idx===idx));
+  document.querySelectorAll('.house-label').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.cat-list-item').forEach(el=>el.classList.remove('active'));
+  const label = document.getElementById('houseLabel'+idx);
+  const item  = document.getElementById('catListItem'+idx);
+  if(label) label.classList.add('active');
+  if(item)  item.classList.add('active');
+}
+function clearActiveCat(){
+  document.querySelectorAll('.house-shape').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.house-label').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.cat-list-item').forEach(el=>el.classList.remove('active'));
 }
 
 /* ── CATEGORY ──────────────────────────────────────────── */
