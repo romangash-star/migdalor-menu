@@ -223,6 +223,12 @@ body.modal-open{overflow:hidden}
 .site-footer strong{color:var(--white);font-weight:800}
 
 @media(max-width:1024px){.cat-graphic{flex:0 0 300px;max-width:300px}}
+/* Touch devices have no hover: show descriptions inline instead of hiding them behind a hover that can never fire */
+@media(hover:none){
+  .cat-list-item{padding:12px 4px}
+  .cat-list-desc{max-height:200px;opacity:1;margin-top:8px}
+  .house-shape{opacity:.55}
+}
 @media(max-width:640px){
   .hero{padding:16px 16px 14px}
   .categories-section{padding:22px 14px 36px}
