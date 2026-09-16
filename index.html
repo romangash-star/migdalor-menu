@@ -44,7 +44,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .header-back.visible{display:flex}
 
 /* ── HERO ────────────────────────────────────────────── */
-.hero{background:linear-gradient(150deg,#00586f 0%,#1c7d8f 50%,#2b9eb5 100%);color:var(--white);padding:22px 24px 18px;text-align:center;position:relative;overflow:hidden}
+.hero{background:linear-gradient(150deg,#00586f 0%,#1c7d8f 50%,#2b9eb5 100%);color:var(--white);padding:16px 24px 12px;text-align:center;position:relative;overflow:hidden}
 .hero-beam{position:absolute;inset:0;pointer-events:none;opacity:.38}
 .hero-beam svg{width:100%;height:100%}
 .hero-logo-wrap{display:none}
@@ -52,18 +52,18 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .hero h1{position:relative;font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:400;margin-bottom:8px;line-height:1.2;letter-spacing:.01em}
 .hero p{position:relative;font-size:.92rem;opacity:.85;max-width:640px;margin:0 auto;font-family:'BrandText','Heebo',sans-serif}
 /* ── INTRO ───────────────────────────────────────────── */
-.intro-section{background:var(--white);padding:20px 24px;border-bottom:2px solid rgba(0,88,111,.08)}
+.intro-section{background:var(--white);padding:16px 24px;border-top:2px solid rgba(0,88,111,.08)}
 .intro-inner{max-width:880px;margin:0 auto;font-size:.93rem;line-height:1.75;color:#1a3340}
 .intro-inner p+p{margin-top:10px}
 
 /* ── CATEGORIES ──────────────────────────────────────── */
-.categories-section{max-width:1280px;margin:0 auto;padding:32px 24px 56px}
-.section-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.5rem;font-weight:400;color:var(--navy);margin-bottom:20px;display:flex;align-items:center;gap:12px;letter-spacing:.02em}
+.categories-section{max-width:1280px;margin:0 auto;padding:20px 24px 24px}
+.section-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.5rem;font-weight:400;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:12px;letter-spacing:.02em}
 .section-title::after{content:'';flex:1;height:2px;background:linear-gradient(to left,transparent,var(--gold))}
 /* ── HOME SHOWCASE (list + interactive house graphic) ─── */
-.showcase{display:flex;align-items:center;gap:40px;flex-wrap:wrap}
-.cat-graphic{position:relative;flex:0 0 380px;max-width:380px;width:100%;aspect-ratio:480/560}
-.cat-graphic svg{width:100%;height:100%;display:block;overflow:visible}
+.showcase{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.cat-graphic{position:relative;flex:0 0 300px;max-width:300px;width:100%;aspect-ratio:480/560}
+.cat-graphic svg{width:100%;height:100%;display:block;overflow:visible;shape-rendering:geometricPrecision}
 .house-shape{opacity:.42;transition:opacity .3s ease,filter .3s ease;cursor:pointer;transform-box:fill-box;transform-origin:center}
 .house-shape.active{opacity:1;filter:drop-shadow(0 6px 18px rgba(0,0,0,.25))}
 .house-labels{position:absolute;inset:0;pointer-events:none}
@@ -72,7 +72,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .house-label-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.05rem;font-weight:400;line-height:1.2}
 .house-label-count{font-size:.72rem;font-weight:700;margin-top:5px;opacity:.92}
 .cat-list{flex:1;min-width:260px;display:flex;flex-direction:column}
-.cat-list-item{cursor:pointer;padding:11px 4px;border-bottom:1px solid rgba(0,88,111,.08)}
+.cat-list-item{cursor:pointer;padding:8px 4px;border-bottom:1px solid rgba(0,88,111,.08)}
 .cat-list-item:last-child{border-bottom:none}
 .cat-list-name{font-family:'BrandTitle','Secular One',sans-serif;font-weight:400;font-size:1.15rem;transition:font-size .25s ease;letter-spacing:.01em}
 .cat-list-item.active .cat-list-name{font-size:1.7rem}
@@ -102,9 +102,9 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .item-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--gold)}
 .item-card:active{transform:translateY(-1px)}
 .item-card-top{background:linear-gradient(135deg,var(--navy) 0%,var(--teal-mid) 100%);padding:18px 20px;position:relative;min-height:80px}
-.item-type-badge{position:absolute;top:12px;left:12px;padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:700}
+.item-type-badge{position:absolute;top:0;left:16px;padding:8px 22px 8px 12px;font-size:.72rem;font-weight:700;clip-path:polygon(0 0,78% 0,100% 50%,78% 100%,0 100%);box-shadow:0 3px 8px rgba(0,0,0,.18)}
 .badge-supplier{background:var(--gold);color:#3a2800}
-.badge-doc{background:rgba(255,255,255,.2);color:var(--white);border:1px solid rgba(255,255,255,.4)}
+.badge-doc{background:var(--teal-bright);color:#003d4f}
 .item-name{color:var(--white);font-size:.95rem;font-weight:700;line-height:1.4;padding-left:56px}
 .item-card-body{padding:14px 18px;flex:1;display:flex;flex-direction:column;gap:8px}
 .item-meta{display:flex;flex-wrap:wrap;gap:5px}
@@ -141,7 +141,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal-header{background:linear-gradient(150deg,var(--navy-mid) 0%,var(--navy) 55%,var(--teal) 100%);padding:28px 28px 24px;position:relative}
 .modal-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
 .modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
-.modal-type-badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:.75rem;font-weight:700;margin-bottom:10px}
+.modal-type-badge{display:inline-block;padding:7px 24px 7px 14px;font-size:.75rem;font-weight:700;margin-bottom:10px;clip-path:polygon(0 0,78% 0,100% 50%,78% 100%,0 100%)}
 .modal-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.4rem;font-weight:400;color:var(--white);line-height:1.3;letter-spacing:.01em}
 .modal-item-desc{margin-top:10px;font-size:.88rem;line-height:1.72;color:rgba(255,255,255,.88);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;transition:all .2s ease}
 .modal-item-desc.expanded{display:block;-webkit-line-clamp:unset}
@@ -217,7 +217,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 body.in-category .home-view{display:none}
 body.in-category .cat-view{display:block}
 body.modal-open{overflow:hidden}
-.site-footer{background:var(--navy-mid);border-top:3px solid var(--gold);color:rgba(255,255,255,.7);text-align:center;padding:28px 24px;font-size:.85rem}
+.site-footer{background:var(--navy-mid);border-top:3px solid var(--gold);color:rgba(255,255,255,.7);text-align:center;padding:18px 24px;font-size:.85rem}
 .site-footer a{color:var(--gold);text-decoration:none;transition:color var(--t)}
 .site-footer a:hover{color:var(--white)}
 .site-footer strong{color:var(--white);font-weight:800}
@@ -287,12 +287,6 @@ body.modal-open{overflow:hidden}
     <h1>חינוך לדמוקרטיה בשלטון המקומי</h1>
     <p>תפריט פעולה לרשות המקומית לקידום דמוקרטיה ליברלית</p>
   </div>
-  <div class="intro-section anim-title">
-    <div class="intro-inner">
-      <p>התפריט הרשותי של המגדלור נועד לסייע לרשות המקומית לממש את תפקידה וכוחה בקידום חינוך לדמוקרטיה ליברלית, באמצעות מדיניות, תכניות ומהלכים במגוון הזירות שבהן היא פועלת ומשפיעה. התפריט מציע מגוון פעולות, מודלים וכלים שניתן לבחור מתוכם בהתאם לצרכים, לאתגרים ולמאפיינים של כל רשות. התפריט מתייחס לא רק לתכניות חינוכיות, אלא גם לאופן שבו הרשות מעצבת תרבות, נורמות ומרחב ציבורי וקהילתי כמערכת דמוקרטית ליברלית רחבה מתוך הבנה שכדי לייצר שינוי משמעותי בחייהם של אנשים ולקדם חינוך לדמוקרטיה.</p>
-      <p>התפריט מחולק לחמישה תחומים מרכזיים, המשקפים את הזירות העיקריות שבהן הרשות יכולה לפעול ולהשפיע, דרך הזהות הציבורית שלה, כוח האדם, התכניות החינוכיות, התרבות הארגונית, השותפויות והמשאבים העומדים לרשותה. כך, התפריט מציע לרשות מגוון אפשרויות מעשיות ליצירת סביבה עירונית שלמה התומכת בחירות, שוויון, סולידריות, השתתפות וחיים דמוקרטיים משותפים.</p>
-    </div>
-  </div>
   <div class="categories-section">
     <div class="section-title anim-title">תחומי פעולה</div>
     <div class="showcase anim-grid">
@@ -301,6 +295,12 @@ body.modal-open{overflow:hidden}
         <div class="house-labels" id="houseLabels"></div>
       </div>
       <div class="cat-list" id="catList"></div>
+    </div>
+  </div>
+  <div class="intro-section anim-title">
+    <div class="intro-inner">
+      <p>התפריט הרשותי של המגדלור נועד לסייע לרשות המקומית לממש את תפקידה וכוחה בקידום חינוך לדמוקרטיה ליברלית, באמצעות מדיניות, תכניות ומהלכים במגוון הזירות שבהן היא פועלת ומשפיעה. התפריט מציע מגוון פעולות, מודלים וכלים שניתן לבחור מתוכם בהתאם לצרכים, לאתגרים ולמאפיינים של כל רשות. התפריט מתייחס לא רק לתכניות חינוכיות, אלא גם לאופן שבו הרשות מעצבת תרבות, נורמות ומרחב ציבורי וקהילתי כמערכת דמוקרטית ליברלית רחבה מתוך הבנה שכדי לייצר שינוי משמעותי בחייהם של אנשים ולקדם חינוך לדמוקרטיה.</p>
+      <p>התפריט מחולק לחמישה תחומים מרכזיים, המשקפים את הזירות העיקריות שבהן הרשות יכולה לפעול ולהשפיע, דרך הזהות הציבורית שלה, כוח האדם, התכניות החינוכיות, התרבות הארגונית, השותפויות והמשאבים העומדים לרשותה. כך, התפריט מציע לרשות מגוון אפשרויות מעשיות ליצירת סביבה עירונית שלמה התומכת בחירות, שוויון, סולידריות, השתתפות וחיים דמוקרטיים משותפים.</p>
     </div>
   </div>
 </div>
