@@ -102,8 +102,8 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .item-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--gold)}
 .item-card:active{transform:translateY(-1px)}
 .item-card-top{background:linear-gradient(135deg,var(--navy) 0%,var(--teal-mid) 100%);padding:18px 20px;position:relative;min-height:80px;border-radius:var(--radius) var(--radius) 0 0}
-.item-type-badge{position:absolute;top:-16px;right:22px;width:74px;height:66px}
-.item-type-badge .badge-shape{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 4px 8px rgba(0,0,0,.22))}
+.item-type-badge{position:absolute;top:-16px;right:22px;width:74px;height:66px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.22))}
+.item-type-badge .badge-shape{position:absolute;inset:0;width:100%;height:100%}
 .item-type-badge .badge-text{position:absolute;left:0;right:0;bottom:9px;text-align:center;font-size:.7rem;font-weight:700;line-height:1.15}
 .badge-supplier .badge-shape polygon{fill:var(--gold)}
 .badge-supplier .badge-text{color:#3a2800}
@@ -145,8 +145,8 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal-header{background:linear-gradient(150deg,var(--navy-mid) 0%,var(--navy) 55%,var(--teal) 100%);padding:28px 28px 24px;position:relative}
 .modal-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
 .modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
-.modal-type-badge{position:relative;width:78px;height:68px;margin-bottom:14px}
-.modal-type-badge .badge-shape{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))}
+.modal-type-badge{position:relative;width:78px;height:68px;margin-bottom:14px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))}
+.modal-type-badge .badge-shape{position:absolute;inset:0;width:100%;height:100%}
 .modal-type-badge .badge-text{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-size:.72rem;font-weight:700;line-height:1.15}
 .modal-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.4rem;font-weight:400;color:var(--white);line-height:1.3;letter-spacing:.01em}
 .modal-item-desc{margin-top:10px;font-size:.88rem;line-height:1.72;color:rgba(255,255,255,.88);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;transition:all .2s ease}
@@ -240,7 +240,9 @@ body.modal-open{overflow:hidden}
   .showcase{display:none}
   .house-carousel{display:flex;flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:16px;padding:10px 4px 14px;scrollbar-width:none;-ms-overflow-style:none}
   .house-carousel::-webkit-scrollbar{display:none}
-  .house-card{flex:0 0 62%;aspect-ratio:480/560;scroll-snap-align:center;clip-path:polygon(50% 0%,100% 30%,100% 100%,0% 100%,0% 30%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:26px;color:#fff;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.2);cursor:pointer}
+  .house-card{flex:0 0 62%;aspect-ratio:480/560;scroll-snap-align:center;position:relative;cursor:pointer;filter:drop-shadow(0 6px 14px rgba(0,0,0,.2))}
+  .house-card .badge-shape{position:absolute;inset:0;width:100%;height:100%}
+  .house-card-text{position:absolute;left:0;right:0;bottom:26px;text-align:center;color:#fff;padding:0 10px}
   .house-card-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.25rem;font-weight:400;padding:0 10px}
   .house-card-count{font-size:.8rem;font-weight:700;margin-top:6px;opacity:.92}
   .cat-current-desc{display:block;background:var(--white);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);margin-top:16px}
@@ -528,9 +530,12 @@ function renderHome(){
     const color = CAT_COLORS[cat]||'#00586f';
     const count = DATA.items.filter(it=>it.category===cat).length;
     const displayName = CAT_DISPLAY[cat]||cat;
-    return `<div class="house-card" id="houseCard${i}" style="background:${color}" onclick="openCategory('${escH(cat)}')">
-      <div class="house-card-name">${escH(displayName)}</div>
-      <div class="house-card-count">‹ ${count} מסמכים ›</div>
+    return `<div class="house-card" id="houseCard${i}" onclick="openCategory('${escH(cat)}')">
+      <svg class="badge-shape" viewBox="0 0 480 560"><polygon points="240,0 480,168 480,560 0,560 0,168" fill="${color}"></polygon></svg>
+      <div class="house-card-text">
+        <div class="house-card-name">${escH(displayName)}</div>
+        <div class="house-card-count">‹ ${count} מסמכים ›</div>
+      </div>
     </div>`;
   }).join('');
 
@@ -678,7 +683,7 @@ function renderItems(items){
     return `<div class="item-card anim-card" style="animation-delay:${idx*0.05}s" onclick="openModal(${idx})">
       <div class="item-card-top">
         <div class="item-type-badge ${isS?'badge-supplier':'badge-doc'}">
-          <svg class="badge-shape" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 100,36 100,100 0,100 0,36"/></svg>
+          <svg class="badge-shape" viewBox="0 0 74 66"><polygon points="37,0 74,24 74,66 0,66 0,24"/></svg>
           <span class="badge-text">${isS?'ספק':'מסמך'}</span>
         </div>
         <div class="item-name">${escH(item.name)}</div>
@@ -704,7 +709,7 @@ function openModal(idx){
   const isS = item.type==='ספק';
   const badge = document.getElementById('modalBadge');
   badge.className = 'modal-type-badge '+(isS?'badge-supplier':'badge-doc');
-  badge.innerHTML = `<svg class="badge-shape" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="50,0 100,36 100,100 0,100 0,36"></polygon></svg><span class="badge-text">${isS?'ספק':'מסמך המלצות'}</span>`;
+  badge.innerHTML = `<svg class="badge-shape" viewBox="0 0 78 68"><polygon points="39,0 78,24.5 78,68 0,68 0,24.5"></polygon></svg><span class="badge-text">${isS?'ספק':'מסמך המלצות'}</span>`;
   document.getElementById('modalTitle').textContent = item.name;
   const descWrap = document.getElementById('modalDescWrap');
   if(descWrap){
