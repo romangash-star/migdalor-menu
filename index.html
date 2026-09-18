@@ -13,7 +13,7 @@
   --teal:#00586f;--teal-mid:#1c7d8f;--teal-light:#2b9eb5;--teal-bright:#38d1d6;
   --gold:#fcb84f;--gold-hover:#e8a53a;
   --slate:#4A556C;--slate-light:#8896B3;--white:#fff;--off-white:#f0f2de;
-  --accent:#fcb84f;--accent-hover:#e8a53a;--whatsapp:#25D366;
+  --accent:#fcb84f;--accent-hover:#e8a53a;--whatsapp:#38d1d6;
   --radius:12px;--shadow:0 4px 20px rgba(0,88,111,.15);--shadow-lg:0 8px 36px rgba(0,88,111,.28);
   --t:.22s ease}
 body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);color:#1a3340;min-height:100vh;font-size:16px;line-height:1.6}
@@ -52,7 +52,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .hero h1{position:relative;font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:400;margin-bottom:8px;line-height:1.2;letter-spacing:.01em}
 .hero p{position:relative;font-size:.92rem;opacity:.85;max-width:640px;margin:0 auto;font-family:'BrandText','Heebo',sans-serif}
 /* ── INTRO ───────────────────────────────────────────── */
-.intro-section{background:var(--white);padding:16px 24px;border-top:2px solid rgba(0,88,111,.08)}
+.intro-section{background:var(--white);padding:16px 24px;border-bottom:2px solid rgba(0,88,111,.08)}
 .intro-inner{max-width:880px;margin:0 auto;font-size:.93rem;line-height:1.75;color:#1a3340}
 .intro-inner p+p{margin-top:10px}
 
@@ -155,8 +155,8 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal-header-actions{display:flex;align-items:center;gap:8px;justify-content:flex-start;margin-bottom:12px;flex-direction:row-reverse}
 .modal-close{position:static;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
 .modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
-.modal-share-btn{background:rgba(37,211,102,.2);border:1.5px solid rgba(37,211,102,.5);color:#fff;padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:'BrandText','Heebo',sans-serif;transition:background var(--t)}
-.modal-share-btn:hover{background:rgba(37,211,102,.4)}
+.modal-share-btn{background:rgba(56,209,214,.22);border:1.5px solid rgba(56,209,214,.55);color:#fff;padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:'BrandText','Heebo',sans-serif;transition:background var(--t)}
+.modal-share-btn:hover{background:rgba(56,209,214,.4)}
 .modal-body{padding:28px;background:var(--white)}
 .modal-section{margin-bottom:22px}
 .modal-section-title{font-size:.8rem;font-weight:700;color:var(--teal-mid);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid rgba(0,88,111,.1);display:flex;align-items:center;gap:6px}
@@ -174,7 +174,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .contact-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
 .btn-email{background:var(--navy);color:var(--white)}
 .btn-phone{background:var(--teal-mid);color:var(--white)}
-.btn-whatsapp{background:var(--whatsapp);color:var(--white)}
+.btn-whatsapp{background:var(--whatsapp);color:#003d4f}
 
 /* ── FILES IN MODAL ──────────────────────────────────── */
 .files-list{display:flex;flex-direction:column;gap:8px}
@@ -315,6 +315,12 @@ body.modal-open{overflow:hidden}
     <h1>חינוך לדמוקרטיה בשלטון המקומי</h1>
     <p>תפריט פעולה לרשות המקומית לקידום דמוקרטיה ליברלית</p>
   </div>
+  <div class="intro-section anim-title">
+    <div class="intro-inner">
+      <p>התפריט הרשותי של המגדלור נועד לסייע לרשות המקומית לממש את תפקידה וכוחה בקידום חינוך לדמוקרטיה ליברלית, באמצעות מדיניות, תכניות ומהלכים במגוון הזירות שבהן היא פועלת ומשפיעה. התפריט מציע מגוון פעולות, מודלים וכלים שניתן לבחור מתוכם בהתאם לצרכים, לאתגרים ולמאפיינים של כל רשות. התפריט מתייחס לא רק לתכניות חינוכיות, אלא גם לאופן שבו הרשות מעצבת תרבות, נורמות ומרחב ציבורי וקהילתי כמערכת דמוקרטית ליברלית רחבה מתוך הבנה שכדי לייצר שינוי משמעותי בחייהם של אנשים ולקדם חינוך לדמוקרטיה.</p>
+      <p>התפריט מחולק לחמישה תחומים מרכזיים, המשקפים את הזירות העיקריות שבהן הרשות יכולה לפעול ולהשפיע, דרך הזהות הציבורית שלה, כוח האדם, התכניות החינוכיות, התרבות הארגונית, השותפויות והמשאבים העומדים לרשותה. כך, התפריט מציע לרשות מגוון אפשרויות מעשיות ליצירת סביבה עירונית שלמה התומכת בחירות, שוויון, סולידריות, השתתפות וחיים דמוקרטיים משותפים.</p>
+    </div>
+  </div>
   <div class="categories-section">
     <div class="section-title anim-title">תחומי פעולה</div>
     <div class="showcase anim-grid">
@@ -326,12 +332,6 @@ body.modal-open{overflow:hidden}
     </div>
     <div class="house-carousel" id="houseCarousel"></div>
     <div class="cat-current-desc" id="catCurrentDesc"></div>
-  </div>
-  <div class="intro-section anim-title">
-    <div class="intro-inner">
-      <p>התפריט הרשותי של המגדלור נועד לסייע לרשות המקומית לממש את תפקידה וכוחה בקידום חינוך לדמוקרטיה ליברלית, באמצעות מדיניות, תכניות ומהלכים במגוון הזירות שבהן היא פועלת ומשפיעה. התפריט מציע מגוון פעולות, מודלים וכלים שניתן לבחור מתוכם בהתאם לצרכים, לאתגרים ולמאפיינים של כל רשות. התפריט מתייחס לא רק לתכניות חינוכיות, אלא גם לאופן שבו הרשות מעצבת תרבות, נורמות ומרחב ציבורי וקהילתי כמערכת דמוקרטית ליברלית רחבה מתוך הבנה שכדי לייצר שינוי משמעותי בחייהם של אנשים ולקדם חינוך לדמוקרטיה.</p>
-      <p>התפריט מחולק לחמישה תחומים מרכזיים, המשקפים את הזירות העיקריות שבהן הרשות יכולה לפעול ולהשפיע, דרך הזהות הציבורית שלה, כוח האדם, התכניות החינוכיות, התרבות הארגונית, השותפויות והמשאבים העומדים לרשותה. כך, התפריט מציע לרשות מגוון אפשרויות מעשיות ליצירת סביבה עירונית שלמה התומכת בחירות, שוויון, סולידריות, השתתפות וחיים דמוקרטיים משותפים.</p>
-    </div>
   </div>
 </div>
 
