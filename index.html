@@ -70,6 +70,8 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .house-label{position:absolute;transform:translate(-50%,-50%);text-align:center;opacity:0;transition:opacity .25s ease;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.4);pointer-events:none;width:120px}
 .house-label.active{opacity:1}
 .house-label-dark{color:#1a3340;text-shadow:none}
+.house-label-narrow .house-label-name{font-size:.8rem;line-height:1.15}
+.house-label-narrow .house-label-count{font-size:.62rem;line-height:1.2}
 .house-label-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.05rem;font-weight:400;line-height:1.2}
 .house-label-count{font-size:.72rem;font-weight:700;margin-top:5px;opacity:.92}
 .cat-list{flex:0 1 420px;min-width:260px;display:flex;flex-direction:column}
@@ -474,13 +476,15 @@ let _renderedItems = [];
 /* ── HOME ──────────────────────────────────────────────── */
 // Exact geometry + opacity from the designer's vector file, in the file's own draw
 // order (back to front). Coordinates are the PDF's points with the y-axis flipped;
-// the SVG viewBox crops to them. cx/cy = label center as % of the graphic box.
+// the SVG viewBox crops to them. cx/cy = label center as % of the graphic box, placed
+// on the part of each house no other house overlaps (its own color only). Where that
+// part is a narrow strip, `narrow` = label width in px so the text stacks to fit it.
 const HOUSE_SHAPES = [
-  {color:'#fcb84f', op:0.5,  pts:'116.889,106.022 116.889,435.811 304.134,435.811 304.134,106.022 210.512,51.057', cx:49.57, cy:44.65},
-  {color:'#1e7e90', op:0.68, pts:'166.720,181.034 166.720,482.582 352.688,482.582 352.688,181.034 259.704,126.444', cx:63.71, cy:56.68},
-  {color:'#5cc6cd', op:0.67, pts:'47.438,248.319 47.438,395.529 234.682,395.529 234.682,248.319 141.060,193.354',  cx:29.61, cy:54.73},
-  {color:'#ebe275', op:0.51, pts:'190.514,338.688 190.514,544.219 377.759,544.219 377.759,338.688 284.137,304.433', cx:70.73, cy:78.35},
-  {color:'#075c73', op:0.68, pts:'97.228,359.436 97.228,508.106 283.197,508.106 283.197,359.436 190.213,325.414',  cx:43.74, cy:76.83}
+  {color:'#fcb84f', op:0.5,  pts:'116.889,106.022 116.889,435.811 304.134,435.811 304.134,106.022 210.512,51.057', cx:37.64, cy:16.40},
+  {color:'#1e7e90', op:0.68, pts:'166.720,181.034 166.720,482.582 352.688,482.582 352.688,181.034 259.704,126.444', cx:83.33, cy:39.72, narrow:40},
+  {color:'#5cc6cd', op:0.67, pts:'47.438,248.319 47.438,395.529 234.682,395.529 234.682,248.319 141.060,193.354',  cx:12.64, cy:54.35, narrow:58},
+  {color:'#ebe275', op:0.51, pts:'190.514,338.688 190.514,544.219 377.759,544.219 377.759,338.688 284.137,304.433', cx:83.91, cy:92.49, narrow:76},
+  {color:'#075c73', op:0.68, pts:'97.228,359.436 97.228,508.106 283.197,508.106 283.197,359.436 190.213,325.414',  cx:27.01, cy:84.39, narrow:58}
 ];
 const shapeForCat = cat => HOUSE_SHAPES.find(s => s.color === CAT_COLORS[cat]);
 
@@ -503,11 +507,11 @@ function renderHome(){
   const carousel = document.getElementById('houseCarousel');
 
   // Draw in the designer's back-to-front order, not category order.
-  svg.innerHTML = HOUSE_SHAPES.map((s, order) => {
+  svg.innerHTML = HOUSE_SHAPES.map(s => {
     const i = cats.findIndex(c => CAT_COLORS[c] === s.color);
     if(i < 0) return '';
     const cat = cats[i];
-    return `<polygon class="house-shape" data-idx="${i}" data-order="${order}" points="${s.pts}" fill="${s.color}" style="--op:${s.op}"
+    return `<polygon class="house-shape" data-idx="${i}" points="${s.pts}" fill="${s.color}" style="--op:${s.op}"
       ${HOVER_ATTRS(i)} onclick="openCategory('${escH(cat)}')"></polygon>`;
   }).join('');
 
@@ -517,9 +521,10 @@ function renderHome(){
     const count = DATA.items.filter(it=>it.category===cat).length;
     const displayName = CAT_DISPLAY[cat]||cat;
     const dark = LIGHT_HOUSE_COLORS.includes(s.color) ? ' house-label-dark' : '';
-    return `<div class="house-label${dark}" id="houseLabel${i}" style="left:${s.cx}%;top:${s.cy}%">
+    const narrow = s.narrow ? ` house-label-narrow" style="left:${s.cx}%;top:${s.cy}%;width:${s.narrow}px` : `" style="left:${s.cx}%;top:${s.cy}%`;
+    return `<div class="house-label${dark}${narrow}" id="houseLabel${i}">
       <div class="house-label-name">${escH(displayName)}</div>
-      <div class="house-label-count">‹ ${count} מסמכים ›</div>
+      <div class="house-label-count">${s.narrow ? `${count} מסמכים` : `‹ ${count} מסמכים ›`}</div>
     </div>`;
   }).join('');
 
@@ -564,22 +569,8 @@ function renderHome(){
   }
 }
 
-// Put houses back in the designer's back-to-front order.
-function restoreHouseOrder(){
-  const svg = document.getElementById('houseSvg');
-  [...svg.querySelectorAll('.house-shape')].sort((a,b)=>a.dataset.order-b.dataset.order).forEach(el=>svg.appendChild(el));
-}
 function setActiveCat(idx){
-  // Moving the hovered node re-fires mouseenter on the next mouse move; skip if already done.
-  const top = document.getElementById('houseSvg').lastElementChild;
-  if(top && top.classList.contains('active') && +top.dataset.idx===idx) return;
-  restoreHouseOrder();
-  document.querySelectorAll('.house-shape').forEach(el=>{
-    const on = +el.dataset.idx===idx;
-    el.classList.toggle('active', on);
-    // Hovered house comes to the front, so its label sits on its own color only.
-    if(on) el.parentNode.appendChild(el);
-  });
+  document.querySelectorAll('.house-shape').forEach(el=>el.classList.toggle('active', +el.dataset.idx===idx));
   document.querySelectorAll('.house-label').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.cat-list-item').forEach(el=>el.classList.remove('active'));
   const label = document.getElementById('houseLabel'+idx);
@@ -589,7 +580,6 @@ function setActiveCat(idx){
 }
 function clearActiveCat(){
   document.querySelectorAll('.house-shape').forEach(el=>el.classList.remove('active'));
-  restoreHouseOrder();
   document.querySelectorAll('.house-label').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.cat-list-item').forEach(el=>el.classList.remove('active'));
 }
