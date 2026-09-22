@@ -61,7 +61,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .section-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.5rem;font-weight:400;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:12px;letter-spacing:.02em}
 .section-title::after{content:'';flex:1;height:2px;background:linear-gradient(to left,transparent,var(--gold))}
 /* ── HOME SHOWCASE (list + interactive house graphic) ─── */
-.showcase{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.showcase{display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap}
 .cat-graphic{position:relative;flex:0 0 300px;max-width:300px;width:100%;aspect-ratio:348/506}
 .cat-graphic svg{width:100%;height:100%;display:block;overflow:visible;shape-rendering:geometricPrecision}
 .house-shape{opacity:var(--op,.68);transition:opacity .3s ease,filter .3s ease;cursor:pointer;transform-box:fill-box;transform-origin:center}
@@ -72,7 +72,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .house-label-dark{color:#1a3340;text-shadow:none}
 .house-label-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.05rem;font-weight:400;line-height:1.2}
 .house-label-count{font-size:.72rem;font-weight:700;margin-top:5px;opacity:.92}
-.cat-list{flex:1;min-width:260px;display:flex;flex-direction:column}
+.cat-list{flex:0 1 420px;min-width:260px;display:flex;flex-direction:column}
 .cat-list-item{cursor:pointer;padding:8px 4px;border-bottom:1px solid rgba(0,88,111,.08)}
 .cat-list-item:last-child{border-bottom:none}
 .cat-list-name{font-family:'BrandTitle','Secular One',sans-serif;font-weight:400;font-size:1.15rem;transition:font-size .25s ease;letter-spacing:.01em}
@@ -403,15 +403,15 @@ const DATA = {"categories": ["חזון ויעוד", "כח אדם", "תכניות
 
 // Exact colors from the designer's file (קבצים מריקי המעצבת/2.pdf)
 const CAT_COLORS = {
-  'חזון ויעוד':'#1e7e90',
-  'כח אדם':'#5cc6cd',
-  'תכניות חינוכיות וקהילתיות':'#ebe275',
-  'תרבות ארגונית':'#075c73',
-  'שותפויות ומשאבים':'#fcb84f'
+  'חזון ויעוד':'#fcb84f',
+  'כח אדם':'#1e7e90',
+  'תכניות חינוכיות וקהילתיות':'#5cc6cd',
+  'תרבות ארגונית':'#ebe275',
+  'שותפויות ומשאבים':'#075c73'
 };
 const LIGHT_HOUSE_COLORS = ['#ebe275','#fcb84f'];
 const CAT_DISPLAY = {
-  'חזון ויעוד':'חזון ותפיסת יעוד',
+  'חזון ויעוד':'זהות וייעוד',
   'כח אדם':'כח אדם',
   'תכניות חינוכיות וקהילתיות':'תכניות חינוכיות',
   'תרבות ארגונית':'תרבות ארגונית',
