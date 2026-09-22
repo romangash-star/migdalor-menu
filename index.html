@@ -239,11 +239,12 @@ body.modal-open{overflow:hidden}
 .cat-current-desc{display:none}
 @media(hover:none){
   .showcase{display:none}
-  .house-carousel{display:flex;flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:16px;padding:10px 4px 14px;scrollbar-width:none;-ms-overflow-style:none}
+  .house-carousel{display:flex;flex-direction:row;align-items:flex-end;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:16px;padding:10px 4px 14px;scrollbar-width:none;-ms-overflow-style:none}
   .house-carousel::-webkit-scrollbar{display:none}
-  .house-card{flex:0 0 62%;aspect-ratio:480/560;scroll-snap-align:center;position:relative;cursor:pointer;filter:drop-shadow(0 6px 14px rgba(0,0,0,.2))}
+  .house-card{flex:0 0 min(52%,210px);scroll-snap-align:center;position:relative;cursor:pointer}
   .house-card .badge-shape{position:absolute;inset:0;width:100%;height:100%}
   .house-card-text{position:absolute;left:0;right:0;bottom:26px;text-align:center;color:#fff;padding:0 10px}
+  .house-card-text.house-label-dark{color:#1a3340}
   .house-card-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.25rem;font-weight:400;padding:0 10px}
   .house-card-count{font-size:.8rem;font-weight:700;margin-top:6px;opacity:.92}
   .cat-current-desc{display:block;background:var(--white);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);margin-top:16px}
@@ -535,13 +536,20 @@ function renderHome(){
 
   // Mobile: the graphic itself is the swipeable carousel — one house at a time,
   // full size, name + count already inside it.
+  // Each mobile card is that category's exact house from the designer's file — its own
+  // height, roof and opacity — at one shared scale, so their sizes relate as in her design.
   carousel.innerHTML = cats.map((cat, i) => {
-    const color = CAT_COLORS[cat]||'#00586f';
+    const s = shapeForCat(cat);
+    if(!s) return '';
+    const xy = s.pts.split(' ').map(p => p.split(',').map(Number));
+    const minX = Math.min(...xy.map(p=>p[0])), minY = Math.min(...xy.map(p=>p[1]));
+    const w = Math.max(...xy.map(p=>p[0])) - minX, h = Math.max(...xy.map(p=>p[1])) - minY;
     const count = DATA.items.filter(it=>it.category===cat).length;
     const displayName = CAT_DISPLAY[cat]||cat;
-    return `<div class="house-card" id="houseCard${i}" onclick="openCategory('${escH(cat)}')">
-      <svg class="badge-shape" viewBox="0 0 480 560"><polygon points="240,0 480,141 480,560 0,560 0,141" fill="${color}"></polygon></svg>
-      <div class="house-card-text${LIGHT_HOUSE_COLORS.includes(color)?' house-label-dark':''}">
+    const whiteText = ['#1e7e90','#075c73'].includes(s.color);
+    return `<div class="house-card" id="houseCard${i}" style="aspect-ratio:${w}/${h}" onclick="openCategory('${escH(cat)}')">
+      <svg class="badge-shape" viewBox="${minX} ${minY} ${w} ${h}"><polygon points="${s.pts}" fill="${s.color}" fill-opacity="${s.op}"></polygon></svg>
+      <div class="house-card-text${whiteText?'':' house-label-dark'}">
         <div class="house-card-name">${escH(displayName)}</div>
         <div class="house-card-count">‹ ${count} מסמכים ›</div>
       </div>
