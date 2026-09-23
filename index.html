@@ -105,13 +105,15 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .item-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--gold)}
 .item-card:active{transform:translateY(-1px)}
 .item-card-top{background:linear-gradient(135deg,var(--navy) 0%,var(--teal-mid) 100%);padding:18px 20px;position:relative;min-height:80px;border-radius:var(--radius) var(--radius) 0 0}
-.item-type-badge{position:absolute;top:-22px;right:22px;width:74px;height:66px}
-.item-type-badge .badge-shape{position:absolute;inset:0;width:100%;height:100%}
-.item-type-badge .badge-text{position:absolute;left:0;right:0;bottom:9px;text-align:center;font-size:.7rem;font-weight:700;line-height:1.15}
-.badge-supplier .badge-shape polygon{fill:var(--gold)}
-.badge-supplier .badge-text{color:#3a2800}
-.badge-doc .badge-shape polygon{fill:var(--teal-bright)}
-.badge-doc .badge-text{color:#003d4f}
+.item-type-badge{position:absolute;top:-22px;bottom:0;right:22px;width:74px}
+.item-type-badge .badge-roof{position:absolute;top:0;left:0;width:100%;height:22px;display:block}
+.item-type-badge .badge-body{position:absolute;top:21px;bottom:0;left:0;right:0}
+.item-type-badge .badge-text{position:absolute;left:0;right:0;top:30px;text-align:center;font-size:.7rem;font-weight:700;line-height:1.15;letter-spacing:.05em}
+.badge-supplier{--badge-bg:var(--gold);--badge-fg:#3a2800}
+.badge-doc{--badge-bg:var(--teal-bright);--badge-fg:#003d4f}
+.item-type-badge .badge-roof polygon{fill:var(--badge-bg)}
+.item-type-badge .badge-body{background:var(--badge-bg)}
+.item-type-badge .badge-text{color:var(--badge-fg)}
 .item-name{color:var(--white);font-size:.95rem;font-weight:700;line-height:1.4;padding-right:86px}
 .item-card-body{padding:14px 18px;flex:1;display:flex;flex-direction:column;gap:8px}
 .item-meta{display:flex;flex-wrap:wrap;gap:5px}
@@ -126,7 +128,8 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 /* File names list in card */
 .item-files-list{display:flex;flex-direction:column;gap:3px;margin-top:6px}
 .item-file-chip{display:flex;align-items:center;gap:5px;font-size:.74rem;color:var(--slate);line-height:1.3}
-.item-file-chip .ext-dot{width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;flex-shrink:0}
+.item-file-chip .file-clip{display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--teal-mid)}
+.item-file-chip .clip-icon{width:14px;height:14px}
 .ext-pdf{background:#FDECEA;color:#C62828}
 .ext-doc{background:#E3F2FD;color:#1565C0}
 .ext-ppt{background:#FFF3E0;color:#E65100}
@@ -703,7 +706,7 @@ function renderItems(items){
       const rest  = files.length - SHOW;
       filesHtml = `<div class="item-files-list">
         ${shown.map(f=>`<div class="item-file-chip">
-          <div class="ext-dot ${fileExtCss(f.name)}">${ext(f.name).toUpperCase().slice(0,3)}</div>
+          <span class="file-clip" title="${escA(ext(f.name).toUpperCase())}">${CLIP_ICON}</span>
           <span class="item-file-name">${escH(f.name.replace(/\.[^.]+$/,''))}</span>
         </div>`).join('')}
         ${rest>0?`<div class="item-files-more">+ ${rest} קבצים נוספים</div>`:''}
@@ -720,7 +723,8 @@ function renderItems(items){
     return `<div class="item-card anim-card" style="animation-delay:${idx*0.05}s" onclick="openModal(${idx})">
       <div class="item-card-top">
         <div class="item-type-badge ${isS?'badge-supplier':'badge-doc'}">
-          <svg class="badge-shape" viewBox="0 0 74 66"><polygon points="37,0 74,22 74,66 0,66 0,22"/></svg>
+          <svg class="badge-roof" viewBox="0 0 74 22" preserveAspectRatio="none"><polygon points="37,0 74,22 0,22"/></svg>
+          <div class="badge-body"></div>
           <span class="badge-text">${isS?'ספק':'מסמך'}</span>
         </div>
         <div class="item-name">${escH(item.name)}</div>
