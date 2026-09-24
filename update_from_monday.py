@@ -8,18 +8,30 @@ update_from_monday.py  —  מעדכן את DATA ב-index.html מלוח Monday.c
   python update_from_monday.py              # עדכן את index.html מ-Monday
 """
 
-import json, re, sys, urllib.request, urllib.error
+import json, os, re, sys, urllib.request, urllib.error
 from pathlib import Path
 
 # ════════════════════════════════════════════════════════════════════
 #  הגדרות — ערוך כאן לפני הרצה ראשונה
 # ════════════════════════════════════════════════════════════════════
 
-API_TOKEN = "YOUR_API_TOKEN_HERE"
-#   ↑ Monday → לחץ על תמונת הפרופיל → Developers → My Access Tokens → Copy
+# המפתח נקרא מקובץ monday_token.txt שלידך (או ממשתנה סביבה MONDAY_TOKEN),
+# כדי שלא יישמר בתוך הקוד ולא יעלה לאינטרנט. הקובץ הזה מוחרג מגיט.
+def _read_token() -> str:
+    env = os.environ.get("MONDAY_TOKEN", "").strip()
+    if env:
+        return env
+    token_file = Path(__file__).parent / "monday_token.txt"
+    if token_file.exists():
+        return token_file.read_text(encoding="utf-8").strip()
+    return ""
 
-BOARD_ID  = "YOUR_BOARD_ID_HERE"
-#   ↑ פתח את הלוח ב-Monday, תראה בURL: monday.com/boards/1234567890
+API_TOKEN = _read_token()
+#   ↑ Monday → תמונת הפרופיל → Developers → My Access Tokens → Copy,
+#     ואז להדביק את המפתח לקובץ monday_token.txt
+
+BOARD_ID  = "18226036072"
+#   ↑ מזהה הלוח מה-URL: monday.com/boards/18226036072
 
 # מיפוי: שם שדה ב-DATA  →  מזהה עמודה ב-Monday (column id)
 # הרץ תחילה:  python update_from_monday.py --discover
@@ -229,11 +241,14 @@ def update_html(data: dict):
 
 def main():
     if "--discover" in sys.argv:
+        if not API_TOKEN:
+            print("לא נמצא מפתח. צור קובץ monday_token.txt לצד הסקריפט והדבק בו את המפתח מ-Monday.")
+            sys.exit(1)
         discover()
         return
 
-    if API_TOKEN == "YOUR_API_TOKEN_HERE" or BOARD_ID == "YOUR_BOARD_ID_HERE":
-        print("שגיאה: הכנס API_TOKEN ו-BOARD_ID בתחילת הסקריפט.")
+    if not API_TOKEN:
+        print("לא נמצא מפתח. צור קובץ monday_token.txt לצד הסקריפט והדבק בו את המפתח מ-Monday.")
         sys.exit(1)
 
     print("═" * 50)
