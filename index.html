@@ -85,7 +85,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .cat-page-desc{margin-top:12px;font-size:.95rem;opacity:.85;line-height:1.8;max-width:760px}
 
 /* ── CATEGORY PAGE ───────────────────────────────────── */
-.cat-page-header{background:linear-gradient(150deg,var(--navy-mid) 0%,var(--navy) 55%,var(--teal) 100%);color:var(--white);padding:40px 24px 36px;position:relative;overflow:hidden}
+.cat-page-header{background:linear-gradient(150deg,var(--cat-mid,var(--navy-mid)) 0%,var(--cat-deep,var(--navy)) 55%,var(--cat-deepest,var(--teal)) 100%);color:var(--white);padding:40px 24px 36px;position:relative;overflow:hidden}
 .cat-page-header::after{content:'';position:absolute;top:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(252,184,79,.15) 0%,transparent 70%);pointer-events:none}
 .cat-page-header-inner{max-width:1200px;margin:0 auto;position:relative}
 .cat-page-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:400;margin-bottom:8px;letter-spacing:.01em}
@@ -102,15 +102,15 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .items-section{max-width:1200px;margin:0 auto;padding:28px 24px 56px}
 .items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));column-gap:18px;row-gap:44px}
 .item-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer;transition:transform var(--t),box-shadow var(--t),border-color var(--t);border:2px solid transparent;display:flex;flex-direction:column}
-.item-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--gold)}
+.item-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--cat,var(--gold))}
 .item-card:active{transform:translateY(-1px)}
-.item-card-top{background:linear-gradient(135deg,var(--navy) 0%,var(--teal-mid) 100%);padding:18px 20px;position:relative;min-height:80px;border-radius:var(--radius) var(--radius) 0 0}
+.item-card-top{background:linear-gradient(135deg,var(--cat-deep,var(--navy)) 0%,var(--cat-mid,var(--teal-mid)) 100%);padding:18px 20px;position:relative;min-height:80px;border-radius:var(--radius) var(--radius) 0 0}
 .item-type-badge{position:absolute;top:-22px;bottom:0;right:22px;width:74px}
 .item-type-badge .badge-roof{position:absolute;top:0;left:0;width:100%;height:22px;display:block}
 .item-type-badge .badge-body{position:absolute;top:21px;bottom:0;left:0;right:0}
 .item-type-badge .badge-text{position:absolute;left:0;right:0;top:30px;text-align:center;font-size:.7rem;font-weight:700;line-height:1.15;letter-spacing:.05em}
 .badge-supplier{--badge-bg:var(--gold);--badge-fg:#3a2800}
-.badge-doc{--badge-bg:var(--teal-bright);--badge-fg:#003d4f}
+.badge-doc{--badge-bg:var(--cat-soft,var(--teal-bright));--badge-fg:var(--cat-soft-fg,#003d4f)}
 .item-type-badge .badge-roof polygon{fill:var(--badge-bg)}
 .item-type-badge .badge-body{background:var(--badge-bg)}
 .item-type-badge .badge-text{color:var(--badge-fg)}
@@ -139,7 +139,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .item-files-more{font-size:.72rem;color:var(--accent);font-weight:700;padding-right:23px}
 
 .item-card-footer{padding:10px 18px;border-top:1px solid rgba(0,88,111,.07);display:flex;align-items:center;justify-content:space-between;border-radius:0 0 var(--radius) var(--radius)}
-.view-btn{font-size:.85rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:4px;transition:gap var(--t),color var(--t)}
+.view-btn{font-size:.85rem;font-weight:700;color:var(--cat-deep,var(--navy));display:flex;align-items:center;gap:4px;transition:gap var(--t),color var(--t)}
 .item-card:hover .view-btn{gap:7px;color:var(--teal-mid)}
 .gafan-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,88,111,.1);color:var(--teal);padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:700}
 
@@ -148,7 +148,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal{background:var(--white);border-radius:16px;max-width:760px;width:100%;margin:auto;box-shadow:var(--shadow-lg);overflow:hidden}
 .modal-overlay.open .modal{animation:scaleIn .25s ease both}
-.modal-header{background:linear-gradient(150deg,var(--navy-mid) 0%,var(--navy) 55%,var(--teal) 100%);padding:28px 28px 24px;position:relative}
+.modal-header{background:linear-gradient(150deg,var(--cat-mid,var(--navy-mid)) 0%,var(--cat-deep,var(--navy)) 55%,var(--cat-deepest,var(--teal)) 100%);padding:28px 28px 24px;position:relative}
 .modal-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
 .modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
 .modal-type-badge{position:relative;width:78px;height:68px;margin-bottom:14px}
@@ -165,7 +165,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal-share-btn:hover{background:rgba(56,209,214,.4)}
 .modal-body{padding:28px;background:var(--white)}
 .modal-section{margin-bottom:22px}
-.modal-section-title{font-size:.8rem;font-weight:700;color:var(--teal-mid);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid rgba(0,88,111,.1);display:flex;align-items:center;gap:6px}
+.modal-section-title{font-size:.8rem;font-weight:700;color:var(--cat-mid,var(--teal-mid));text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid rgba(0,88,111,.1);display:flex;align-items:center;gap:6px}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
 .info-item{background:var(--off-white);border-radius:8px;padding:10px 12px;transition:background var(--t)}
 .info-item:hover{background:rgba(0,88,111,.06)}
@@ -201,7 +201,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .file-actions{display:flex;gap:6px;flex-shrink:0}
 .file-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;font-family:'Heebo',sans-serif;font-size:.8rem;font-weight:700;text-decoration:none;transition:transform var(--t),background var(--t);cursor:pointer;border:none}
 .file-btn:hover{transform:translateY(-1px)}
-.file-btn-view{background:var(--navy);color:var(--white)}
+.file-btn-view{background:var(--cat-deep,var(--navy));color:var(--white)}
 .file-btn-view:hover{background:var(--teal-mid)}
 .file-btn-dl{background:transparent;color:var(--navy);border:1.5px solid rgba(0,88,111,.2)}
 .file-btn-dl:hover{background:rgba(0,88,111,.06)}
@@ -640,7 +640,47 @@ function initSwipeSync(){
 
 /* ── CATEGORY ──────────────────────────────────────────── */
 let currentItems = [];
+/* ── CATEGORY THEME ─────────────────────────────────────── */
+// Each category page takes its own house colour: shades are derived from the one
+// hex so a colour change in CAT_COLORS themes the whole page automatically.
+const hexToHsl = hex => {
+  const n = parseInt(hex.slice(1), 16);
+  const r = ((n >> 16) & 255) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn;
+  let h = 0, sat = 0;
+  if(d){
+    sat = d / (1 - Math.abs(2 * l - 1));
+    h = mx === r ? ((g - b) / d + (g < b ? 6 : 0)) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    h *= 60;
+  }
+  return [h, sat, l];
+};
+const hsl = (h, s, l) => `hsl(${h.toFixed(1)} ${(s * 100).toFixed(1)}% ${(l * 100).toFixed(1)}%)`;
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+// Shades keep the category's own hue — only lightness moves — so a gold page reads
+// gold and a teal page reads teal, instead of both drifting toward one dark colour.
+function applyCatTheme(cat){
+  const root = document.documentElement.style;
+  const base = CAT_COLORS[cat];
+  if(!base){ clearCatTheme(); return; }
+  const [h, sat, l] = hexToHsl(base);
+  const s2 = clamp(sat, 0.35, 0.8);
+  const softL = clamp(l * 1.15, 0.58, 0.8);
+  root.setProperty('--cat', base);
+  root.setProperty('--cat-mid', hsl(h, s2, clamp(l * 0.62, 0.24, 0.40)));
+  root.setProperty('--cat-deep', hsl(h, s2, clamp(l * 0.45, 0.17, 0.28)));
+  root.setProperty('--cat-deepest', hsl(h, s2, clamp(l * 0.34, 0.12, 0.22)));
+  root.setProperty('--cat-soft', hsl(h, clamp(sat, 0.4, 0.95), softL));
+  root.setProperty('--cat-soft-fg', softL > 0.62 ? '#00303d' : '#fff');
+}
+function clearCatTheme(){
+  ['--cat','--cat-mid','--cat-deep','--cat-deepest','--cat-soft','--cat-soft-fg']
+    .forEach(v => document.documentElement.style.removeProperty(v));
+}
+
 function openCategory(cat){
+  applyCatTheme(cat);
   currentItems = DATA.items.filter(i=>i.category===cat);
   document.getElementById('catPageTitle').textContent = CAT_DISPLAY[cat]||cat;
   const sup = currentItems.filter(i=>i.type==='ספק').length;
@@ -890,6 +930,7 @@ function closeModalOnOverlay(e){if(e.target===document.getElementById('modalOver
 
 /* ── NAV ────────────────────────────────────────────────── */
 function goHome(){
+  clearCatTheme();
   document.body.classList.remove('in-category');
   document.getElementById('backBtn').classList.remove('visible');
   window.scrollTo({top:0,behavior:'smooth'});
