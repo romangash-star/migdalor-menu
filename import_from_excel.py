@@ -128,8 +128,10 @@ def parse_items(rows):
         item["category"] = CATEGORY_ALIASES.get(raw_category, raw_category)
         item["type"] = item["type"] or "מסמך המלצות"
         item["_links"] = [u.strip() for u in get(FILE_COLUMN).split(",") if u.strip().startswith("http")]
+        # קישורי Canva הם עמודי עיצוב ולא קבצים, ולכן לא נלקחים לאתר.
         item["_pdf_links"] = [u.strip() for title in header if is_link_column(title)
-                              for u in re.split(r"[,\s]+", get(title)) if u.strip().startswith("http")]
+                              for u in re.split(r"[,\s]+", get(title))
+                              if u.strip().startswith("http") and "canva." not in u.lower()]
         items.append(item)
     return items
 
@@ -214,6 +216,22 @@ def download_links(items, save: bool, timeout: int = 60):
     return done, blocked
 
 
+def drop_unavailable(items):
+    """מסיר קבצים שאין להם עותק מקומי והקישור אליהם מוגן ודורש התחברות ל-Monday,
+    כדי שלא יופיעו באתר קבצים שאי אפשר לפתוח."""
+    removed = []
+    for item in items:
+        kept = []
+        for f in item.get("files", []):
+            protected = "monday.com" in (f.get("url") or "").lower()
+            if not f.get("localPath") and protected:
+                removed.append((item["name"], f.get("name", "")))
+            else:
+                kept.append(f)
+        item["files"] = kept
+    return removed
+
+
 def write_html(data: dict):
     html = HTML_FILE.read_text(encoding="utf-8")
     payload = "const DATA = " + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";"
@@ -233,6 +251,8 @@ def main():
     ap.add_argument("--files-dir", help="התיקייה שאליה הורדת את הקבצים")
     ap.add_argument("--dry-run", action="store_true", help="רק להראות מה יקרה, בלי לשנות דבר")
     ap.add_argument("--skip-links", action="store_true", help="לדלג על הורדה מעמודת הקישור המעוצב")
+    ap.add_argument("--keep-dead-links", action="store_true",
+                    help="להשאיר באתר גם קבצים שאין להם עותק מקומי (קישור מוגן שלא ייפתח)")
     args = ap.parse_args()
 
     excel = Path(args.excel)
@@ -252,6 +272,7 @@ def main():
 
     matched, missing = attach_files(items, downloads, copy=not args.dry_run)
     downloaded, blocked = download_links(items, save=not args.dry_run and not args.skip_links)
+    dropped = [] if args.keep_dead_links else drop_unavailable(items)
 
     cats_in_data = {i["category"] for i in items if i["category"]}
     categories = [c for c in CATEGORY_ORDER if c in cats_in_data]
@@ -289,6 +310,15 @@ def main():
             if len(blocked) > 10:
                 print(f"   ... ועוד {len(blocked) - 10}")
             print("   (אפשר להוריד אותם ידנית לתיקיית הקבצים ולהריץ שוב)")
+
+    if dropped:
+        print()
+        print(f"קבצים שהושמטו מהאתר (אין עותק מקומי והקישור מוגן): {len(dropped)}")
+        for name, fname in dropped[:10]:
+            print(f"   * {fname[:60]}  ({name[:30]})")
+        if len(dropped) > 10:
+            print(f"   ... ועוד {len(dropped) - 10}")
+        print("   (להוריד אותם לתיקיית הקבצים ולהריץ שוב, או --keep-dead-links כדי להשאיר בכל זאת)")
 
     if args.dry_run:
         print("\n— בדיקה בלבד, לא שונה דבר. להרצה אמיתית: להסיר --dry-run —\n")
