@@ -87,13 +87,21 @@ def norm(text: str) -> str:
 
 
 def index_downloads(folder: Path) -> dict:
-    """ממפה שם קובץ מנורמל → הנתיב בפועל, כולל תיקיות משנה."""
+    """ממפה שם קובץ מנורמל → הנתיב בפועל, כולל תיקיות משנה.
+    שם מלא בלבד: התאמה לפי שם בלי סיומת גרמה לקובץ Word להיקשר ל-PDF באותו שם."""
     found = {}
     for path in folder.rglob("*"):
         if path.is_file():
             found.setdefault(norm(path.name), path)
-            found.setdefault(norm(path.stem), path)   # גם בלי סיומת, ליתר ביטחון
     return found
+
+
+def index_stems(downloads: dict) -> dict:
+    """מפתח נוסף לפי שם בלי סיומת, לשימוש בזיהוי הקובץ המעוצב בלבד."""
+    stems = {}
+    for path in downloads.values():
+        stems.setdefault(norm(path.stem), path)
+    return stems
 
 
 def read_rows(excel: Path):
@@ -170,7 +178,7 @@ def attach_files(items, downloads: dict, copy: bool):
             filename = urllib.parse.unquote(url.rsplit("/", 1)[-1]).strip()
             if not filename:
                 continue
-            local = downloads.get(norm(filename)) or downloads.get(norm(Path(filename).stem))
+            local = downloads.get(norm(filename))
             entry = {"url": url, "name": filename, "localPath": None}
             if local:
                 target = FILES_DIR / filename
@@ -213,7 +221,8 @@ def find_designed_pdf(item_name: str, downloads: dict):
         return path if path.exists() else None
     # השם שמוצע לשמירה עובר ניקוי תווים אסורים, ולכן משווים גם לגרסה המנוקה.
     keys = {norm(item_name), norm(safe_name(item_name))}
-    pdfs = {name: path for name, path in downloads.items() if path.suffix.lower() == ".pdf"}
+    pdfs = {name: path for name, path in {**downloads, **index_stems(downloads)}.items()
+            if path.suffix.lower() == ".pdf"}
     for key in keys:
         if key in pdfs:
             return pdfs[key]
@@ -314,6 +323,16 @@ def dedupe_files(items):
     return removed
 
 
+def keep_designed_only(items):
+    """באתר מוצגים רק הקבצים המעוצבים שירדו מה-Drive, ולא המצורפים מ-Monday."""
+    removed = 0
+    for item in items:
+        kept = [f for f in item.get("files", []) if "מעוצב" in f.get("name", "")]
+        removed += len(item.get("files", [])) - len(kept)
+        item["files"] = kept
+    return removed
+
+
 def drop_unavailable(items):
     """מסיר קבצים שאין להם עותק מקומי והקישור אליהם מוגן ודורש התחברות ל-Monday,
     כדי שלא יופיעו באתר קבצים שאי אפשר לפתוח."""
@@ -375,6 +394,7 @@ def main():
     downloaded, blocked = download_links(items, downloads, save=not args.dry_run and not args.skip_links)
     dropped = [] if args.keep_dead_links else drop_unavailable(items)
     duplicates = dedupe_files(items)
+    hidden = keep_designed_only(items)
 
     cats_in_data = {i["category"] for i in items if i["category"]}
     categories = [c for c in CATEGORY_ORDER if c in cats_in_data]
@@ -421,6 +441,10 @@ def main():
         if len(dropped) > 10:
             print(f"   ... ועוד {len(dropped) - 10}")
         print("   (להוריד אותם לתיקיית הקבצים ולהריץ שוב, או --keep-dead-links כדי להשאיר בכל זאת)")
+
+    if hidden:
+        print()
+        print(f"מצורפים שאינם מעוצבים והוסתרו מהאתר: {hidden}")
 
     if duplicates:
         print(f"\nכפילויות שהוסרו (אותו קובץ פעמיים באותו פריט): {duplicates}")
