@@ -3,7 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>תפריט ספקים – המגדלור לרשויות מקומיות</title>
+<title>תפריט המגדלור לרשויות מקומיות</title>
+<meta name="description" content="כל הכלים, המסמכים והספקים של המגדלור לרשויות מקומיות — זהות וייעוד, כח אדם, תכניות חינוכיות וקהילתיות, תרבות ארגונית ושותפויות ומשאבים.">
+<link rel="canonical" href="https://hamigdalor-rashut.org/">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="icon-512.png">
+<meta name="theme-color" content="#00586f">
+
+<!-- תצוגה מקדימה בשיתוף (וואטסאפ, פייסבוק, לינקדאין) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="המגדלור">
+<meta property="og:locale" content="he_IL">
+<meta property="og:title" content="תפריט המגדלור לרשויות מקומיות">
+<meta property="og:description" content="כל הכלים, המסמכים והספקים של המגדלור לרשויות מקומיות — זהות וייעוד, כח אדם, תכניות חינוכיות וקהילתיות, תרבות ארגונית ושותפויות ומשאבים.">
+<meta property="og:url" content="https://hamigdalor-rashut.org/">
+<meta property="og:image" content="https://hamigdalor-rashut.org/share-image.png">
+<meta property="og:image:secure_url" content="https://hamigdalor-rashut.org/share-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="המגדלור — חינוך פוליטי לדמוקרטיה ליברלית">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="תפריט המגדלור לרשויות מקומיות">
+<meta name="twitter:description" content="כל הכלים, המסמכים והספקים של המגדלור לרשויות מקומיות — זהות וייעוד, כח אדם, תכניות חינוכיות וקהילתיות, תרבות ארגונית ושותפויות ומשאבים.">
+<meta name="twitter:image" content="https://hamigdalor-rashut.org/share-image.png">
 <style>
 @font-face{font-family:'BrandTitle';src:url('fonts/title.otf') format('opentype');font-display:swap}
 @font-face{font-family:'BrandText';src:url('fonts/text.otf') format('opentype');font-display:swap}
@@ -82,14 +105,14 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .cat-list-desc{max-height:0;overflow:hidden;opacity:0;font-size:.85rem;line-height:1.7;color:var(--slate);transition:max-height .3s ease,opacity .25s ease,margin-top .25s ease}
 .cat-list-item.active .cat-list-desc{max-height:220px;opacity:1;margin-top:8px}
 /* Category page description */
-.cat-page-desc{margin-top:12px;font-size:.95rem;opacity:.85;line-height:1.8;max-width:760px}
+.cat-page-desc{margin-top:6px;font-size:.85rem;opacity:.85;line-height:1.6;max-width:820px}
 
 /* ── CATEGORY PAGE ───────────────────────────────────── */
-.cat-page-header{background:var(--cat,var(--navy));color:var(--cat-fg,var(--white));padding:40px 24px 36px;position:relative;overflow:hidden}
+.cat-page-header{background:var(--cat,var(--navy));color:var(--cat-fg,var(--white));padding:16px 24px 18px;position:relative;overflow:hidden}
 .cat-page-header::after{content:'';position:absolute;top:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(252,184,79,.15) 0%,transparent 70%);pointer-events:none}
 .cat-page-header-inner{max-width:1200px;margin:0 auto;position:relative}
-.cat-page-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:400;margin-bottom:8px;letter-spacing:.01em}
-.cat-page-subtitle{font-size:1rem;opacity:.8}
+.cat-page-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.35rem,2.6vw,1.9rem);font-weight:400;margin-bottom:4px;letter-spacing:.01em}
+.cat-page-subtitle{font-size:.85rem;opacity:.8}
 .filters-bar{background:var(--white);border-bottom:2px solid rgba(0,88,111,.08);padding:14px 24px;position:sticky;top:52px;z-index:50;box-shadow:0 2px 12px rgba(0,88,111,.08)}
 .filters-bar-inner{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .filter-label{font-size:.85rem;font-weight:700;color:var(--slate);white-space:nowrap}
@@ -198,6 +221,8 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .file-title{flex:1;font-weight:700;font-size:.92rem;color:var(--navy);word-break:break-word}
 .file-preview{background:#fff;border-radius:8px;overflow:hidden;border:1px solid rgba(0,88,111,.12);min-height:60px}
 .file-preview iframe{width:100%;height:440px;border:none;display:block}
+.file-preview canvas{width:100%;height:auto;display:block;background:#fff}
+.file-preview canvas+canvas{border-top:1px solid #E0E6EF}
 .file-preview img{width:100%;max-height:480px;object-fit:contain;display:block;background:#fff}
 .file-note{padding:20px 16px;text-align:center;color:var(--slate);font-size:.85rem;line-height:1.7}
 @media(max-width:640px){.modal-top{grid-template-columns:1fr;gap:12px}.file-preview iframe{height:320px}}
@@ -715,8 +740,10 @@ function clearCatTheme(){
     .forEach(v => document.documentElement.style.removeProperty(v));
 }
 
-function openCategory(cat){
+function openCategory(cat, fromHistory){
+  if(!fromHistory) pushView({view:'category', cat});
   applyCatTheme(cat);
+  _currentCat = cat;
   currentItems = DATA.items.filter(i=>i.category===cat);
   document.getElementById('catPageTitle').textContent = CAT_DISPLAY[cat]||cat;
   const sup = currentItems.filter(i=>i.type==='ספק').length;
@@ -819,7 +846,8 @@ function renderItems(items){
 
 /* ── MODAL ──────────────────────────────────────────────── */
 let _currentModalIdx = -1;
-function openModal(idx){
+function openModal(idx, fromHistory){
+  if(!fromHistory) pushView({view:'item', cat:_currentCat, idx});
   _currentModalIdx = idx;
   const item = _renderedItems[idx];
   if(!item) return;
@@ -901,6 +929,11 @@ function initPreviews(){
   const load = box => {
     if(box.dataset.done) return;
     box.dataset.done = '1';
+    // בנייד אין דפדפן שמציג PDF בתוך iframe, ולכן מציירים את העמודים על קנבס
+    if(IS_TOUCH && box.dataset.ext === 'pdf' && box.dataset.src){
+      renderPdfPreview(box, /^https?:/i.test(box.dataset.src) ? box.dataset.src : resolveUrl(box.dataset.src));
+      return;
+    }
     box.innerHTML = previewMarkup(box.dataset.src, box.dataset.ext);
   };
   const loadVisible = () => {
@@ -915,6 +948,71 @@ function initPreviews(){
   overlay.addEventListener('scroll', onScroll, {passive:true});
   window.addEventListener('scroll', onScroll, {passive:true});
   loadVisible();
+}
+
+// pdf.js נטען רק כשצריך אותו בפועל (נייד), ומצייר את העמודים הראשונים כתמונה
+const PDFJS_VER = '3.11.174';
+let _pdfjs = null;
+function loadPdfJs(){
+  if(_pdfjs) return _pdfjs;
+  _pdfjs = new Promise((res, rej) => {
+    const sc = document.createElement('script');
+    sc.src = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VER}/pdf.min.js`;
+    sc.onload = () => {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VER}/pdf.worker.min.js`;
+      res(window.pdfjsLib);
+    };
+    sc.onerror = () => rej(new Error('pdf.js failed'));
+    document.head.appendChild(sc);
+  });
+  return _pdfjs;
+}
+
+const PDF_MAX_PAGES = 3;
+// אם משהו נתקע (רשת איטית, ה-CDN חסום) מציגים קישור פתיחה במקום להשאיר טעינה נצחית
+function pdfFallback(box, url){
+  box.innerHTML = '<div class="file-note">לא הצלחנו להציג את הקובץ כאן. ' +
+    '<a href="' + escA(url) + '" target="_blank" rel="noopener">פתיחה בחלון חדש</a></div>';
+}
+async function renderPdfPreview(box, url){
+  box.innerHTML = '<div class="file-note loading-pulse">טוען תצוגה מקדימה…</div>';
+  // שומר זמן: הציור נעצר כשהעמוד מוסתר, ולכן נספר רק זמן שבו העמוד גלוי
+  let done = false, visibleMs = 0;
+  const watchdog = setInterval(() => {
+    if(done || document.visibilityState !== 'visible') return;
+    visibleMs += 1000;
+    if(visibleMs >= 15000){ done = true; clearInterval(watchdog); pdfFallback(box, url); }
+  }, 1000);
+  try{
+    const lib = await loadPdfJs();
+    const pdf = await lib.getDocument(url).promise;
+    const pages = Math.min(pdf.numPages, PDF_MAX_PAGES);
+    const boxW = box.clientWidth || 320;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    box.innerHTML = '';
+    for(let n = 1; n <= pages; n++){
+      if(done) return;
+      const page = await pdf.getPage(n);
+      const base = page.getViewport({scale:1});
+      const vp = page.getViewport({scale: (boxW / base.width) * dpr});
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(vp.width); cv.height = Math.round(vp.height);
+      box.appendChild(cv);
+      await page.render({canvasContext: cv.getContext('2d'), viewport: vp}).promise;
+    }
+    if(done) return;
+    if(pdf.numPages > pages){
+      const note = document.createElement('div');
+      note.className = 'file-note';
+      note.textContent = `במסמך ${pdf.numPages} עמודים — לצפייה בכולם אפשר להוריד את הקובץ.`;
+      box.appendChild(note);
+    }
+  }catch(err){
+    if(!done) pdfFallback(box, url);
+  }finally{
+    done = true; clearInterval(watchdog);
+  }
 }
 
 function previewMarkup(src, e){
@@ -945,7 +1043,9 @@ function shareItem(){
   window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
 }
 
-function closeModal(){
+function closeModal(fromHistory){
+  // חזרה לעמוד התחום שמאחורי החלון
+  if(!fromHistory && history.state && history.state.view === 'item'){ history.back(); return; }
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.classList.remove('modal-open');
   document.querySelectorAll('.file-viewer.open').forEach(v=>{
@@ -955,8 +1055,32 @@ function closeModal(){
 }
 function closeModalOnOverlay(e){if(e.target===document.getElementById('modalOverlay'))closeModal()}
 
+
+/* ── HISTORY ────────────────────────────────────────────── */
+// כפתור "חזרה" של הדפדפן צריך לחזור עמוד אחורה באתר, לא לצאת ממנו.
+let _currentCat = null;
+function pushView(state){
+  if(!history.state) history.replaceState({view:'home'}, '');
+  if(JSON.stringify(history.state) !== JSON.stringify(state)) history.pushState(state, '');
+}
+window.addEventListener('popstate', e => {
+  const st = e.state || {view:'home'};
+  const modalOpen = document.getElementById('modalOverlay').classList.contains('open');
+  if(st.view === 'item'){
+    if(st.cat && st.cat !== _currentCat) openCategory(st.cat, true);
+    openModal(st.idx, true);
+    return;
+  }
+  if(modalOpen) closeModal(true);
+  if(st.view === 'category'){ openCategory(st.cat, true); }
+  else { goHome(true); }
+});
+
 /* ── NAV ────────────────────────────────────────────────── */
-function goHome(){
+function goHome(fromHistory){
+  // חזרה מעמוד תחום = צעד אחד אחורה בהיסטוריה, כדי לא להערים עמודים
+  if(!fromHistory && history.state && history.state.view === 'category'){ history.back(); return; }
+  if(!fromHistory) pushView({view:'home'});
   clearCatTheme();
   document.body.classList.remove('in-category');
   document.getElementById('backBtn').classList.remove('visible');
