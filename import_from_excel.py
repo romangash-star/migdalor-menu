@@ -201,7 +201,18 @@ def safe_name(text: str) -> str:
     return re.sub(r'[\\/?%*:|"<>]', "-", text).strip()[:120] or "file"
 
 
-def download_links(items, save: bool, timeout: int = 60):
+def find_designed_pdf(item_name: str, downloads: dict):
+    """קובץ מעוצב שהורד ידנית מזוהה לפי שם הפריט, גם אם נוספו לו סיומות."""
+    key = norm(item_name)
+    if key in downloads:
+        return downloads[key]
+    for name, path in downloads.items():
+        if path.suffix.lower() == ".pdf" and (name.startswith(key) or key.startswith(name)):
+            return path
+    return None
+
+
+def download_links(items, downloads: dict, save: bool, timeout: int = 60):
     """מוריד את הקבצים מעמודת הקישור המעוצב. קישורים שדורשים התחברות לא יירדו,
     והם יידווחו בסוף כדי שאפשר יהיה להוריד אותם ידנית."""
     done, blocked = 0, []
@@ -211,6 +222,17 @@ def download_links(items, save: bool, timeout: int = 60):
                 continue
             target_name = safe_name(item["name"]) + " - מעוצב.pdf"
             target = FILES_DIR / target_name
+            # קודם כל: אולי הקובץ כבר הורד ידנית לתיקיית הקבצים
+            local = find_designed_pdf(item["name"], downloads)
+            if local:
+                if save:
+                    FILES_DIR.mkdir(exist_ok=True)
+                    if local.resolve() != target.resolve():
+                        shutil.copy2(local, target)
+                item["files"].append({"url": url, "name": target_name,
+                                      "localPath": f"files/{target_name}", "_source": url})
+                done += 1
+                continue
             if not save:
                 blocked.append((item["name"], url, "בדיקה בלבד"))
                 continue
@@ -258,8 +280,8 @@ def drop_unavailable(items):
     for item in items:
         kept = []
         for f in item.get("files", []):
-            protected = "monday.com" in (f.get("url") or "").lower()
-            if not f.get("localPath") and protected:
+            # בלי עותק מקומי הקובץ לא ייפתח לגולשים, בין אם הקישור ל-Monday ובין אם ל-Drive
+            if not f.get("localPath"):
                 removed.append((item["name"], f.get("name", "")))
             else:
                 kept.append(f)
@@ -270,9 +292,12 @@ def drop_unavailable(items):
 def write_html(data: dict):
     html = HTML_FILE.read_text(encoding="utf-8")
     payload = "const DATA = " + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";"
-    updated = re.sub(r"const DATA = \{.*?\};", lambda _: payload, html, count=1, flags=re.DOTALL)
-    if updated == html:
+    updated, found = re.subn(r"const DATA = \{.*?\};", lambda _: payload, html, count=1, flags=re.DOTALL)
+    if not found:
         sys.exit("לא נמצא const DATA = {...} בתוך index.html")
+    if updated == html:
+        print("הנתונים באתר כבר זהים לקובץ — לא נדרש שינוי.")
+        return None
     BACKUP_DIR.mkdir(exist_ok=True)
     backup = BACKUP_DIR / f"index-{datetime.now():%Y%m%d-%H%M%S}.html"
     backup.write_text(html, encoding="utf-8")
@@ -306,7 +331,7 @@ def main():
         downloads = index_downloads(folder)
 
     matched, missing = attach_files(items, downloads, copy=not args.dry_run)
-    downloaded, blocked = download_links(items, save=not args.dry_run and not args.skip_links)
+    downloaded, blocked = download_links(items, downloads, save=not args.dry_run and not args.skip_links)
     dropped = [] if args.keep_dead_links else drop_unavailable(items)
 
     cats_in_data = {i["category"] for i in items if i["category"]}
@@ -360,6 +385,8 @@ def main():
         return
 
     backup = write_html(data)
+    if backup is None:
+        return
     print(f"\nהאתר עודכן. גיבוי המצב הקודם: {backup.name}")
     print("לפרסום:  git add -A  &&  git commit -m \"Import from Monday export\"  &&  git push\n")
 
