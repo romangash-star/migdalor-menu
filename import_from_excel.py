@@ -15,7 +15,7 @@ import_from_excel.py — מייבא את הפריטים לאתר מייצוא Ex
   4. שומר גיבוי של index.html ואז כותב את הנתונים החדשים.
 """
 
-import argparse, json, re, shutil, sys, unicodedata, urllib.error, urllib.parse, urllib.request
+import argparse, difflib, json, re, shutil, sys, unicodedata, urllib.error, urllib.parse, urllib.request
 from datetime import datetime
 from pathlib import Path
 
@@ -205,15 +205,22 @@ def find_designed_pdf(item_name: str, downloads: dict):
     """קובץ מעוצב שהורד ידנית מזוהה לפי שם הפריט, גם אם נוספו לו סיומות."""
     # השם שמוצע לשמירה עובר ניקוי תווים אסורים, ולכן משווים גם לגרסה המנוקה.
     keys = {norm(item_name), norm(safe_name(item_name))}
+    pdfs = {name: path for name, path in downloads.items() if path.suffix.lower() == ".pdf"}
     for key in keys:
-        if key in downloads:
-            return downloads[key]
-    for name, path in downloads.items():
-        if path.suffix.lower() != ".pdf":
-            continue
+        if key in pdfs:
+            return pdfs[key]
+    for name, path in pdfs.items():
         if any(name.startswith(k) or k.startswith(name) for k in keys):
             return path
-    return None
+    # קבצים מעוצבים נשמרים לעיתים בשם משלהם ולא בשם הפריט, ולכן גם התאמה קרובה.
+    best, score = None, 0.0
+    for name, path in pdfs.items():
+        for key in keys:
+            ratio = difflib.SequenceMatcher(None, key, name).ratio()
+            if ratio > score:
+                best, score = path, ratio
+    # סף גבוה בכוונה: קובץ שגוי על פריט גרוע יותר מקובץ חסר.
+    return best if score >= 0.8 else None
 
 
 def download_links(items, downloads: dict, save: bool, timeout: int = 60):
