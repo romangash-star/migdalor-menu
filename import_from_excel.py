@@ -75,6 +75,15 @@ CATEGORY_ORDER = [
 ITEM_FIELDS = ["name", "category", "dept", "contactName", "phone", "email",
                "audience", "topic", "gafan", "type", "description"]
 
+# קבצים מעוצבים שנשמרו בשם משלהם ולא בשם הפריט. השיוך נקבע לפי תוכן הקובץ,
+# ולכן הוא מפורש כאן ולא מנוחש לפי דמיון בשמות.
+DESIGNED_PDF_OVERRIDES = {
+    "הצעה לתהליך לכתיבת חזון/ הכשרה": "ייעוד ויחוד.pdf",
+    "צ'ק ליסט ליברלי למרחב הציבורי":  "צ׳ק ליסט העשיריה הפותחת.pdf",
+    "פנייה לציבור":                   "תבנית לנאום של בעלי תפקידים.pdf",
+    "תקנון פרסום בלוחות רשותיים":     "תקנון לפרסום בלוחות הפרסום העירוניים (1).pdf",
+}
+
 
 def norm(text: str) -> str:
     """שם קובץ מנורמל להשוואה: בלי רווחים כפולים, אותיות קטנות, יוניקוד אחיד."""
@@ -203,6 +212,10 @@ def safe_name(text: str) -> str:
 
 def find_designed_pdf(item_name: str, downloads: dict):
     """קובץ מעוצב שהורד ידנית מזוהה לפי שם הפריט, גם אם נוספו לו סיומות."""
+    override = DESIGNED_PDF_OVERRIDES.get(item_name.strip())
+    if override:
+        path = FILES_DIR / override
+        return path if path.exists() else None
     # השם שמוצע לשמירה עובר ניקוי תווים אסורים, ולכן משווים גם לגרסה המנוקה.
     keys = {norm(item_name), norm(safe_name(item_name))}
     pdfs = {name: path for name, path in downloads.items() if path.suffix.lower() == ".pdf"}
@@ -284,6 +297,28 @@ def download_links(items, downloads: dict, save: bool, timeout: int = 60):
     return done, blocked
 
 
+def dedupe_files(items):
+    """אותו קובץ יכול להגיע גם כמצורף וגם כקובץ מעוצב. משאירים עותק אחד."""
+    import hashlib
+    removed = 0
+    for item in items:
+        seen, kept = set(), []
+        for f in item.get("files", []):
+            local = f.get("localPath")
+            key = f.get("url") or local
+            if local:
+                path = ROOT / local
+                if path.exists():
+                    key = hashlib.md5(path.read_bytes()).hexdigest()
+            if key in seen:
+                removed += 1
+                continue
+            seen.add(key)
+            kept.append(f)
+        item["files"] = kept
+    return removed
+
+
 def drop_unavailable(items):
     """מסיר קבצים שאין להם עותק מקומי והקישור אליהם מוגן ודורש התחברות ל-Monday,
     כדי שלא יופיעו באתר קבצים שאי אפשר לפתוח."""
@@ -344,6 +379,7 @@ def main():
     matched, missing = attach_files(items, downloads, copy=not args.dry_run)
     downloaded, blocked = download_links(items, downloads, save=not args.dry_run and not args.skip_links)
     dropped = [] if args.keep_dead_links else drop_unavailable(items)
+    duplicates = dedupe_files(items)
 
     cats_in_data = {i["category"] for i in items if i["category"]}
     categories = [c for c in CATEGORY_ORDER if c in cats_in_data]
@@ -390,6 +426,9 @@ def main():
         if len(dropped) > 10:
             print(f"   ... ועוד {len(dropped) - 10}")
         print("   (להוריד אותם לתיקיית הקבצים ולהריץ שוב, או --keep-dead-links כדי להשאיר בכל זאת)")
+
+    if duplicates:
+        print(f"\nכפילויות שהוסרו (אותו קובץ פעמיים באותו פריט): {duplicates}")
 
     if args.dry_run:
         print("\n— בדיקה בלבד, לא שונה דבר. להרצה אמיתית: להסיר --dry-run —\n")
