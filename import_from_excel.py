@@ -203,11 +203,15 @@ def safe_name(text: str) -> str:
 
 def find_designed_pdf(item_name: str, downloads: dict):
     """קובץ מעוצב שהורד ידנית מזוהה לפי שם הפריט, גם אם נוספו לו סיומות."""
-    key = norm(item_name)
-    if key in downloads:
-        return downloads[key]
+    # השם שמוצע לשמירה עובר ניקוי תווים אסורים, ולכן משווים גם לגרסה המנוקה.
+    keys = {norm(item_name), norm(safe_name(item_name))}
+    for key in keys:
+        if key in downloads:
+            return downloads[key]
     for name, path in downloads.items():
-        if path.suffix.lower() == ".pdf" and (name.startswith(key) or key.startswith(name)):
+        if path.suffix.lower() != ".pdf":
+            continue
+        if any(name.startswith(k) or k.startswith(name) for k in keys):
             return path
     return None
 
