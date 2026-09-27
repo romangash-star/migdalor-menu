@@ -6,3 +6,6 @@ monday_token.txt
 backups/
 download-helper.html
 __pycache__/
+
+# קבצי האתר תמיד נכללים, גם אם הסיומת שלהם מוחרגת למעלה
+!files/**
