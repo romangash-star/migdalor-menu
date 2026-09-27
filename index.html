@@ -148,23 +148,23 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal{background:var(--white);border-radius:16px;max-width:760px;width:100%;margin:auto;box-shadow:var(--shadow-lg);overflow:hidden}
 .modal-overlay.open .modal{animation:scaleIn .25s ease both}
-.modal-header{background:var(--cat,var(--navy));padding:28px 28px 24px;position:relative}
+.modal-header{background:var(--cat,var(--navy));padding:14px 20px 16px;position:relative}
 .modal-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
 .modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
 .modal-type-badge{position:relative;width:78px;height:68px;margin-bottom:14px}
 .modal-type-badge .badge-shape{position:absolute;inset:0;width:100%;height:100%}
 .modal-type-badge .badge-text{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-size:.72rem;font-weight:700;line-height:1.15}
-.modal-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.4rem;font-weight:400;color:var(--cat-fg,var(--white));line-height:1.3;letter-spacing:.01em}
-.modal-item-desc{margin-top:10px;font-size:.88rem;line-height:1.72;color:rgba(255,255,255,.88);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;transition:all .2s ease}
+.modal-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.15rem;font-weight:400;color:var(--cat-fg,var(--white));line-height:1.3;letter-spacing:.01em}
+.modal-item-desc{margin-top:6px;font-size:.88rem;line-height:1.72;color:rgba(255,255,255,.88);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;transition:all .2s ease}
 .modal-item-desc.expanded{display:block;-webkit-line-clamp:unset}
 .modal-desc-more{background:none;border:none;color:var(--gold);cursor:pointer;font-size:.82rem;font-weight:700;padding:4px 0 0;margin-top:2px;display:block;font-family:'BrandText','Heebo',sans-serif}
-.modal-header-actions{display:flex;align-items:center;gap:8px;justify-content:flex-start;margin-bottom:12px;flex-direction:row-reverse}
+.modal-header-actions{display:flex;align-items:center;gap:8px;justify-content:flex-start;margin-bottom:8px;flex-direction:row-reverse}
 .modal-close{position:static;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
 .modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
 .modal-share-btn{background:rgba(56,209,214,.22);border:1.5px solid rgba(56,209,214,.55);color:#fff;padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:'BrandText','Heebo',sans-serif;transition:background var(--t)}
 .modal-share-btn:hover{background:rgba(56,209,214,.4)}
-.modal-body{padding:28px;background:var(--white)}
-.modal-section{margin-bottom:22px}
+.modal-body{padding:16px 20px 20px;background:var(--white)}
+.modal-section{margin-bottom:16px}
 .modal-section-title{font-size:.8rem;font-weight:700;color:var(--cat-ink,var(--teal-mid));text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid rgba(0,88,111,.1);display:flex;align-items:center;gap:6px}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
 .info-item{background:var(--off-white);border-radius:8px;padding:10px 12px;transition:background var(--t)}
@@ -182,6 +182,25 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .btn-phone{background:var(--teal-mid);color:var(--white)}
 .btn-whatsapp{background:var(--whatsapp);color:#003d4f}
 
+
+/* ── MODAL: compact layout, inline file previews ─────── */
+.modal-type-pill{display:inline-block;padding:3px 12px;border-radius:20px;font-size:.7rem;font-weight:700;
+ background:rgba(255,255,255,.25);color:var(--cat-fg,var(--white));margin-bottom:6px;letter-spacing:.04em}
+.modal-top{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-bottom:16px}
+.info-chips{display:flex;flex-wrap:wrap;gap:6px}
+.info-chip{background:var(--off-white);border-radius:8px;padding:6px 11px;line-height:1.35}
+.info-chip b{display:block;font-size:.64rem;font-weight:700;color:var(--slate);letter-spacing:.04em}
+.info-chip span{font-size:.84rem;font-weight:700;color:var(--navy)}
+.contact-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.contact-name{font-weight:700;font-size:.9rem;margin-left:4px}
+.file-card{background:var(--off-white);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.file-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.file-title{flex:1;font-weight:700;font-size:.92rem;color:var(--navy);word-break:break-word}
+.file-preview{background:#fff;border-radius:8px;overflow:hidden;border:1px solid rgba(0,88,111,.12);min-height:60px}
+.file-preview iframe{width:100%;height:440px;border:none;display:block}
+.file-preview img{width:100%;max-height:480px;object-fit:contain;display:block;background:#fff}
+.file-note{padding:20px 16px;text-align:center;color:var(--slate);font-size:.85rem;line-height:1.7}
+@media(max-width:640px){.modal-top{grid-template-columns:1fr;gap:12px}.file-preview iframe{height:320px}}
 /* ── FILES IN MODAL ──────────────────────────────────── */
 .files-list{display:flex;flex-direction:column;gap:8px}
 .file-item{background:var(--off-white);border-radius:8px;border:1.5px solid rgba(0,88,111,.12);overflow:hidden;transition:border-color var(--t)}
@@ -205,14 +224,6 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .file-btn-view:hover{background:var(--teal-mid)}
 .file-btn-dl{background:transparent;color:var(--navy);border:1.5px solid rgba(0,88,111,.2)}
 .file-btn-dl:hover{background:rgba(0,88,111,.06)}
-#hoverPreview{position:fixed;z-index:9999;pointer-events:none;background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.22);border:1.5px solid rgba(0,88,111,.15);overflow:hidden;display:none;max-width:340px;max-height:280px}
-#hoverPreview.hp-visible{display:block}
-#hoverPreview iframe{width:340px;height:270px;border:none;display:block}
-#hoverPreview img{max-width:340px;max-height:270px;object-fit:contain;display:block}
-#hoverPreview .hp-placeholder{width:280px;padding:28px 24px;text-align:center;font-family:'Heebo',sans-serif;font-size:.95rem;color:var(--navy);display:flex;flex-direction:column;align-items:center;gap:10px}
-#hoverPreview .hp-icon{font-size:2.6rem}
-#hoverPreview .hp-label{font-weight:700}
-#hoverPreview .hp-sub{font-size:.78rem;color:var(--teal-mid);font-weight:400}
 .file-viewer{display:none;border-top:1px solid #E0E6EF}
 .file-viewer.open{display:block}
 .file-viewer iframe,.file-viewer img{width:100%;border:none;display:block}
@@ -796,120 +807,111 @@ function openModal(idx){
   const item = _renderedItems[idx];
   if(!item) return;
   const isS = item.type==='ספק';
+
   const badge = document.getElementById('modalBadge');
-  badge.className = 'modal-type-badge '+(isS?'badge-supplier':'badge-doc');
-  badge.innerHTML = `<svg class="badge-shape" viewBox="0 0 78 68"><polygon points="39,0 78,23 78,68 0,68 0,23"></polygon></svg><span class="badge-text">${isS?'ספק':'מסמך המלצות'}</span>`;
+  badge.className = 'modal-type-pill';
+  badge.textContent = isS ? 'ספק' : 'מסמך המלצות';
   document.getElementById('modalTitle').textContent = item.name;
+
   const descWrap = document.getElementById('modalDescWrap');
   if(descWrap){
-    if(item.description){
-      descWrap.innerHTML = `<div class="modal-item-desc" id="modalItemDesc">${escH(item.description)}</div><button class="modal-desc-more" id="modalDescBtn" onclick="toggleModalDesc()">קרא עוד ↓</button>`;
-    } else {
-      descWrap.innerHTML = '';
-    }
+    descWrap.innerHTML = item.description
+      ? `<div class="modal-item-desc" id="modalItemDesc">${escH(item.description)}</div><button class="modal-desc-more" id="modalDescBtn" onclick="toggleModalDesc()">קרא עוד ↓</button>`
+      : '';
   }
+
+  const chip = (label, value) => `<div class="info-chip"><b>${escH(label)}</b><span>${escH(value)}</span></div>`;
+  const details = [
+    item.category ? chip('תחום', item.category) : '',
+    item.dept     ? chip('מחלקה', item.dept)    : '',
+    item.topic    ? chip('נושא', item.topic)    : '',
+    item.gafan==='כן' ? chip('גפ"ן', '✓ קיים')  : ''
+  ].join('');
+  const auds = (item.audience||'').split(',').map(a=>a.trim()).filter(Boolean);
 
   let html = '';
-
-  // Info
-  const info = [
-    item.category?{l:'תחום ראשי',v:item.category}:null,
-    item.dept?{l:'שיוך מחלקתי',v:item.dept}:null,
-    item.topic?{l:'נושא תוכן',v:item.topic}:null,
-    item.gafan==='כן'?{l:'מאגר גפ"ן',v:'✓ קיים'}:null
-  ].filter(Boolean);
-  if(info.length){
-    html += `<div class="modal-section"><div class="modal-section-title">📋 פרטי הפריט</div>
-      <div class="info-grid">${info.map(i=>`<div class="info-item">
-        <div class="info-item-label">${escH(i.l)}</div>
-        <div class="info-item-value">${escH(i.v)}</div>
-      </div>`).join('')}</div></div>`;
-  }
-
-  // Audience
-  if(item.audience){
-    const auds = item.audience.split(',').map(a=>a.trim()).filter(Boolean);
-    html += `<div class="modal-section"><div class="modal-section-title">קהל יעד</div>
-      <div class="tags-row">${auds.map(a=>`<span class="tag tag-green">${escH(a)}</span>`).join('')}</div>
+  if(details || auds.length){
+    html += `<div class="modal-top">
+      ${details ? `<div><div class="modal-section-title">פרטי הפריט</div><div class="info-chips">${details}</div></div>` : '<div></div>'}
+      ${auds.length ? `<div><div class="modal-section-title">קהל יעד</div>
+        <div class="tags-row">${auds.map(a=>`<span class="tag tag-green">${escH(a)}</span>`).join('')}</div></div>` : ''}
     </div>`;
   }
 
-  // Contact
-  const hasC = item.contactName||item.phone||item.email;
-  if(hasC){
-    html += `<div class="modal-section"><div class="modal-section-title">יצירת קשר</div>`;
-    if(item.contactName) html += `<div style="font-weight:700;font-size:1rem;margin-bottom:12px">${escH(item.contactName)}</div>`;
-    html += `<div class="contact-buttons">`;
-    if(item.email) html += `<a href="mailto:${escA(item.email)}" class="contact-btn btn-email">${escH(item.email)}</a>`;
+  // יצירת קשר מוצגת רק כשיש טלפון או אימייל להתקשר אליו
+  if(item.phone || item.email){
+    html += `<div class="modal-section"><div class="modal-section-title">יצירת קשר</div><div class="contact-row">`;
+    if(item.contactName) html += `<span class="contact-name">${escH(item.contactName)}</span>`;
     if(item.phone){
-      const c  = item.phone.replace(/\D/g,'');
-      const wa = c.startsWith('0')?'972'+c.slice(1):c;
+      const digits = item.phone.replace(/\D/g,'');
+      const wa = digits.startsWith('0') ? '972'+digits.slice(1) : digits;
       html += `<a href="tel:${escA(item.phone)}" class="contact-btn btn-phone">${escH(item.phone)}</a>`;
-      html += `<a href="https://wa.me/${wa}" target="_blank" class="contact-btn btn-whatsapp">וואטסאפ</a>`;
+      html += `<a href="https://wa.me/${wa}" target="_blank" rel="noopener" class="contact-btn btn-whatsapp">הודעה בוואטסאפ</a>`;
     }
+    if(item.email) html += `<a href="mailto:${escA(item.email)}" class="contact-btn btn-email">${escH(item.email)}</a>`;
     html += `</div></div>`;
   }
 
-  // Files
-  if(item.files&&item.files.length>0){
-    html += `<div class="modal-section"><div class="modal-section-title">קבצים ומסמכים</div><div class="files-list">`;
-    item.files.forEach((f,fi)=>{
-      const e       = ext(f.name);
-      const em      = fileEmoji(f.name);
-      const cls     = fileExtCss(f.name);
-      const iconCls = {pdf:'file-icon-pdf',doc:'file-icon-word',docx:'file-icon-word',ppt:'file-icon-ppt',pptx:'file-icon-ppt',pptm:'file-icon-ppt',jpg:'file-icon-img',jpeg:'file-icon-img',png:'file-icon-img'}[e]||'file-icon-other';
-      const hasLocal = !!(f.localPath);
-      const viewUrl  = getViewerUrl(f.localPath||null, f.url);
-      const dlUrl    = f.localPath ? resolveUrl(f.localPath) : f.url;
-      const fid = `fv-${idx}-${fi}`;
-      html += `<div class="file-item">
-        <div class="file-item-header" onclick="toggleViewer('${fid}','${escA(viewUrl||'')}','${e}')">
-          <div class="file-icon ${iconCls}">${em}</div>
-          <div class="file-info">
-            <div class="file-name">${escH(f.name)}</div>
-            <div>
-              ${hasLocal?'<span class="file-local-badge">✓ קובץ מקומי</span>':''}
-              <span class="file-ext-badge" style="background:${cls==='ext-pdf'?'#FDECEA':cls==='ext-doc'?'#E3F2FD':cls==='ext-ppt'?'#FFF3E0':'#F5F5F5'};color:#333">${e.toUpperCase()}</span>
-            </div>
-          </div>
-          <div class="file-actions">
-            ${viewUrl?`<button class="file-btn file-btn-view" onclick="event.stopPropagation();toggleViewer('${fid}','${escA(viewUrl)}','${e}')" onmouseenter="showFilePreview(event,'${escA(viewUrl)}','${e}')" onmouseleave="hideFilePreview()">👁 צפה</button>`:''}
-            <a href="${escA(dlUrl)}" target="_blank" class="file-btn file-btn-dl" onclick="event.stopPropagation()">⬇ הורד</a>
-          </div>
+  if(item.files && item.files.length){
+    html += `<div class="modal-section"><div class="modal-section-title">קבצים ומסמכים</div>`;
+    html += item.files.map((f, fi) => {
+      const clean = f.name.replace(/\.[^.]+$/,'');          // בלי סיומת הקובץ
+      const dlUrl = f.localPath ? resolveUrl(f.localPath) : f.url;
+      return `<div class="file-card">
+        <div class="file-head">
+          <div class="file-title">${escH(clean)}</div>
+          <a href="${escA(dlUrl)}" download target="_blank" rel="noopener" class="file-btn file-btn-dl">הורדה ⬇</a>
         </div>
-        <div class="file-viewer" id="${fid}">
-          <div class="viewer-loading loading-pulse">⏳ טוען מסמך...</div>
+        <div class="file-preview" data-src="${escA(f.localPath||f.url||'')}" data-ext="${escA(ext(f.name))}" id="fp-${idx}-${fi}">
+          <div class="file-note loading-pulse">טוען תצוגה מקדימה…</div>
         </div>
       </div>`;
-    });
-    html += `</div></div>`;
+    }).join('');
+    html += `</div>`;
   }
 
   document.getElementById('modalBody').innerHTML = html;
   document.getElementById('modalOverlay').classList.add('open');
   document.body.classList.add('modal-open');
+  initPreviews();
 }
 
-function toggleViewer(id, url, type){
-  const viewer = document.getElementById(id);
-  if(viewer.classList.contains('open')){
-    viewer.classList.remove('open');
-    return;
-  }
-  document.querySelectorAll('.file-viewer.open').forEach(v=>{
-    v.classList.remove('open');
-    if(v.id!==id){v.dataset.loaded='';v.innerHTML='<div class="viewer-loading loading-pulse">⏳ טוען מסמך...</div>';}
-  });
-  viewer.classList.add('open');
-  if(!viewer.dataset.loaded){
-    viewer.dataset.loaded='1';
-    if(['jpg','jpeg','png','gif'].includes(type)){
-      viewer.innerHTML = `<img src="${url}" alt="תמונה" loading="lazy">`;
-    } else {
-      viewer.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
-    }
-  }
+// התצוגות נטענות כשגוללים אליהן, כדי לא למשוך את כל הקבצים בבת אחת.
+function initPreviews(){
+  const overlay = document.getElementById('modalOverlay');
+  const boxes = [...document.querySelectorAll('.file-preview[data-src]')];
+  if(!boxes.length) return;
+  const load = box => {
+    if(box.dataset.done) return;
+    box.dataset.done = '1';
+    box.innerHTML = previewMarkup(box.dataset.src, box.dataset.ext);
+  };
+  const loadVisible = () => {
+    boxes.forEach(box => {
+      if(box.dataset.done) return;
+      const r = box.getBoundingClientRect();
+      if(r.top < window.innerHeight + 400 && r.bottom > -400) load(box);
+    });
+  };
+  let timer = null;
+  const onScroll = () => { clearTimeout(timer); timer = setTimeout(loadVisible, 80); };
+  overlay.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('scroll', onScroll, {passive:true});
+  loadVisible();
 }
+
+function previewMarkup(src, e){
+  if(!src) return '<div class="file-note">אין תצוגה מקדימה לקובץ הזה</div>';
+  const url = /^https?:/i.test(src) ? src : resolveUrl(src);
+  if(['jpg','jpeg','png','gif','webp','svg'].includes(e)) return `<img src="${escA(url)}" alt="" loading="lazy">`;
+  if(e === 'pdf') return `<iframe src="${escA(url)}#view=FitH&toolbar=0" loading="lazy" title="תצוגה מקדימה"></iframe>`;
+  // Word/PowerPoint אינם נפתחים בדפדפן; מציגים אותם דרך הצפיין של גוגל, שדורש כתובת ציבורית
+  if(location.hostname === 'localhost' || location.protocol === 'file:'){
+    return '<div class="file-note">תצוגה מקדימה של קבצי Word ו-PowerPoint זמינה באתר המפורסם בלבד.<br>אפשר להוריד את הקובץ מהכפתור למעלה.</div>';
+  }
+  return `<iframe src="https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}" loading="lazy" title="תצוגה מקדימה"></iframe>`;
+}
+
 
 function toggleModalDesc(){
   const el  = document.getElementById('modalItemDesc');
@@ -957,39 +959,6 @@ document.addEventListener('keydown',e=>{
 
 renderHome();
 
-/* ── HOVER FILE PREVIEW ─────────────────────────────────── */
-let _hpTimer = null;
-function showFilePreview(e, url, fileExt){
-  clearTimeout(_hpTimer);
-  _hpTimer = setTimeout(()=>{
-    const panel = document.getElementById('hoverPreview');
-    const isImg = ['jpg','jpeg','png','gif','webp','svg'].includes(fileExt);
-    const isPdf = fileExt==='pdf';
-    if(isImg){
-      panel.innerHTML = `<img src="${url}" alt="תצוגה מקדימה" loading="lazy">`;
-    } else if(isPdf || ['doc','docx','ppt','pptx','xls','xlsx'].includes(fileExt)){
-      const icons = {pdf:'📄',doc:'📝',docx:'📝',ppt:'📊',pptx:'📊',xls:'📋',xlsx:'📋'};
-      const label = fileExt.toUpperCase();
-      panel.innerHTML = `<iframe src="${url}" title="${label}" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>`;
-    } else {
-      const icons = {pdf:'📄',doc:'📝',docx:'📝',ppt:'📊',pptx:'📊',xls:'📋',xlsx:'📋'};
-      panel.innerHTML = `<div class="hp-placeholder"><div class="hp-icon">${icons[fileExt]||'📎'}</div><div class="hp-label">${fileExt.toUpperCase()}</div><div class="hp-sub">לחץ "צפה" לפתיחה</div></div>`;
-    }
-    const rect = e.target.getBoundingClientRect();
-    const vw = window.innerWidth, vh = window.innerHeight;
-    let left = rect.left, top = rect.bottom + 8;
-    if(left + 350 > vw) left = vw - 355;
-    if(top + 290 > vh) top = rect.top - 290;
-    panel.style.left = left+'px';
-    panel.style.top  = top+'px';
-    panel.classList.add('hp-visible');
-  }, 350);
-}
-function hideFilePreview(){
-  clearTimeout(_hpTimer);
-  document.getElementById('hoverPreview').classList.remove('hp-visible');
-}
 </script>
-<div id="hoverPreview"></div>
 </body>
 </html>
