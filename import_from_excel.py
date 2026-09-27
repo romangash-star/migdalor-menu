@@ -31,6 +31,8 @@ COLUMNS = {
     "Name":                       "name",
     "תחום ראשי בתפריט":           "category",
     "שיוך מחלקתי":                "dept",
+    "מחלקה רלבנטית":              "dept",
+    "תיאור קצר":                  "description",
     "שם איש קשר להטמעה":          "contactName",
     "טלפון ליצירת קשר":           "phone",
     "אי מייל ליצירת קשר":         "email",
@@ -54,6 +56,7 @@ DESC_COLUMNS = ("תיאור", "פירוט", "תוכן")      # אופציונל�
 # כדי שלא ייווצרו באתר תחומים כפולים בלי צבע.
 CATEGORY_ALIASES = {
     "חזון ותפיסת יעוד":        "חזון ויעוד",
+    "זהות ויעוד":              "חזון ויעוד",
     "זהות וייעוד":             "חזון ויעוד",
     "כוח אדם":                 "כח אדם",
     "תכנית חינוכית וקהילתית":  "תכניות חינוכיות וקהילתיות",
@@ -98,24 +101,42 @@ def read_rows(excel: Path):
 def parse_items(rows):
     """הייצוא בנוי משורת כותרות שחוזרת לכל קבוצה, ומעליה שם התחום."""
     header, items, current_group = None, [], ""
+    in_subitems = False
     for row in rows:
         cells = [("" if c is None else str(c).strip()) for c in row]
         if not any(cells):
             continue
         if "Name" in cells:
-            header = cells
+            # לתת-פריטים יש שורת כותרות משלהם, בלי עמודת התחום. מזהים לפי כך
+            # שהיא חסרה, וכל מה שאחריה מדולג.
+            if FILE_COLUMN in cells or "תחום ראשי בתפריט" in cells:
+                header, in_subitems = cells, False
+            else:
+                in_subitems = True
             continue
         if header is None:
             continue
-        if cells[0] and not any(cells[1:]):
-            current_group = cells[0]          # שורת כותרת של תחום
+        if cells[0] == "Subitems":
+            # Monday מייצא תת-פריטים עם עמודות משלהם. הם שייכים לפריט שמעליהם
+            # ולא מיובאים כפריטים עצמאיים.
+            in_subitems = True
             continue
+        if cells[0] and not any(cells[1:]):
+            current_group, in_subitems = cells[0], False   # שורת כותרת של תחום
+            continue
+        # שורת תת-פריט אין בה תחום; ברגע שחוזרת שורה עם תחום, זה שוב פריט רגיל.
+        cat_idx = header.index("תחום ראשי בתפריט") if "תחום ראשי בתפריט" in header else -1
+        has_category = 0 <= cat_idx < len(cells) and bool(cells[cat_idx])
+        if in_subitems:
+            if not has_category:
+                continue
+            in_subitems = False
 
         def get(title):
             return cells[header.index(title)] if title in header and header.index(title) < len(cells) else ""
 
         name = get("Name")
-        if not name:
+        if not name or name == "Subitems":      # שורת שירות של Monday, לא פריט
             continue
         item = {field: "" for field in ITEM_FIELDS}
         for title, field in COLUMNS.items():
@@ -162,6 +183,20 @@ def attach_files(items, downloads: dict, copy: bool):
     return matched, missing
 
 
+def direct_url(url: str) -> str:
+    """קישור שיתוף של Google Drive מצביע על עמוד תצוגה. כאן הוא מומר לקישור
+    שמחזיר את הקובץ עצמו, כדי שאפשר יהיה להוריד אותו."""
+    m = re.search(r"drive\.google\.com/file/d/([\w-]+)", url) or \
+        re.search(r"drive\.google\.com/open\?id=([\w-]+)", url) or \
+        re.search(r"drive\.google\.com/uc\?[^\"]*id=([\w-]+)", url)
+    if m:
+        return f"https://drive.google.com/uc?export=download&id={m.group(1)}"
+    m = re.search(r"docs\.google\.com/document/d/([\w-]+)", url)
+    if m:
+        return f"https://docs.google.com/document/d/{m.group(1)}/export?format=pdf"
+    return url
+
+
 def safe_name(text: str) -> str:
     return re.sub(r'[\\/?%*:|"<>]', "-", text).strip()[:120] or "file"
 
@@ -185,7 +220,7 @@ def download_links(items, save: bool, timeout: int = 60):
                 done += 1
                 continue
             try:
-                req = urllib.request.Request(url, headers={
+                req = urllib.request.Request(direct_url(url), headers={
                     "User-Agent": "Mozilla/5.0", "Accept": "application/pdf,*/*"})
                 with urllib.request.urlopen(req, timeout=timeout) as resp:
                     ctype = (resp.headers.get("Content-Type") or "").lower()
