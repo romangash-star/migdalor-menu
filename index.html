@@ -85,7 +85,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .cat-page-desc{margin-top:12px;font-size:.95rem;opacity:.85;line-height:1.8;max-width:760px}
 
 /* ── CATEGORY PAGE ───────────────────────────────────── */
-.cat-page-header{background:linear-gradient(150deg,var(--cat-mid,var(--navy-mid)) 0%,var(--cat-deep,var(--navy)) 55%,var(--cat-deepest,var(--teal)) 100%);color:var(--white);padding:40px 24px 36px;position:relative;overflow:hidden}
+.cat-page-header{background:var(--cat,var(--navy));color:var(--cat-fg,var(--white));padding:40px 24px 36px;position:relative;overflow:hidden}
 .cat-page-header::after{content:'';position:absolute;top:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(252,184,79,.15) 0%,transparent 70%);pointer-events:none}
 .cat-page-header-inner{max-width:1200px;margin:0 auto;position:relative}
 .cat-page-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:400;margin-bottom:8px;letter-spacing:.01em}
@@ -104,7 +104,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .item-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer;transition:transform var(--t),box-shadow var(--t),border-color var(--t);border:2px solid transparent;display:flex;flex-direction:column}
 .item-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--cat,var(--gold))}
 .item-card:active{transform:translateY(-1px)}
-.item-card-top{background:linear-gradient(135deg,var(--cat-deep,var(--navy)) 0%,var(--cat-mid,var(--teal-mid)) 100%);padding:18px 20px;position:relative;min-height:80px;border-radius:var(--radius) var(--radius) 0 0}
+.item-card-top{background:var(--cat,var(--navy));padding:18px 20px;position:relative;min-height:80px;border-radius:var(--radius) var(--radius) 0 0}
 .item-type-badge{position:absolute;top:-22px;bottom:0;right:22px;width:74px}
 .item-type-badge .badge-roof{position:absolute;top:0;left:0;width:100%;height:22px;display:block}
 .item-type-badge .badge-body{position:absolute;top:21px;bottom:0;left:0;right:0}
@@ -114,7 +114,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .item-type-badge .badge-roof polygon{fill:var(--badge-bg)}
 .item-type-badge .badge-body{background:var(--badge-bg)}
 .item-type-badge .badge-text{color:var(--badge-fg)}
-.item-name{color:var(--white);font-size:.95rem;font-weight:700;line-height:1.4;padding-right:86px}
+.item-name{color:var(--cat-fg,var(--white));font-size:.95rem;font-weight:700;line-height:1.4;padding-right:86px}
 .item-card-body{padding:14px 18px;flex:1;display:flex;flex-direction:column;gap:8px}
 .item-meta{display:flex;flex-wrap:wrap;gap:5px}
 .meta-tag{padding:3px 10px;border-radius:12px;font-size:.74rem;font-weight:600;background:rgba(0,88,111,.08);color:var(--navy)}
@@ -139,7 +139,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .item-files-more{font-size:.72rem;color:var(--accent);font-weight:700;padding-right:23px}
 
 .item-card-footer{padding:10px 18px;border-top:1px solid rgba(0,88,111,.07);display:flex;align-items:center;justify-content:space-between;border-radius:0 0 var(--radius) var(--radius)}
-.view-btn{font-size:.85rem;font-weight:700;color:var(--cat-deep,var(--navy));display:flex;align-items:center;gap:4px;transition:gap var(--t),color var(--t)}
+.view-btn{font-size:.85rem;font-weight:700;color:var(--cat-ink,var(--navy));display:flex;align-items:center;gap:4px;transition:gap var(--t),color var(--t)}
 .item-card:hover .view-btn{gap:7px;color:var(--teal-mid)}
 .gafan-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,88,111,.1);color:var(--teal);padding:3px 10px;border-radius:12px;font-size:.75rem;font-weight:700}
 
@@ -148,13 +148,13 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal{background:var(--white);border-radius:16px;max-width:760px;width:100%;margin:auto;box-shadow:var(--shadow-lg);overflow:hidden}
 .modal-overlay.open .modal{animation:scaleIn .25s ease both}
-.modal-header{background:linear-gradient(150deg,var(--cat-mid,var(--navy-mid)) 0%,var(--cat-deep,var(--navy)) 55%,var(--cat-deepest,var(--teal)) 100%);padding:28px 28px 24px;position:relative}
+.modal-header{background:var(--cat,var(--navy));padding:28px 28px 24px;position:relative}
 .modal-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
 .modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
 .modal-type-badge{position:relative;width:78px;height:68px;margin-bottom:14px}
 .modal-type-badge .badge-shape{position:absolute;inset:0;width:100%;height:100%}
 .modal-type-badge .badge-text{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-size:.72rem;font-weight:700;line-height:1.15}
-.modal-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.4rem;font-weight:400;color:var(--white);line-height:1.3;letter-spacing:.01em}
+.modal-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.4rem;font-weight:400;color:var(--cat-fg,var(--white));line-height:1.3;letter-spacing:.01em}
 .modal-item-desc{margin-top:10px;font-size:.88rem;line-height:1.72;color:rgba(255,255,255,.88);overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;transition:all .2s ease}
 .modal-item-desc.expanded{display:block;-webkit-line-clamp:unset}
 .modal-desc-more{background:none;border:none;color:var(--gold);cursor:pointer;font-size:.82rem;font-weight:700;padding:4px 0 0;margin-top:2px;display:block;font-family:'BrandText','Heebo',sans-serif}
@@ -165,7 +165,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal-share-btn:hover{background:rgba(56,209,214,.4)}
 .modal-body{padding:28px;background:var(--white)}
 .modal-section{margin-bottom:22px}
-.modal-section-title{font-size:.8rem;font-weight:700;color:var(--cat-mid,var(--teal-mid));text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid rgba(0,88,111,.1);display:flex;align-items:center;gap:6px}
+.modal-section-title{font-size:.8rem;font-weight:700;color:var(--cat-ink,var(--teal-mid));text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid rgba(0,88,111,.1);display:flex;align-items:center;gap:6px}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
 .info-item{background:var(--off-white);border-radius:8px;padding:10px 12px;transition:background var(--t)}
 .info-item:hover{background:rgba(0,88,111,.06)}
@@ -201,7 +201,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .file-actions{display:flex;gap:6px;flex-shrink:0}
 .file-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;font-family:'Heebo',sans-serif;font-size:.8rem;font-weight:700;text-decoration:none;transition:transform var(--t),background var(--t);cursor:pointer;border:none}
 .file-btn:hover{transform:translateY(-1px)}
-.file-btn-view{background:var(--cat-deep,var(--navy));color:var(--white)}
+.file-btn-view{background:var(--cat-ink,var(--navy));color:var(--white)}
 .file-btn-view:hover{background:var(--teal-mid)}
 .file-btn-dl{background:transparent;color:var(--navy);border:1.5px solid rgba(0,88,111,.2)}
 .file-btn-dl:hover{background:rgba(0,88,111,.06)}
@@ -657,6 +657,13 @@ const hexToHsl = hex => {
 };
 const hsl = (h, s, l) => `hsl(${h.toFixed(1)} ${(s * 100).toFixed(1)}% ${(l * 100).toFixed(1)}%)`;
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+// יחס הניגודיות מול לבן, לפי התקן, כדי להחליט אם הטקסט יהיה לבן או כהה.
+const contrastWithWhite = hex => {
+  const n = parseInt(hex.slice(1), 16);
+  const lin = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+  const L = 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255);
+  return 1.05 / (L + 0.05);
+};
 
 // Shades keep the category's own hue — only lightness moves — so a gold page reads
 // gold and a teal page reads teal, instead of both drifting toward one dark colour.
@@ -666,16 +673,17 @@ function applyCatTheme(cat){
   if(!base){ clearCatTheme(); return; }
   const [h, sat, l] = hexToHsl(base);
   const s2 = clamp(sat, 0.35, 0.8);
-  const softL = clamp(l * 1.15, 0.58, 0.8);
-  root.setProperty('--cat', base);
-  root.setProperty('--cat-mid', hsl(h, s2, clamp(l * 0.62, 0.24, 0.40)));
-  root.setProperty('--cat-deep', hsl(h, s2, clamp(l * 0.45, 0.17, 0.28)));
-  root.setProperty('--cat-deepest', hsl(h, s2, clamp(l * 0.34, 0.12, 0.22)));
+  const light = contrastWithWhite(base) < 3;   // בוחר טקסט כהה כשהלבן לא קריא
+  const softL = clamp(l * 1.15, 0.58, 0.85);
+  root.setProperty('--cat', base);             // הצבע המדויק של הבית
+  root.setProperty('--cat-fg', light ? '#123' : '#fff');   // טקסט שיושב על הצבע
+  // גרסה כהה יותר לטקסט על רקע לבן, כדי שגם הצהוב והכתום יישארו קריאים
+  root.setProperty('--cat-ink', hsl(h, s2, clamp(l * 0.5, 0.2, 0.34)));
   root.setProperty('--cat-soft', hsl(h, clamp(sat, 0.4, 0.95), softL));
-  root.setProperty('--cat-soft-fg', softL > 0.62 ? '#00303d' : '#fff');
+  root.setProperty('--cat-soft-fg', softL > 0.6 ? '#00303d' : '#fff');
 }
 function clearCatTheme(){
-  ['--cat','--cat-mid','--cat-deep','--cat-deepest','--cat-soft','--cat-soft-fg']
+  ['--cat','--cat-fg','--cat-ink','--cat-soft','--cat-soft-fg']
     .forEach(v => document.documentElement.style.removeProperty(v));
 }
 
