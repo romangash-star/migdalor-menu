@@ -39,7 +39,8 @@
   --accent:#fcb84f;--accent-hover:#e8a53a;--whatsapp:#38d1d6;
   --radius:12px;--shadow:0 4px 20px rgba(0,88,111,.15);--shadow-lg:0 8px 36px rgba(0,88,111,.28);
   --t:.22s ease}
-body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);color:#1a3340;min-height:100vh;font-size:16px;line-height:1.6}
+html{font-size:calc(100% * var(--a11y-scale, 1))}
+body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);color:#1a3340;min-height:100vh;font-size:1rem;line-height:1.6}
 
 /* ── ANIMATIONS ─────────────────────────────────────── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
@@ -98,21 +99,21 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .house-label-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.05rem;font-weight:400;line-height:1.35;letter-spacing:.07em}
 .house-label-count{font-size:.72rem;font-weight:700;margin-top:7px;opacity:.92;letter-spacing:.05em}
 .cat-list{flex:0 1 420px;min-width:260px;display:flex;flex-direction:column}
-.cat-list-item{cursor:pointer;padding:8px 4px;border-bottom:1px solid rgba(0,88,111,.08)}
+.cat-list-item{cursor:pointer;padding:8px 4px;border-bottom:1px solid rgba(0,88,111,.08);display:block;width:100%;text-align:right;font:inherit;color:inherit;background:none;border-top:none;border-inline:none}
 .cat-list-item:last-child{border-bottom:none}
-.cat-list-name{font-family:'BrandTitle','Secular One',sans-serif;font-weight:400;font-size:1.15rem;transition:font-size .25s ease;letter-spacing:.06em}
+.cat-list-name{display:block;font-family:'BrandTitle','Secular One',sans-serif;font-weight:400;font-size:1.15rem;transition:font-size .25s ease;letter-spacing:.06em}
 .cat-list-item.active .cat-list-name{font-size:1.7rem}
-.cat-list-desc{max-height:0;overflow:hidden;opacity:0;font-size:.85rem;line-height:1.7;color:var(--slate);transition:max-height .3s ease,opacity .25s ease,margin-top .25s ease}
+.cat-list-desc{display:block;max-height:0;overflow:hidden;opacity:0;font-size:.85rem;line-height:1.7;color:var(--slate);transition:max-height .3s ease,opacity .25s ease,margin-top .25s ease}
 .cat-list-item.active .cat-list-desc{max-height:220px;opacity:1;margin-top:8px}
 /* Category page description */
-.cat-page-desc{margin-top:6px;font-size:.85rem;opacity:.85;line-height:1.6;max-width:820px}
+.cat-page-desc{margin-top:6px;font-size:.85rem;line-height:1.6;max-width:820px}
 
 /* ── CATEGORY PAGE ───────────────────────────────────── */
 .cat-page-header{background:var(--cat,var(--navy));color:var(--cat-fg,var(--white));padding:16px 24px 18px;position:relative;overflow:hidden}
 .cat-page-header::after{content:'';position:absolute;top:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(252,184,79,.15) 0%,transparent 70%);pointer-events:none}
 .cat-page-header-inner{max-width:1200px;margin:0 auto;position:relative}
 .cat-page-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.35rem,2.6vw,1.9rem);font-weight:400;margin-bottom:4px;letter-spacing:.01em}
-.cat-page-subtitle{font-size:.85rem;opacity:.8}
+.cat-page-subtitle{font-size:.85rem}
 .filters-bar{background:var(--white);border-bottom:2px solid rgba(0,88,111,.08);padding:14px 24px;position:sticky;top:52px;z-index:50;box-shadow:0 2px 12px rgba(0,88,111,.08)}
 .filters-bar-inner{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .filter-label{font-size:.85rem;font-weight:700;color:var(--slate);white-space:nowrap}
@@ -138,6 +139,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .item-type-badge .badge-body{background:var(--badge-bg)}
 .item-type-badge .badge-text{color:var(--badge-fg)}
 .item-name{color:var(--cat-fg,var(--white));font-size:.95rem;font-weight:700;line-height:1.4;padding-right:86px}
+.item-name-btn{font:inherit;color:inherit;background:none;border:none;padding:0;margin:0;text-align:right;width:100%;cursor:pointer}
 .item-card-body{padding:14px 18px;flex:1;display:flex;flex-direction:column;gap:8px}
 .item-meta{display:flex;flex-wrap:wrap;gap:5px}
 .meta-tag{padding:3px 10px;border-radius:12px;font-size:.74rem;font-weight:600;background:rgba(0,88,111,.08);color:var(--navy)}
@@ -172,8 +174,8 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal{background:var(--white);border-radius:16px;max-width:760px;width:100%;margin:auto;box-shadow:var(--shadow-lg);overflow:hidden}
 .modal-overlay.open .modal{animation:scaleIn .25s ease both}
 .modal-header{background:var(--cat,var(--navy));padding:14px 20px 16px;position:relative}
-.modal-close{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
-.modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
+.modal-close{position:absolute;top:16px;left:16px;background:var(--cat-ink,#00303d);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
+.modal-close:hover{background:var(--cat-ink,#00303d);filter:brightness(1.3);transform:rotate(90deg)}
 .modal-type-badge{position:relative;width:78px;height:68px;margin-bottom:14px}
 .modal-type-badge .badge-shape{position:absolute;inset:0;width:100%;height:100%}
 .modal-type-badge .badge-text{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-size:.72rem;font-weight:700;line-height:1.15}
@@ -182,10 +184,10 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal-item-desc.expanded{display:block;-webkit-line-clamp:unset}
 .modal-desc-more{background:none;border:none;color:var(--gold);cursor:pointer;font-size:.82rem;font-weight:700;padding:4px 0 0;margin-top:2px;display:block;font-family:'BrandText','Heebo',sans-serif}
 .modal-header-actions{display:flex;align-items:center;gap:8px;justify-content:flex-start;margin-bottom:8px;flex-direction:row-reverse}
-.modal-close{position:static;background:rgba(255,255,255,.15);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
-.modal-close:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
-.modal-share-btn{background:rgba(56,209,214,.22);border:1.5px solid rgba(56,209,214,.55);color:#fff;padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:'BrandText','Heebo',sans-serif;transition:background var(--t)}
-.modal-share-btn:hover{background:rgba(56,209,214,.4)}
+.modal-close{position:static;background:var(--cat-ink,#00303d);border:none;color:var(--white);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
+.modal-close:hover{background:var(--cat-ink,#00303d);filter:brightness(1.3);transform:rotate(90deg)}
+.modal-share-btn{background:var(--cat-ink,#00303d);border:1.5px solid rgba(255,255,255,.4);color:#fff;padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:'BrandText','Heebo',sans-serif;transition:background var(--t)}
+.modal-share-btn:hover{filter:brightness(1.3)}
 .modal-body{padding:16px 20px 20px;background:var(--white)}
 .modal-section{margin-bottom:16px}
 .modal-section-title{font-size:.8rem;font-weight:700;color:var(--cat-ink,var(--teal-mid));text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid rgba(0,88,111,.1);display:flex;align-items:center;gap:6px}
@@ -265,7 +267,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 body.in-category .home-view{display:none}
 body.in-category .cat-view{display:block}
 body.modal-open{overflow:hidden}
-.site-footer{background:var(--navy-mid);border-top:3px solid var(--gold);color:rgba(255,255,255,.7);text-align:center;padding:18px 24px;font-size:.85rem}
+.site-footer{background:var(--navy);border-top:3px solid var(--gold);color:rgba(255,255,255,.88);text-align:center;padding:18px 24px;font-size:.85rem}
 .site-footer a{color:var(--gold);text-decoration:none;transition:color var(--t)}
 .site-footer a:hover{color:var(--white)}
 .site-footer strong{color:var(--white);font-weight:800}
@@ -282,11 +284,11 @@ body.modal-open{overflow:hidden}
   .showcase{display:none}
   .house-carousel{display:flex;flex-direction:row;align-items:flex-end;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:16px;padding:10px 4px 14px;scrollbar-width:none;-ms-overflow-style:none}
   .house-carousel::-webkit-scrollbar{display:none}
-  .house-card{flex:0 0 min(52%,210px);scroll-snap-align:center;position:relative;cursor:pointer}
+  .house-card{flex:0 0 min(52%,210px);scroll-snap-align:center;position:relative;cursor:pointer;background:none;border:none;padding:0;font:inherit;color:inherit}
   .house-card .badge-shape{position:absolute;inset:0;width:100%;height:100%}
-  .house-card-text{position:absolute;left:0;right:0;bottom:26px;text-align:center;color:#fff;padding:0 10px}
+  .house-card-text{display:block;position:absolute;left:0;right:0;bottom:26px;text-align:center;color:#fff;padding:0 10px}
   .house-card-text.house-label-dark{color:#1a3340}
-  .house-card-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.25rem;font-weight:400;padding:0 10px;line-height:1.35;letter-spacing:.07em}
+  .house-card-name{display:block;font-family:'BrandTitle','Secular One',sans-serif;font-size:1.25rem;font-weight:400;padding:0 10px;line-height:1.35;letter-spacing:.07em}
   .house-card-count{font-size:.8rem;font-weight:700;margin-top:7px;opacity:.92;letter-spacing:.05em;display:flex;align-items:center;justify-content:center;gap:5px}
   .cat-current-desc{display:block;background:var(--white);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);margin-top:16px}
   .cat-current-desc-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.2rem;margin-bottom:8px}
@@ -309,18 +311,94 @@ body.modal-open{overflow:hidden}
   .cat-graphic{flex:0 0 auto;max-width:240px}
   .filter-select{min-width:120px}
 }
+
+/* ── ACCESSIBILITY ───────────────────────────────────── */
+.skip-link{position:absolute;right:-9999px;top:0;z-index:2000;background:var(--navy);color:#fff;
+  padding:12px 22px;border-radius:0 0 0 12px;font-weight:700;text-decoration:none}
+.skip-link:focus{right:0}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+:focus-visible{outline:3px solid #0b3d4d;outline-offset:3px;border-radius:4px}
+.site-header :focus-visible,.cat-page-header :focus-visible,.modal-header :focus-visible,
+.site-footer :focus-visible,.privacy-bar :focus-visible{outline-color:#fff}
+main:focus{outline:none}
+
+/* תפריט הנגישות */
+.a11y-btn{position:fixed;left:14px;bottom:14px;z-index:1200;width:52px;height:52px;border-radius:50%;
+  border:2px solid #fff;background:var(--navy);color:#fff;font-size:1.45rem;cursor:pointer;line-height:1;
+  box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.a11y-panel{position:fixed;left:14px;bottom:76px;z-index:1200;width:252px;background:#fff;color:#1a3340;
+  border:1px solid #cfd9d9;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.28);padding:14px;display:none}
+.a11y-panel[data-open="1"]{display:block}
+.a11y-panel h2{font-size:1rem;margin-bottom:10px;color:var(--navy)}
+.a11y-panel button{display:block;width:100%;text-align:right;font:inherit;font-size:.9rem;
+  background:#eef2f2;border:1px solid #d5dede;color:#1a3340;border-radius:9px;padding:9px 12px;
+  margin-bottom:7px;cursor:pointer}
+.a11y-panel button:hover{background:#dde7e7}
+.a11y-panel button[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.a11y-panel .a11y-links-row{display:flex;gap:10px;justify-content:center;margin-top:10px;font-size:.8rem}
+.a11y-panel .a11y-links-row a{color:var(--navy)}
+
+/* מצבי נגישות */
+body.a11y-underline a{text-decoration:underline}
+body.a11y-no-anim *,body.a11y-no-anim *::before,body.a11y-no-anim *::after{
+  animation:none!important;transition:none!important;scroll-behavior:auto!important}
+/* רכיבים שמתחילים שקופים ונחשפים באנימציה — בלי אנימציה הם חייבים להיות גלויים */
+body.a11y-no-anim .anim-card,body.a11y-no-anim .anim-hero,body.a11y-no-anim .anim-title,
+body.a11y-no-anim .anim-grid,body.a11y-no-anim .anim-filters{opacity:1!important;transform:none!important}
+body.a11y-contrast{background:#000;color:#fff}
+body.a11y-contrast .intro-section,body.a11y-contrast .items-section,body.a11y-contrast .categories-section,
+body.a11y-contrast .hero,body.a11y-contrast .filters-bar,body.a11y-contrast .modal-body{background:#000}
+body.a11y-contrast .item-card,body.a11y-contrast .cat-list-item,body.a11y-contrast .modal,
+body.a11y-contrast .cat-current-desc,body.a11y-contrast .file-card,body.a11y-contrast .a11y-panel,
+body.a11y-contrast .intro-inner,body.a11y-contrast .empty-state{
+  background:#000;color:#fff;border:1px solid #fff;box-shadow:none}
+body.a11y-contrast .site-header,body.a11y-contrast .site-footer,body.a11y-contrast .cat-page-header,
+body.a11y-contrast .modal-header,body.a11y-contrast .privacy-bar{background:#000;color:#fff;border-bottom:1px solid #fff}
+body.a11y-contrast a,body.a11y-contrast .cat-list-name,body.a11y-contrast .item-name,
+body.a11y-contrast .cat-page-title,body.a11y-contrast .modal-title,body.a11y-contrast h1,
+body.a11y-contrast h2,body.a11y-contrast h3,body.a11y-contrast .view-btn{color:#ffe14d}
+body.a11y-contrast .item-meta-tag,body.a11y-contrast .filter-select,body.a11y-contrast .a11y-panel button{
+  background:#000;color:#fff;border:1px solid #fff}
+body.a11y-contrast .hero-beam,body.a11y-contrast .cat-graphic,body.a11y-contrast .house-carousel{opacity:.55}
+body.a11y-contrast :focus-visible{outline-color:#ffe14d}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+
+/* הודעת פרטיות ועוגיות */
+.privacy-bar{position:fixed;inset-inline:0;bottom:0;z-index:1300;background:var(--navy);color:#fff;
+  padding:14px 20px;display:none;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;
+  font-size:.88rem;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+.privacy-bar[data-open="1"]{display:flex}
+body.privacy-open .a11y-btn{bottom:calc(var(--bar-h, 64px) + 14px)}
+body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
+.privacy-bar a{color:var(--gold)}
+.privacy-bar button{font:inherit;font-weight:700;background:var(--gold);color:#1a3340;border:none;
+  border-radius:9px;padding:8px 22px;cursor:pointer}
+
+/* קישורי חובה בתחתית */
+.footer-nav{margin-bottom:12px;display:flex;gap:4px 14px;justify-content:center;flex-wrap:wrap}
+@media(max-width:640px){
+  .a11y-btn{width:46px;height:46px;font-size:1.25rem}
+  .a11y-panel{width:calc(100vw - 28px)}
+}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#mainContent">דילוג לתוכן המרכזי</a>
 <header class="site-header">
   <div class="header-inner">
-    <div class="site-logo" onclick="goHome()">
-      <img src="logo.png" alt="המגדלור" class="logo-img">
-    </div>
-    <button class="header-back" id="backBtn" onclick="goHome()">&#8592; חזרה לתפריט הראשי</button>
+    <button type="button" class="site-logo" onclick="goHome()" aria-label="המגדלור — חזרה לעמוד הראשי">
+      <img src="logo.png" alt="" class="logo-img">
+    </button>
+    <button type="button" class="header-back" id="backBtn" onclick="goHome()">&#8592; חזרה לתפריט הראשי</button>
   </div>
 </header>
 
+<main id="mainContent" tabindex="-1">
 <div class="home-view">
   <div class="hero anim-hero">
     <div class="hero-beam" aria-hidden="true">
@@ -365,15 +443,15 @@ body.modal-open{overflow:hidden}
     </div>
   </div>
   <div class="categories-section">
-    <div class="section-title anim-title">תחומי פעולה</div>
+    <h2 class="section-title anim-title">תחומי פעולה</h2>
     <div class="showcase anim-grid">
       <div class="cat-graphic">
         <svg viewBox="38 45 348 506" id="houseSvg" aria-hidden="true"></svg>
-        <div class="house-labels" id="houseLabels"></div>
+        <div class="house-labels" id="houseLabels" aria-hidden="true"></div>
       </div>
-      <div class="cat-list" id="catList"></div>
+      <div class="cat-list" id="catList" role="group" aria-label="תחומי הפעולה"></div>
     </div>
-    <div class="house-carousel" id="houseCarousel"></div>
+    <div class="house-carousel" id="houseCarousel" role="group" aria-label="תחומי הפעולה"></div>
     <div class="cat-current-desc" id="catCurrentDesc"></div>
   </div>
 </div>
@@ -381,44 +459,45 @@ body.modal-open{overflow:hidden}
 <div class="cat-view">
   <div class="cat-page-header">
     <div class="cat-page-header-inner">
-      <div class="cat-page-title" id="catPageTitle"></div>
+      <h2 class="cat-page-title" id="catPageTitle"></h2>
       <div class="cat-page-subtitle" id="catPageSubtitle"></div>
       <div class="cat-page-desc" id="catPageDesc"></div>
     </div>
   </div>
   <div class="filters-bar anim-filters">
     <div class="filters-bar-inner">
-      <span class="filter-label">סנן לפי:</span>
-      <select class="filter-select" id="filterDept" onchange="applyFilters()"><option value="">כל המחלקות</option></select>
-      <select class="filter-select" id="filterTopic" onchange="applyFilters()"><option value="">כל הנושאים</option></select>
-      <select class="filter-select" id="filterAudience" onchange="applyFilters()"><option value="">כל קהלי היעד</option></select>
-      <select class="filter-select" id="filterType" onchange="applyFilters()">
+      <span class="filter-label" id="filterLabel">סנן לפי:</span>
+      <select class="filter-select" id="filterDept" aria-label="סינון לפי מחלקה" onchange="applyFilters()"><option value="">כל המחלקות</option></select>
+      <select class="filter-select" id="filterTopic" aria-label="סינון לפי נושא" onchange="applyFilters()"><option value="">כל הנושאים</option></select>
+      <select class="filter-select" id="filterAudience" aria-label="סינון לפי קהל יעד" onchange="applyFilters()"><option value="">כל קהלי היעד</option></select>
+      <select class="filter-select" id="filterType" aria-label="סינון לפי סוג הפריט" onchange="applyFilters()">
         <option value="">כל הסוגים</option>
         <option value="ספק">ספקים</option>
         <option value="מסמך המלצות">מסמכים</option>
       </select>
-      <span class="results-count" id="resultsCount"></span>
+      <span class="results-count" id="resultsCount" role="status" aria-live="polite"></span>
     </div>
   </div>
   <div class="items-section">
-    <div class="items-grid" id="itemsGrid"></div>
+    <div class="items-grid" id="itemsGrid" role="list"></div>
     <div class="empty-state" id="emptyState" style="display:none">
-      <div class="empty-state-icon">🔍</div>
+      <div class="empty-state-icon" aria-hidden="true">🔍</div>
       <h3>לא נמצאו פריטים</h3>
       <p>נסו לשנות את הפילטרים</p>
     </div>
   </div>
 </div>
+</main>
 
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
-  <div class="modal" id="modal">
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
     <div class="modal-header">
       <div class="modal-header-actions">
-        <button class="modal-close" onclick="closeModal()">✕</button>
-        <button class="modal-share-btn" id="modalShareBtn" onclick="shareItem()">שתף בוואטסאפ</button>
+        <button type="button" class="modal-close" onclick="closeModal()" aria-label="סגירת החלון"><span aria-hidden="true">✕</span></button>
+        <button type="button" class="modal-share-btn" id="modalShareBtn" onclick="shareItem()">שיתוף בוואטסאפ</button>
       </div>
       <div class="modal-type-badge" id="modalBadge"></div>
-      <div class="modal-title" id="modalTitle"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
       <div id="modalDescWrap"></div>
     </div>
     <div class="modal-body" id="modalBody"></div>
@@ -434,10 +513,39 @@ body.modal-open{overflow:hidden}
     לפרטים נוספים אודות המגדלור וכלים נוספים בקידום חינוך פוליטי לדמוקרטיה &mdash;
     <a href="https://ha-migdalor.co.il" target="_blank">ha-migdalor.co.il</a>
   </div>
-  <div style="opacity:.6;font-size:.8rem">
+  <nav class="footer-nav" aria-label="מידע משפטי">
+    <a href="accessibility.html">הצהרת נגישות</a>
+    <span aria-hidden="true">|</span>
+    <a href="privacy.html">הצהרת פרטיות ועוגיות</a>
+    <span aria-hidden="true">|</span>
+    <a href="terms.html">תנאי שימוש</a>
+  </nav>
+  <div style="font-size:.8rem">
     <strong>המגדלור</strong> – חינוך פוליטי לדמוקרטיה ליברלית
   </div>
 </footer>
+
+<button type="button" class="a11y-btn" id="a11yBtn" aria-expanded="false" aria-controls="a11yPanel"
+        aria-label="תפריט נגישות"><span aria-hidden="true">&#9855;</span></button>
+<div class="a11y-panel" id="a11yPanel" data-open="0" role="dialog" aria-label="הגדרות נגישות">
+  <h2>הגדרות נגישות</h2>
+  <button type="button" id="a11yBigger">הגדלת הטקסט</button>
+  <button type="button" id="a11ySmaller">הקטנת הטקסט</button>
+  <button type="button" id="a11yContrast" aria-pressed="false">ניגודיות גבוהה</button>
+  <button type="button" id="a11yUnderline" aria-pressed="false">הדגשת קישורים</button>
+  <button type="button" id="a11yNoAnim" aria-pressed="false">עצירת אנימציות</button>
+  <button type="button" id="a11yReset">איפוס ההגדרות</button>
+  <div class="a11y-links-row">
+    <a href="accessibility.html">הצהרת נגישות</a>
+    <a href="privacy.html">הצהרת פרטיות</a>
+  </div>
+</div>
+
+<div class="privacy-bar" id="privacyBar" data-open="0" role="region" aria-label="הודעה על פרטיות ועוגיות">
+  <span>האתר אינו משתמש בעוגיות מעקב ואינו אוסף מידע אישי.
+    <a href="privacy.html">להצהרת הפרטיות המלאה</a></span>
+  <button type="button" id="privacyOk">הבנתי</button>
+</div>
 
 <script>
 const DATA = {"categories":["חזון ויעוד","כח אדם","תכניות חינוכיות וקהילתיות","תרבות ארגונית"],"items":[{"name":"ספרית שמות דמוקרטית ליברלית","category":"חזון ויעוד","dept":"מטה","contactName":"","phone":"","email":"","audience":"תושבים- כללי","topic":"זהות","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"הצעה לתהליך לכתיבת חזון/ הכשרה","category":"חזון ויעוד","dept":"מטה","contactName":"המגדלור","phone":"","email":"","audience":"צוות רשותי","topic":"מעורבות ואקטיביזם","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1mtvrEnpR-3XYJS0IbbNDVArWw4WsMCYs/view?usp=drive_link","name":"הצעה לתהליך לכתיבת חזון- הכשרה - מעוצב.pdf","localPath":"files/הצעה לתהליך לכתיבת חזון- הכשרה - מעוצב.pdf"}]},{"name":"צ'ק ליסט ליברלי למרחב הציבורי","category":"חזון ויעוד","dept":"רב זירתי","contactName":"","phone":"","email":"","audience":"צוות רשותי","topic":"מעורבות ואקטיביזם","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1FzvNaVqEa7j1O5OMk01QYzNoEu_DTFq6/view?usp=drive_link","name":"צ'ק ליסט ליברלי למרחב הציבורי - מעוצב.pdf","localPath":"files/צ'ק ליסט ליברלי למרחב הציבורי - מעוצב.pdf"}]},{"name":"הצעה להקמת גלריה חברתית קהילתית","category":"חזון ויעוד","dept":"תרבות","contactName":"תרבות","phone":"","email":"","audience":"צוות רשותי","topic":"אמנות ותרבות","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1ktKZTVBXaLomopSZblrA9z3P6AvUwlWJ/view?usp=drive_link","name":"הצעה להקמת גלריה חברתית קהילתית - מעוצב.pdf","localPath":"files/הצעה להקמת גלריה חברתית קהילתית - מעוצב.pdf"}]},{"name":"שילוט עירוני","category":"חזון ויעוד","dept":"דוברות","contactName":"מרכזים לצדק, הצעד הבא, פלג","phone":"","email":"","audience":"צוות רשותי","topic":"זהות","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/12eq8l2smtt6zEaR2cNXVia8mRkCMjLMn/view?usp=drive_link","name":"שילוט עירוני - מעוצב.pdf","localPath":"files/שילוט עירוני - מעוצב.pdf"}]},{"name":"תו תקן ליברלי למוסדות ועסקים","category":"חזון ויעוד","dept":"רב זירתי","contactName":"מרכזים לצדק חברתי, ישראל חופשית","phone":"","email":"","audience":"צוות רשותי","topic":"","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1H8mNxZDf8N9BCUntNWXTDsCTy2pWj6ul/view?usp=drive_link","name":"תו תקן ליברלי למוסדות ועסקים - מעוצב.pdf","localPath":"files/תו תקן ליברלי למוסדות ועסקים - מעוצב.pdf"}]},{"name":"פנייה לציבור","category":"חזון ויעוד","dept":"דוברות","contactName":"","phone":"","email":"","audience":"צוות רשותי","topic":"אזרחות","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1Y6n7pB91eSuxOIIyx_wZd8PdkTBLof86/view?usp=drive_link","name":"פנייה לציבור - מעוצב.pdf","localPath":"files/פנייה לציבור - מעוצב.pdf"}]},{"name":"תקנון פרסום בלוחות רשותיים","category":"חזון ויעוד","dept":"דוברות","contactName":"","phone":"","email":"","audience":"צוות רשותי","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1Gh5ALh_VHN1KsQMSiEazLB6tCWRfZnqt/view?usp=drive_link","name":"תקנון פרסום בלוחות רשותיים - מעוצב.pdf","localPath":"files/תקנון פרסום בלוחות רשותיים - מעוצב.pdf"}]},{"name":"הכשרות לכח אדם ברשות","category":"כח אדם","dept":"רב זירתי","contactName":"המגדלור, קול מקומי (מרכזים לצדק)","phone":"","email":"","audience":"צוות רשותי","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1q7F1Nwb44MUL8f9-_GFsFJUa_GlYLlMT/view?usp=drive_link","name":"הכשרות לכח אדם ברשות - מעוצב.pdf","localPath":"files/הכשרות לכח אדם ברשות - מעוצב.pdf"}]},{"name":"הכשרות לצוותי חינוך","category":"כח אדם","dept":"חינוך","contactName":"המגדלור  ויתר הגופים","phone":"","email":"","audience":"צוותי חינוך","topic":"חינוך פוליטי","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1mmSeJNt86S2wG93in6_vc8MKDINspPUH/view?usp=drive_link","name":"הכשרות לצוותי חינוך - מעוצב.pdf","localPath":"files/הכשרות לצוותי חינוך - מעוצב.pdf"}]},{"name":"השתלמות מורים לחינוך לדמוקרטיה","category":"כח אדם","dept":"חינוך","contactName":"כל הגופים ברשימה, מפתח","phone":"","email":"","audience":"צוותי חינוך","topic":"חינוך פוליטי","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"פורום מקצועיים למען הדמוקרטיה","category":"כח אדם","dept":"","contactName":"המגדלור, מרכזים לצדק","phone":"54555555","email":"nono@gmail.com","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1lZHuqS0j48gR4ovqkk3Ep9FuvgsGUj5E/view?usp=drive_link","name":"פורום מקצועיים למען הדמוקרטיה - מעוצב.pdf","localPath":"files/פורום מקצועיים למען הדמוקרטיה - מעוצב.pdf"}]},{"name":"הגדרת תפקיד רכז חינוך לדמוקרטיה","category":"כח אדם","dept":"","contactName":"המגדלור ליוי אור זמיר- יעוץ","phone":"530535387","email":"or@gmail.com","audience":"","topic":"חינוך פוליטי","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/11Mr6B4LOO1NIABbo0yTu9IMhy-T-xxDh/view?usp=drive_link","name":"הגדרת תפקיד רכז חינוך לדמוקרטיה - מעוצב.pdf","localPath":"files/הגדרת תפקיד רכז חינוך לדמוקרטיה - מעוצב.pdf"}]},{"name":"הגדרת תפקיד רכז מעורבות חברתית","category":"כח אדם","dept":"","contactName":"המגדלור- ליווי","phone":"","email":"","audience":"תיכון","topic":"מנהיגות","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/13qzeaBp8QQIayJZIN_t8iHXvRASPjxy2/view?usp=drive_link","name":"הגדרת תפקיד רכז מעורבות חברתית - מעוצב.pdf","localPath":"files/הגדרת תפקיד רכז מעורבות חברתית - מעוצב.pdf"}]},{"name":"הגדרת תפקיד רכז.ת הכנה לצהל","category":"כח אדם","dept":"","contactName":"המגדלור- ליווי","phone":"","email":"","audience":"תיכון","topic":"הכנה לצה\"ל","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1n1dHVcKkIVndFV1A5Ud69Mv4ytrdv-pw/view?usp=drive_link","name":"הגדרת תפקיד רכז.ת הכנה לצהל - מעוצב.pdf","localPath":"files/הגדרת תפקיד רכז.ת הכנה לצהל - מעוצב.pdf"}]},{"name":"קוד אתי ארגוני","category":"כח אדם","dept":"","contactName":"","phone":"545555555","email":"","audience":"","topic":"זהות","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1SNMMhuCOGpdSoOqQP6crqBOowpjyW-jP/view?usp=drive_link","name":"קוד אתי ארגוני - מעוצב.pdf","localPath":"files/קוד אתי ארגוני - מעוצב.pdf"}]},{"name":"לוח אירועים למנהלות משאן רשותיות","category":"כח אדם","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"זהות","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/19FuJ0MpEAhDKTB1EaH4u4UTI1cXs7Q2s/view?usp=drive_link","name":"לוח אירועים למנהלות משאן רשותיות - מעוצב.pdf","localPath":"files/לוח אירועים למנהלות משאן רשותיות - מעוצב.pdf"}]},{"name":"פורום רכזי ארגונים ותוכניות חבפ","category":"כח אדם","dept":"","contactName":"המגדלור","phone":"","email":"","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"קורס לגיל השלישי","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"אמנות ותרבות","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"מסמך מכוון ליצירה ובחירה של תכניות","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/18QRDh_Y12oAA9rFl-1XqzPMmi2SByAI_/view?usp=drive_link","name":"מסמך מכוון ליצירה ובחירה של תכניות - מעוצב.pdf","localPath":"files/מסמך מכוון ליצירה ובחירה של תכניות - מעוצב.pdf"}]},{"name":"לוח שנה דמוקרטי ליברלי מפורט על פי מועדים שבועיים ושנתיים לפי מרכזים וקהלי יעד","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"מגמות על אזוריות דמוקרטיות ליברליות","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"רקפות- יפתח גיא","phone":"","email":"","audience":"תיכון","topic":"חינוך פוליטי","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"מרחבי אקטיביזם לנוער","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"תכנית פלג, הצעד הבא","phone":"","email":"","audience":"תיכון","topic":"מנהיגות","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1vJe130i0I_gH4nFtSLXkr1o67aXsNuMe/view?usp=drive_link","name":"מרחבי אקטיביזם לנוער - מעוצב.pdf","localPath":"files/מרחבי אקטיביזם לנוער - מעוצב.pdf"}]},{"name":"הצעה לפעילות ספריה דמוקרטית ליברלי","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"תרבות /עורך ספרים..","phone":"","email":"","audience":"","topic":"אמנות ותרבות","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1_lrmEOnn98d5sfyYsls_Yks-opbrlhSJ/view?usp=sharing","name":"הצעה לפעילות ספריה דמוקרטית ליברלי - מעוצב.pdf","localPath":"files/הצעה לפעילות ספריה דמוקרטית ליברלי - מעוצב.pdf"}]},{"name":"פעילות מוסדות תרבות ברשות","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"תרבות","phone":"","email":"","audience":"","topic":"אמנות ותרבות","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"הכשרות והדרכות להורים בתחום","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"","phone":"","email":"","audience":"הורים","topic":"חינוך פוליטי","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"תוכנית מצטיינים ומצטיינות","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"שוות,פלג הדבר הבא","phone":"","email":"","audience":"","topic":"מנהיגות","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1JeqbyFRd1OD7-FvQnYRs-Ps8f9yWG0XE/view?usp=drive_link","name":"תוכנית מצטיינים ומצטיינות - מעוצב.pdf","localPath":"files/תוכנית מצטיינים ומצטיינות - מעוצב.pdf"}]},{"name":"פורומים של הורים","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"משמר החינוך -ליאור","phone":"545555555","email":"","audience":"הורים","topic":"מנהיגות","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1pAWO9GF3Rc1Brw9gB6LPWBKUAwKart7x/view?usp=drive_link","name":"פורומים של הורים - מעוצב.pdf","localPath":"files/פורומים של הורים - מעוצב.pdf"}]},{"name":"הצעות לספקים ומפעילים","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"פעילות צהרונים","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"הזנק 800","phone":"","email":"","audience":"","topic":"חינוך פוליטי","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"דוגמא לתכנית חינוכית של מרכז דמוקרטיה רשותית","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"המגדלור,","phone":"","email":"","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"תכניות הכנה לצה\"ל","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"המגדלור, יהב","phone":"","email":"","audience":"","topic":"חינוך פוליטי","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1jajC1wk9NqT_ayvrlPH8Mz8zNDMWHOnF/view?usp=drive_link","name":"תכניות הכנה לצה-ל - מעוצב.pdf","localPath":"files/תכניות הכנה לצה-ל - מעוצב.pdf"}]},{"name":"שבוע הדמוקרטיה","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"תכניות יהדות דמוקרטית ליברלית ברשות המקומית","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/18HMfqrTD2i4h_eIDPMknn0Yb7aeKRVUo/view?usp=drive_link","name":"תכניות יהדות דמוקרטית ליברלית ברשות המקומית - מעוצב.pdf","localPath":"files/תכניות יהדות דמוקרטית ליברלית ברשות המקומית - מעוצב.pdf"}]},{"name":"שוויון מגדרי ברשות - תוכנית  על","category":"תכניות חינוכיות וקהילתיות","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/11_o0l5vijCmeOVERh74RymZJEMoc5G_A/view?usp=drive_link","name":"שוויון מגדרי ברשות - תוכנית  על - מעוצב.pdf","localPath":"files/שוויון מגדרי ברשות - תוכנית  על - מעוצב.pdf"}]},{"name":"הצעה או דוגמא לפרויקטים של שיתוף ציבור בתחום החינוך הפוליטי לדמוקרטיה","category":"תרבות ארגונית","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"מעורבות ואקטיביזם","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"תהלכים שיתוף נוער בסוגיות פוליטיות מקומיות שונות","category":"תרבות ארגונית","dept":"","contactName":"מרכזים לצדק חברתי","phone":"","email":"","audience":"","topic":"מעורבות ואקטיביזם","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1wowM-GF2R-ph4iQlo61gbyfeSXlRgUj2/view?usp=drive_link","name":"תהלכים שיתוף נוער בסוגיות פוליטיות מקומיות שונות - מעוצב.pdf","localPath":"files/תהלכים שיתוף נוער בסוגיות פוליטיות מקומיות שונות - מעוצב.pdf"}]},{"name":"נהלים למניעת גזענות ויצירת שיוון ברשות וסובלנות ברשות לצד קביעת הגבולות האדומים של הרשות","category":"תרבות ארגונית","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"יחסים בין קבוצות","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1eZMnMuA6anfAP6aythNOP40iArDpbCyq/view?usp=drive_link","name":"נהלים למניעת גזענות ויצירת שיוון ברשות וסובלנות ברשות לצד קביעת הגבולות האדומים של הרשות - מעוצב.pdf","localPath":"files/נהלים למניעת גזענות ויצירת שיוון ברשות וסובלנות ברשות לצד קביעת הגבולות האדומים של הרשות - מעוצב.pdf"}]},{"name":"פלטפורמות לעידוד חופש הביטוי ברשתות ובמרחבים ציבוריים שונים ומול הרשות","category":"תרבות ארגונית","dept":"","contactName":"החזית הורודה, החלוץ, תרבות, מרכזים לצדק","phone":"","email":"","audience":"","topic":"מעורבות ואקטיביזם","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1asi_TnmyS0_X72caQTlyCuTHlVG3X-yQ/view?usp=drive_link","name":"פלטפורמות לעידוד חופש הביטוי ברשתות ובמרחבים ציבוריים שונים ומול הרשות - מעוצב.pdf","localPath":"files/פלטפורמות לעידוד חופש הביטוי ברשתות ובמרחבים ציבוריים שונים ומול הרשות - מעוצב.pdf"}]},{"name":"מפגשים של בעלי תפקידים עם התושבים והנוער","category":"תרבות ארגונית","dept":"","contactName":"מרכזים לצדק","phone":"","email":"","audience":"","topic":"","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"עידוד ויצירת לגיטימציה פעולה בתחום כלפי בעלי תפקידים  לצד גיבוי במידת הצורך","category":"תרבות ארגונית","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"מעורבות ואקטיביזם","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"קריטריונים לבחינת שותפויות","category":"תרבות ארגונית","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/18a9gbJW_faqCeSqn-5dsEkt1Plc_PWEZ/view?usp=drive_link","name":"קריטריונים לבחינת שותפויות - מעוצב.pdf","localPath":"files/קריטריונים לבחינת שותפויות - מעוצב.pdf"}]},{"name":"מיפוי ארגוני חינוך דמוקרטים ליברליים","category":"תרבות ארגונית","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"דוגמאות לניהול משאבים עירוני באופן מוצאם לערכי הדמוקרטיה (לדוגמא חלקות משאבי הסופרט באופן שווה מגדרית","category":"תרבות ארגונית","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/18xalt2z9As_n3KkpRXp3D4_5I94mA1mI/view?usp=drive_link","name":"דוגמאות לניהול משאבים עירוני באופן מוצאם לערכי הדמוקרטיה (לדוגמא חלקות משאבי הסופרט באופן שווה מגדרית - מעוצב.pdf","localPath":"files/דוגמאות לניהול משאבים עירוני באופן מוצאם לערכי הדמוקרטיה (לדוגמא חלקות משאבי הסופרט באופן שווה מגדרית - מעוצב.pdf"}]},{"name":"דוגמאות להקצאת משאבים רשותיים לטובת חינוך לדמוקרטיה- מרכז דמוקרטיה רשותי,","category":"תרבות ארגונית","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1_iIMSmvumGo821TwDhM9INPO23cpukYO/view?usp=drive_link","name":"דוגמאות להקצאת משאבים רשותיים לטובת חינוך לדמוקרטיה- מרכז דמוקרטיה רשותי, - מעוצב.pdf","localPath":"files/דוגמאות להקצאת משאבים רשותיים לטובת חינוך לדמוקרטיה- מרכז דמוקרטיה רשותי, - מעוצב.pdf"}]},{"name":"דוגמאות לשותפויות בין מועצות דמוקרטיות, יהודיות וערביות","category":"תרבות ארגונית","dept":"","contactName":"גבית חביבה, זרעים של שותפות","phone":"","email":"","audience":"","topic":"יחסים בין קבוצות","gafan":"","type":"מסמך המלצות","description":"","files":[]},{"name":"מרכז דמוקרטיה רשותי","category":"תרבות ארגונית","dept":"","contactName":"המגדלור","phone":"","email":"","audience":"","topic":"מעורבות ואקטיביזם","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1a56E2vzOlbztFab-5QDwKnd0Vvb98R1o/view?usp=drive_link","name":"מרכז דמוקרטיה רשותי - מעוצב.pdf","localPath":"files/מרכז דמוקרטיה רשותי - מעוצב.pdf"}]},{"name":"תבחיני גפ\"ן לארגונים","category":"תרבות ארגונית","dept":"חינוך","contactName":"","phone":"","email":"","audience":"צוותי חינוך","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[{"url":"https://drive.google.com/file/d/1xMZM8vGGYJwdIzP1Yrq90SOXSqhfgWWD/view?usp=drive_link","name":"תבחיני גפ-ן לארגונים - מעוצב.pdf","localPath":"files/תבחיני גפ-ן לארגונים - מעוצב.pdf"}]},{"name":"מאגר תכניות גפ\"ן מומלצות","category":"תרבות ארגונית","dept":"","contactName":"","phone":"","email":"","audience":"","topic":"זהות דמוקרטית","gafan":"","type":"מסמך המלצות","description":"","files":[]}]};
@@ -527,7 +635,7 @@ const HOUSE_SHAPES = [
 ];
 const shapeForCat = cat => HOUSE_SHAPES.find(s => s.color === CAT_COLORS[cat]);
 // Paperclip next to the document count, as in the designer's mockup.
-const CLIP_ICON = `<svg class="clip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`;
+const CLIP_ICON = `<svg class="clip-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`;
 
 // Touch devices have no hover, so the list becomes a horizontal swipeable carousel
 // instead: each category's full text is visible right away (no tap needed to reveal
@@ -571,11 +679,11 @@ function renderHome(){
     const color = CAT_COLORS[cat]||'#00586f';
     const displayName = CAT_DISPLAY[cat]||cat;
     const desc = CAT_DESC[cat]||'';
-    return `<div class="cat-list-item anim-card" id="catListItem${i}" style="animation-delay:${i*0.08}s"
+    return `<button type="button" class="cat-list-item anim-card" id="catListItem${i}" style="animation-delay:${i*0.08}s"
       ${HOVER_ATTRS(i)} onclick="openCategory('${escH(cat)}')">
-      <div class="cat-list-name" style="color:${color}">${escH(displayName)}</div>
-      <div class="cat-list-desc">${escH(desc)}</div>
-    </div>`;
+      <span class="cat-list-name" style="color:${color}">${escH(displayName)}</span>
+      <span class="cat-list-desc">${escH(desc)}</span>
+    </button>`;
   }).join('');
 
   // Mobile: the graphic itself is the swipeable carousel — one house at a time,
@@ -591,13 +699,14 @@ function renderHome(){
     const count = DATA.items.filter(it=>it.category===cat).length;
     const displayName = CAT_DISPLAY[cat]||cat;
     const whiteText = ['#1e7e90','#075c73'].includes(s.color);
-    return `<div class="house-card" id="houseCard${i}" style="aspect-ratio:${w}/${h}" onclick="openCategory('${escH(cat)}')">
-      <svg class="badge-shape" viewBox="${minX} ${minY} ${w} ${h}"><polygon points="${s.pts}" fill="${s.color}" fill-opacity="${s.op}"></polygon></svg>
-      <div class="house-card-text${whiteText?'':' house-label-dark'}">
-        <div class="house-card-name">${escH(displayName)}</div>
-        <div class="house-card-count">${CLIP_ICON} ${count} מסמכים</div>
-      </div>
-    </div>`;
+    return `<button type="button" class="house-card" id="houseCard${i}" style="aspect-ratio:${w}/${h}"
+      onclick="openCategory('${escH(cat)}')">
+      <svg class="badge-shape" viewBox="${minX} ${minY} ${w} ${h}" aria-hidden="true"><polygon points="${s.pts}" fill="${s.color}" fill-opacity="${s.op}"></polygon></svg>
+      <span class="house-card-text${whiteText?'':' house-label-dark'}">
+        <span class="house-card-name">${escH(displayName)}</span>
+        <span class="house-card-count">${CLIP_ICON} ${count} מסמכים</span>
+      </span>
+    </button>`;
   }).join('');
 
   if(IS_TOUCH){
@@ -692,6 +801,16 @@ const hexToHsl = hex => {
   return [h, sat, l];
 };
 const hsl = (h, s, l) => `hsl(${h.toFixed(1)} ${(s * 100).toFixed(1)}% ${(l * 100).toFixed(1)}%)`;
+// אותו צבע כקוד הקסדצימלי, כדי שאפשר יהיה למדוד עליו ניגודיות
+const hslHex = (h, s, l) => {
+  const a = s * Math.min(l, 1 - l);
+  const f = n => {
+    const k = (n + h / 30) % 12;
+    const v = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+    return Math.round(v * 255).toString(16).padStart(2, '0');
+  };
+  return '#' + f(0) + f(8) + f(4);
+};
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 // יחס הניגודיות מול לבן, לפי התקן, כדי להחליט אם הטקסט יהיה לבן או כהה.
 // מחזיר לבן או כהה — לפי מה שנותן ניגודיות טובה יותר על הצבע הנתון.
@@ -732,8 +851,10 @@ function applyCatTheme(cat){
   root.setProperty('--cat-solid', base);
   root.setProperty('--cat-fg', bestTextOn(blended));
   root.setProperty('--cat-ink', hsl(h, s2, clamp(l * 0.5, 0.2, 0.34)));
-  root.setProperty('--cat-soft', hsl(h, clamp(sat, 0.4, 0.95), softL));
-  root.setProperty('--cat-soft-fg', softL > 0.6 ? '#00303d' : '#fff');
+  // צבע התג נבחר יחד עם צבע הטקסט שעליו, לפי יחס הניגודיות בפועל
+  const softHex = hslHex(h, clamp(sat, 0.4, 0.95), softL);
+  root.setProperty('--cat-soft', softHex);
+  root.setProperty('--cat-soft-fg', bestTextOn(softHex));
 }
 function clearCatTheme(){
   ['--cat','--cat-solid','--cat-fg','--cat-ink','--cat-soft','--cat-soft-fg']
@@ -742,10 +863,17 @@ function clearCatTheme(){
 
 function openCategory(cat, fromHistory){
   if(!fromHistory) pushView({view:'category', cat});
+  if(fromHistory && cat === _currentCat && document.getElementById('itemsGrid').children.length){
+    document.body.classList.add('in-category');
+    document.getElementById('backBtn').classList.add('visible');
+    setDocTitle(CAT_DISPLAY[cat]||cat);
+    return;
+  }
   applyCatTheme(cat);
   _currentCat = cat;
   currentItems = DATA.items.filter(i=>i.category===cat);
   document.getElementById('catPageTitle').textContent = CAT_DISPLAY[cat]||cat;
+  setDocTitle(CAT_DISPLAY[cat]||cat);
   const sup = currentItems.filter(i=>i.type==='ספק').length;
   document.getElementById('catPageSubtitle').textContent = `${currentItems.length} פריטים · ${sup} ספקים`;
   const descEl = document.getElementById('catPageDesc');
@@ -823,21 +951,22 @@ function renderItems(items){
       ${item.contactName?`<div class="item-contact-row"><span class="cname${org?' cname-small':''}">${org?'איש קשר: ':''}${escH(item.contactName)}</span>${item.phone?`<span>${escH(item.phone)}</span>`:''}</div>`:(item.phone?`<div class="item-contact-row"><span>${escH(item.phone)}</span></div>`:'')}
     </div>` : '';
 
-    return `<div class="item-card anim-card" style="animation-delay:${idx*0.05}s" onclick="openModal(${idx})">
+    return `<div class="item-card anim-card" role="listitem" style="animation-delay:${idx*0.05}s" onclick="openModal(${idx})">
       <div class="item-card-top">
         <div class="item-type-badge ${isS?'badge-supplier':'badge-doc'}">
           <svg class="badge-roof" viewBox="0 0 74 22" preserveAspectRatio="none"><polygon points="37,0 74,22 0,22"/></svg>
           <div class="badge-body"></div>
           <span class="badge-text">${isS?'ספק':'מסמך'}</span>
         </div>
-        <div class="item-name">${escH(item.name)}</div>
+        <h3 class="item-name"><button type="button" class="item-name-btn"
+          onclick="event.stopPropagation();openModal(${idx})">${escH(item.name)}</button></h3>
       </div>
       <div class="item-card-body">
         <div class="item-meta">${tags}</div>
         ${filesHtml}${contact}
       </div>
       <div class="item-card-footer">
-        <span class="view-btn">לפרטים נוספים ←</span>
+        <span class="view-btn" aria-hidden="true">לפרטים נוספים ←</span>
         ${item.gafan==='כן'?'<span class="gafan-badge">✓ גפ"ן</span>':''}
       </div>
     </div>`;
@@ -918,6 +1047,9 @@ function openModal(idx, fromHistory){
   document.getElementById('modalBody').innerHTML = html;
   document.getElementById('modalOverlay').classList.add('open');
   document.body.classList.add('modal-open');
+  if(!_lastFocus) _lastFocus = document.activeElement;
+  setDocTitle(item.name);
+  setTimeout(() => document.getElementById('modal').focus(), 30);
   initPreviews();
 }
 
@@ -998,6 +1130,8 @@ async function renderPdfPreview(box, url){
       const vp = page.getViewport({scale: (boxW / base.width) * dpr});
       const cv = document.createElement('canvas');
       cv.width = Math.round(vp.width); cv.height = Math.round(vp.height);
+      cv.setAttribute('role','img');
+      cv.setAttribute('aria-label', 'תצוגה מקדימה של המסמך, עמוד ' + n);
       box.appendChild(cv);
       await page.render({canvasContext: cv.getContext('2d'), viewport: vp}).promise;
     }
@@ -1048,6 +1182,9 @@ function closeModal(fromHistory){
   if(!fromHistory && history.state && history.state.view === 'item'){ history.back(); return; }
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.classList.remove('modal-open');
+  if(_lastFocus && document.contains(_lastFocus)){ _lastFocus.focus(); }
+  _lastFocus = null;
+  if(_currentCat) setDocTitle(CAT_DISPLAY[_currentCat]||_currentCat);
   document.querySelectorAll('.file-viewer.open').forEach(v=>{
     v.classList.remove('open');v.dataset.loaded='';
     v.innerHTML='<div class="viewer-loading loading-pulse">⏳ טוען מסמך...</div>';
@@ -1081,6 +1218,7 @@ function goHome(fromHistory){
   // חזרה מעמוד תחום = צעד אחד אחורה בהיסטוריה, כדי לא להערים עמודים
   if(!fromHistory && history.state && history.state.view === 'category'){ history.back(); return; }
   if(!fromHistory) pushView({view:'home'});
+  setDocTitle('');
   clearCatTheme();
   document.body.classList.remove('in-category');
   document.getElementById('backBtn').classList.remove('visible');
@@ -1100,6 +1238,102 @@ document.addEventListener('keydown',e=>{
 
 renderHome();
 
+
+/* ── ACCESSIBILITY ──────────────────────────────────────── */
+let _lastFocus = null;
+
+// לכידת מיקוד בתוך החלון הצף, כדי שהמקלדת לא תברח אל מה שמאחוריו
+document.addEventListener('keydown', e => {
+  if(e.key !== 'Tab') return;
+  const modal = document.getElementById('modal');
+  if(!document.getElementById('modalOverlay').classList.contains('open')) return;
+  const items = [...modal.querySelectorAll('a[href], button, select, input, textarea, iframe, [tabindex]')]
+    .filter(el => !el.hasAttribute('disabled') && el.tabIndex !== -1 && el.offsetParent !== null);
+  if(!items.length) return;
+  const first = items[0], last = items[items.length - 1];
+  if(e.shiftKey && (document.activeElement === first || document.activeElement === modal)){
+    e.preventDefault(); last.focus();
+  }else if(!e.shiftKey && document.activeElement === last){
+    e.preventDefault(); first.focus();
+  }
+});
+
+// כותרת העמוד משתנה לפי המסך, כדי שקוראי מסך וכפתור החזרה יידעו היכן אנחנו
+const BASE_TITLE = 'תפריט המגדלור לרשויות מקומיות';
+function setDocTitle(t){ document.title = t ? t + ' | תפריט המגדלור' : BASE_TITLE; }
+
+/* הגדרות הנגישות נשמרות במכשיר של הגולש בלבד */
+const A11Y_KEY = 'migdalor_a11y';
+const A11Y_DEFAULT = {scale:1, contrast:false, underline:false, noAnim:false};
+let a11y = Object.assign({}, A11Y_DEFAULT);
+
+function a11yRead(){
+  try{ return Object.assign({}, A11Y_DEFAULT, JSON.parse(localStorage.getItem(A11Y_KEY) || '{}')); }
+  catch(err){ return Object.assign({}, A11Y_DEFAULT); }
+}
+function a11ySave(){ try{ localStorage.setItem(A11Y_KEY, JSON.stringify(a11y)); }catch(err){} }
+
+function a11yApply(){
+  document.documentElement.style.setProperty('--a11y-scale', a11y.scale);
+  document.body.classList.toggle('a11y-contrast', a11y.contrast);
+  document.body.classList.toggle('a11y-underline', a11y.underline);
+  document.body.classList.toggle('a11y-no-anim', a11y.noAnim);
+  const set = (id, on) => { const b = document.getElementById(id); if(b) b.setAttribute('aria-pressed', on ? 'true' : 'false'); };
+  set('a11yContrast', a11y.contrast); set('a11yUnderline', a11y.underline); set('a11yNoAnim', a11y.noAnim);
+}
+
+function initA11y(){
+  a11y = a11yRead();
+  a11yApply();
+  const panel = document.getElementById('a11yPanel');
+  const btn   = document.getElementById('a11yBtn');
+  const open  = on => { panel.dataset.open = on ? '1' : '0'; btn.setAttribute('aria-expanded', on ? 'true' : 'false'); };
+  btn.onclick = () => open(panel.dataset.open !== '1');
+  document.addEventListener('click', e => {
+    if(panel.dataset.open === '1' && !panel.contains(e.target) && e.target !== btn && !btn.contains(e.target)) open(false);
+  });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && panel.dataset.open === '1'){ open(false); btn.focus(); } });
+
+  const step = d => { a11y.scale = Math.min(1.6, Math.max(0.9, +(a11y.scale + d).toFixed(2))); a11ySave(); a11yApply(); };
+  document.getElementById('a11yBigger').onclick  = () => step(0.1);
+  document.getElementById('a11ySmaller').onclick = () => step(-0.1);
+  const flip = k => { a11y[k] = !a11y[k]; a11ySave(); a11yApply(); };
+  document.getElementById('a11yContrast').onclick  = () => flip('contrast');
+  document.getElementById('a11yUnderline').onclick = () => flip('underline');
+  document.getElementById('a11yNoAnim').onclick    = () => flip('noAnim');
+  document.getElementById('a11yReset').onclick     = () => { a11y = Object.assign({}, A11Y_DEFAULT); a11ySave(); a11yApply(); };
+}
+
+/* הודעת הפרטיות מוצגת פעם אחת; האישור נשמר במכשיר, לא בשרת */
+const PRIVACY_KEY = 'migdalor_privacy_seen';
+function initPrivacyBar(){
+  const bar = document.getElementById('privacyBar');
+  let seen = false;
+  try{ seen = localStorage.getItem(PRIVACY_KEY) === '1'; }catch(err){ seen = true; }
+  const lift = () => document.documentElement.style.setProperty('--bar-h', bar.offsetHeight + 'px');
+  if(!seen){
+    bar.dataset.open = '1';
+    document.body.classList.add('privacy-open');
+    lift();
+    window.addEventListener('resize', lift);
+  }
+  document.getElementById('privacyOk').onclick = () => {
+    bar.dataset.open = '0';
+    document.body.classList.remove('privacy-open');
+    try{ localStorage.setItem(PRIVACY_KEY, '1'); }catch(err){}
+  };
+}
+
+// מיקוד במקלדת על אחד התחומים מדגיש אותו, בדיוק כמו מעבר עכבר
+document.getElementById('catList').addEventListener('focusin', e => {
+  const btn = e.target.closest('.cat-list-item');
+  if(!btn) return;
+  const idx = [...btn.parentNode.children].indexOf(btn);
+  if(idx >= 0) setActiveCat(idx);
+});
+
+initA11y();
+initPrivacyBar();
 </script>
 </body>
 </html>
