@@ -941,7 +941,7 @@ function toggleModalDesc(){
 function shareItem(){
   const item = _renderedItems[_currentModalIdx];
   if(!item) return;
-  const text = `*${item.name}*\n${item.category ? 'תחום: '+item.category+'\n' : ''}${item.description ? item.description.slice(0,200)+(item.description.length>200?'...':'')+'\n' : ''}תפריט המגדלור: https://romangash-star.github.io/migdalor-menu/`;
+  const text = `*${item.name}*\n${item.category ? 'תחום: '+item.category+'\n' : ''}${item.description ? item.description.slice(0,200)+(item.description.length>200?'...':'')+'\n' : ''}תפריט המגדלור: ${location.origin + location.pathname}`;
   window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
 }
 
