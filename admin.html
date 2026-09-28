@@ -59,6 +59,7 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
  gap:12px;cursor:pointer;border:1.5px solid transparent;border-right:6px solid var(--c,var(--navy))}
 .item-row:hover{border-color:var(--c,var(--navy))}
 .item-row b{font-size:.95rem;font-weight:700;flex:1}
+.tag.no-summary{background:#fff3d6;color:#8a5a00;border:1px solid #f0cf8a}
 .tag{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--c-tint,rgba(0,88,111,.1));color:var(--c-deep,var(--navy));white-space:nowrap}
 .tag.sup{background:rgba(252,184,79,.25);color:#7a5200}
 .muted{color:var(--slate);font-size:.8rem}
@@ -153,7 +154,12 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
         <input id="fName">
       </div>
       <div class="field">
-        <label for="fDesc">תוכן / תיאור</label>
+        <label for="fSummary">תקציר קצר</label>
+        <textarea id="fSummary" rows="2" maxlength="220"></textarea>
+        <div class="hint">משפט אחד שמופיע באתר מתחת לכותרת, בכרטיס ובחלון הפריט. עד 220 תווים.</div>
+      </div>
+      <div class="field">
+        <label for="fDesc">תוכן / תיאור מלא</label>
         <textarea id="fDesc"></textarea>
       </div>
       <div class="row">
@@ -372,7 +378,7 @@ function visibleItems(){
   return data.items
     .map((item, idx) => ({item, idx}))
     .filter(({item}) => activeCat === '__all__' || item.category === activeCat)
-    .filter(({item}) => !q || [item.name, item.org, item.contactName, item.topic, item.audience, item.dept]
+    .filter(({item}) => !q || [item.name, item.summary, item.org, item.contactName, item.topic, item.audience, item.dept]
       .some(v => String(v||'').toLowerCase().includes(q)));
 }
 
@@ -382,6 +388,7 @@ function renderItems(){
     <div class="item-row" data-idx="${idx}" style="${catVars(item.category)}">
       <span class="tag ${item.type === 'ספק' ? 'sup' : ''}">${item.type === 'ספק' ? 'ספק' : 'מסמך'}</span>
       <b>${esc(item.name) || '<span class="muted">(ללא כותרת)</span>'}</b>
+      ${item.summary ? '' : '<span class="tag no-summary">חסר תקציר</span>'}
       <span class="muted">${(item.files||[]).length} קבצים</span>
     </div>`).join('') : '<div class="empty">אין פריטים להצגה</div>';
   $('itemList').querySelectorAll('.item-row').forEach(r => r.onclick = () => openEditor(+r.dataset.idx));
@@ -395,6 +402,7 @@ function openEditor(idx){
   $('editorTitle').textContent = idx === -1 ? 'פריט חדש' : 'עריכת פריט';
   $('fCategory').innerHTML = catsOf().map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
   $('fName').value = item.name || '';
+  $('fSummary').value = item.summary || '';
   $('fDesc').value = item.description || '';
   $('fCategory').value = item.category || catsOf()[0];
   $('fType').value = item.type === 'ספק' ? 'ספק' : 'מסמך המלצות';
@@ -435,7 +443,8 @@ function renderFiles(){
 let newItemDraft = {};
 $('newItemBtn').onclick = () => {
   newItemDraft = {name:'', category: activeCat === '__all__' ? catsOf()[0] : activeCat, dept:'', org:'', contactName:'',
-    phone:'', email:'', website:'', notes:'', audience:'', topic:'', gafan:'', type:'מסמך המלצות', description:'', files:[]};
+    phone:'', email:'', website:'', notes:'', audience:'', topic:'', gafan:'',
+    type:'מסמך המלצות', summary:'', description:'', files:[]};
   data.items.push(newItemDraft);
   openEditor(data.items.length - 1);
 };
@@ -460,6 +469,7 @@ $('applyItemBtn').onclick = () => {
   if(!$('fName').value.trim()) return toast('חובה למלא כותרת', 'err');
   Object.assign(item, {
     name: $('fName').value.trim(),
+    summary: $('fSummary').value.trim(),
     description: $('fDesc').value.trim(),
     category: $('fCategory').value,
     type: $('fType').value,
