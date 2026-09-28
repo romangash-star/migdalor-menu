@@ -60,7 +60,8 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 /* ── HEADER ─────────────────────────────────────────── */
 .site-header{background:linear-gradient(135deg,#00586f 0%,#1c7d8f 100%);position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,88,111,.4)}
 .header-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;gap:16px}
-.site-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--white);cursor:pointer;transition:opacity var(--t)}
+.site-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--white);cursor:pointer;
+ background:none;border:none;padding:0;margin:0;font:inherit;transition:opacity var(--t)}
 .site-logo:hover{opacity:.85}
 .logo-img{height:42px;width:auto;display:block;object-fit:contain}
 .header-back{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:var(--white);padding:8px 18px;border-radius:8px;cursor:pointer;font-family:'BrandText','Heebo',sans-serif;font-size:.9rem;font-weight:600;display:none;align-items:center;gap:6px;transition:var(--t)}
@@ -99,6 +100,8 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .house-label-name{font-family:'BrandTitle','Secular One',sans-serif;font-size:1.05rem;font-weight:400;line-height:1.35;letter-spacing:.07em}
 .house-label-count{font-size:.72rem;font-weight:700;margin-top:7px;opacity:.92;letter-spacing:.05em}
 .cat-list{flex:0 1 420px;min-width:260px;display:flex;flex-direction:column}
+/* הכרטיסים האלה הם כפתורים אמיתיים — בלי העיצוב שהדפדפן נותן לכפתור */
+.house-card{background:none;border:none;padding:0;margin:0;font:inherit;color:inherit}
 .cat-list-item{cursor:pointer;padding:8px 4px;border-bottom:1px solid rgba(0,88,111,.08);display:block;width:100%;text-align:right;font:inherit;color:inherit;background:none;border-top:none;border-inline:none}
 .cat-list-item:last-child{border-bottom:none}
 .cat-list-name{display:block;font-family:'BrandTitle','Secular One',sans-serif;font-weight:400;font-size:1.15rem;transition:font-size .25s ease;letter-spacing:.06em}
