@@ -361,7 +361,7 @@ async function gh(path, options = {}){
     let detail = '';
     try { detail = (await res.json()).message || ''; } catch(e){}
     throw new Error(res.status === 401 ? 'המפתח אינו תקף. יש להתחבר מחדש.'
-      : res.status === 403 ? 'למפתח הזה אין הרשאת עריכה.'
+      : res.status === 403 ? 'המפתח מאפשר קריאה בלבד ולא שמירה. צריך מפתח עם הרשאת כתיבה.' + (detail ? ' (' + detail + ')' : '')
       : res.status === 409 || res.status === 422 ? 'העדכון נדחה: ' + detail
       : 'שגיאה מול GitHub (' + res.status + ') ' + detail);
   }
@@ -383,7 +383,10 @@ $('loginBtn').onclick = async () => {
   token = value;
   $('loginBtn').disabled = true;
   try {
-    await gh('/repos/' + REPO);                 // verifies both the token and its access to the repo
+    const repo = await gh('/repos/' + REPO);    // מאמת את המפתח ואת הגישה למאגר
+    if(repo && repo.permissions && !repo.permissions.push){
+      throw new Error('המפתח הזה מאפשר קריאה בלבד. כדי לשמור שינויים צריך מפתח עם הרשאת כתיבה.');
+    }
     if($('rememberBox').checked) localStorage.setItem(TOKEN_KEY, token);
     await startApp();
   } catch(err){
@@ -650,7 +653,10 @@ $('publishBtn').onclick = async () => {
   if(!saved) return;
   token = saved;
   try {
-    await gh('/repos/' + REPO);
+    const repo = await gh('/repos/' + REPO);
+    if(repo && repo.permissions && !repo.permissions.push){
+      throw new Error('המפתח השמור מאפשר קריאה בלבד. כדי לשמור שינויים צריך מפתח עם הרשאת כתיבה.');
+    }
     await startApp();
   } catch(err){
     localStorage.removeItem(TOKEN_KEY);
