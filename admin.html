@@ -299,10 +299,21 @@ let editingIdx = -1;
 // Read straight from the site so the admin always matches it.
 let CAT_COLORS = {};
 const FALLBACK_COLOR = '#00586f';
+const HEX_COLOR = /^#[0-9a-f]{3,8}$/i;
 function readCatColors(html){
-  const m = html.match(/const CAT_COLORS = (\{[\s\S]*?\});/);
+  // ^ עם דגל m: ההכרזה חייבת לפתוח שורה. הנתונים יושבים בשורה אחת ארוכה
+  // שקודמת להכרזה הזו בקובץ, ולכן טקסט בתוך פריט לא יכול להתחזות לה.
+  const m = html.match(/^const CAT_COLORS = (\{[\s\S]*?\});/m);
   if(!m) return;
-  try { CAT_COLORS = JSON.parse(m[1].replace(/'/g, '"').replace(/,(\s*})/g, '$1')); } catch(e){}
+  try {
+    const raw = JSON.parse(m[1].replace(/'/g, '"').replace(/,(\s*})/g, '$1'));
+    const clean = {};                       // רק קוד צבע תקין נכנס פנימה
+    for(const k in raw){
+      const v = String(raw[k]).trim();
+      if(HEX_COLOR.test(v)) clean[k] = v;
+    }
+    CAT_COLORS = clean;
+  } catch(e){}
 }
 function hexToHsl(hex){
   const n = parseInt(hex.slice(1), 16);
@@ -441,7 +452,7 @@ function renderCats(){
   $('catSide').innerHTML =
     `<button class="cat-btn${activeCat === '__all__' ? ' on' : ''}" data-cat="__all__" style="--c:var(--navy);--c-tint:rgba(0,88,111,.06)">
        כל הפריטים <span>${data.items.length}</span></button>` +
-    cats.map(c => `<button class="cat-btn${activeCat === c ? ' on' : ''}" data-cat="${esc(c)}" style="${catVars(c)}">
+    cats.map(c => `<button class="cat-btn${activeCat === c ? ' on' : ''}" data-cat="${esc(c)}" style="${esc(catVars(c))}">
        ${esc(c)} <span>${countIn(c)}</span></button>`).join('');
   $('catSide').querySelectorAll('.cat-btn').forEach(b => b.onclick = () => {
     activeCat = b.dataset.cat;
@@ -466,7 +477,7 @@ function visibleItems(){
 function renderItems(){
   const rows = visibleItems();
   $('itemList').innerHTML = rows.length ? rows.map(({item, idx}) => `
-    <div class="item-row${item.status === 'ממתין' ? ' is-pending' : ''}${isEmptyItem(item) ? ' is-empty' : ''}" data-idx="${idx}" style="${catVars(item.category)}">
+    <div class="item-row${item.status === 'ממתין' ? ' is-pending' : ''}${isEmptyItem(item) ? ' is-empty' : ''}" data-idx="${idx}" style="${esc(catVars(item.category))}">
       <span class="tag ${item.type === 'ספק' ? 'sup' : ''}">${item.type === 'ספק' ? 'ספק' : 'מסמך'}</span>
       <b>${esc(item.name) || '<span class="muted">(ללא כותרת)</span>'}</b>
       ${item.status === 'ממתין' ? '<span class="tag pending">ממתין לאישור</span>' : ''}
@@ -647,9 +658,13 @@ $('publishBtn').onclick = async () => {
       await loadSite();
       return toast('העמוד נטען מחדש עם הגרסה העדכנית', 'ok');
     }
-    // Escaping "</" keeps a closing script tag inside the data from ending the page's script block.
-    const json = JSON.stringify(data).replace(/<\//g, '<\\/');
-    const updated = indexHtml.replace(/const DATA = \{[\s\S]*?\};/, 'const DATA = ' + json + ';');
+    // כל סוגר משולש מקודד, כך ששום טקסט בנתונים לא יכול לסגור את תגית הסקריפט.
+    const json = JSON.stringify(data)
+      .replace(/</g, '\\u003c').replace(/>/g, '\\u003e')
+      .replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
+    // ההחלפה נעשית דרך פונקציה: כמחרוזת, רצף כמו $' בתוך הנתונים היה מורחב
+    // על ידי replace עצמו לכל שאר הקובץ, כולל תגית הסגירה של הסקריפט.
+    const updated = indexHtml.replace(/const DATA = \{[\s\S]*?\};/, () => 'const DATA = ' + json + ';');
     if(updated === indexHtml) throw new Error('לא ניתן היה לעדכן את הנתונים בקובץ');
     const res = await gh('/repos/' + REPO + '/contents/index.html', {
       method: 'PUT',

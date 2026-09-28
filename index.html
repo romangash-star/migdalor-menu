@@ -1138,12 +1138,17 @@ function initPreviews(){
 
 // pdf.js נטען רק כשצריך אותו בפועל (נייד), ומצייר את העמודים הראשונים כתמונה
 const PDFJS_VER = '3.11.174';
+const PDFJS_SRI = 'sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e';
 let _pdfjs = null;
 function loadPdfJs(){
   if(_pdfjs) return _pdfjs;
   _pdfjs = new Promise((res, rej) => {
     const sc = document.createElement('script');
     sc.src = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VER}/pdf.min.js`;
+    // הקובץ מגיע משרת חיצוני ורץ באותו מקור כמו עמוד הניהול, ולכן הדפדפן
+    // מוודא את הטביעה שלו ומסרב להריץ גרסה שהוחלפה בדרך
+    sc.integrity = PDFJS_SRI;
+    sc.crossOrigin = 'anonymous';
     sc.onload = () => {
       window.pdfjsLib.GlobalWorkerOptions.workerSrc =
         `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${PDFJS_VER}/pdf.worker.min.js`;
@@ -1282,7 +1287,8 @@ function goHome(fromHistory){
 }
 
 /* ── UTILS ──────────────────────────────────────────────── */
-function escH(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''}
+function escH(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;').replace(/'/g,'&#39;'):''}
 function escA(s){return s?String(s).replace(/"/g,'&quot;'):''}
 
 // escA חוסם מרכאות בלבד. כתובת שמגיעה מהנתונים יכולה להיות javascript: או

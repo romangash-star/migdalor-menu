@@ -231,8 +231,12 @@ def update_html(data: dict):
         print(f"לא נמצא קובץ: {HTML_FILE}")
         sys.exit(1)
     html     = HTML_FILE.read_text(encoding="utf-8")
-    new_data = "const DATA = " + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";"
-    updated  = re.sub(r"const DATA = \{.*?\};", new_data, html, count=1, flags=re.DOTALL)
+    # מקודדים סוגר משולש, כדי ששום טקסט בנתונים לא יסגור את תגית הסקריפט
+    payload  = (json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+                .replace("<", "\\u003c").replace(">", "\\u003e"))
+    new_data = "const DATA = " + payload + ";"
+    # lambda ולא מחרוזת: כמחרוזת, לוכסן בתוך הנתונים היה מפורש כתו בריחה
+    updated  = re.sub(r"const DATA = \{.*?\};", lambda _: new_data, html, count=1, flags=re.DOTALL)
     if updated == html:
         print("לא נמצא const DATA = {...} ב-index.html — בדוק שהקובץ תקין.")
         sys.exit(1)
