@@ -171,10 +171,15 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
           <option value="">לא</option><option value="כן">כן</option></select></div>
       </div>
       <div class="row">
+        <div class="field"><label for="fOrg">ארגון / ספק מבצע</label><input id="fOrg"></div>
         <div class="field"><label for="fContact">איש/אשת קשר</label><input id="fContact"></div>
-        <div class="field"><label for="fPhone">טלפון</label><input id="fPhone"></div>
       </div>
-      <div class="field"><label for="fEmail">אימייל</label><input id="fEmail" type="email"></div>
+      <div class="row">
+        <div class="field"><label for="fPhone">טלפון</label><input id="fPhone"></div>
+        <div class="field"><label for="fEmail">אימייל</label><input id="fEmail" type="email"></div>
+      </div>
+      <div class="field"><label for="fWebsite">אתר הספק / הפעילות</label><input id="fWebsite" type="url"></div>
+      <div class="field"><label for="fNotes">דגשים והערות</label><textarea id="fNotes" rows="2"></textarea></div>
 
       <div class="field">
         <label>קבצים</label>
@@ -367,7 +372,7 @@ function visibleItems(){
   return data.items
     .map((item, idx) => ({item, idx}))
     .filter(({item}) => activeCat === '__all__' || item.category === activeCat)
-    .filter(({item}) => !q || [item.name, item.contactName, item.topic, item.audience, item.dept]
+    .filter(({item}) => !q || [item.name, item.org, item.contactName, item.topic, item.audience, item.dept]
       .some(v => String(v||'').toLowerCase().includes(q)));
 }
 
@@ -397,9 +402,12 @@ function openEditor(idx){
   $('fTopic').value = item.topic || '';
   $('fDept').value = item.dept || '';
   $('fGafan').value = item.gafan === 'כן' ? 'כן' : '';
+  $('fOrg').value = item.org || '';
   $('fContact').value = item.contactName || '';
   $('fPhone').value = item.phone || '';
   $('fEmail').value = item.email || '';
+  $('fWebsite').value = item.website || '';
+  $('fNotes').value = item.notes || '';
   $('deleteItemBtn').style.display = idx === -1 ? 'none' : 'block';
   paintEditor($('fCategory').value);
   renderFiles();
@@ -426,8 +434,8 @@ function renderFiles(){
 
 let newItemDraft = {};
 $('newItemBtn').onclick = () => {
-  newItemDraft = {name:'', category: activeCat === '__all__' ? catsOf()[0] : activeCat, dept:'', contactName:'',
-    phone:'', email:'', audience:'', topic:'', gafan:'', type:'מסמך המלצות', description:'', files:[]};
+  newItemDraft = {name:'', category: activeCat === '__all__' ? catsOf()[0] : activeCat, dept:'', org:'', contactName:'',
+    phone:'', email:'', website:'', notes:'', audience:'', topic:'', gafan:'', type:'מסמך המלצות', description:'', files:[]};
   data.items.push(newItemDraft);
   openEditor(data.items.length - 1);
 };
@@ -459,9 +467,12 @@ $('applyItemBtn').onclick = () => {
     topic: $('fTopic').value.trim(),
     dept: $('fDept').value.trim(),
     gafan: $('fGafan').value,
+    org: $('fOrg').value.trim(),
     contactName: $('fContact').value.trim(),
     phone: $('fPhone').value.trim(),
-    email: $('fEmail').value.trim()
+    email: $('fEmail').value.trim(),
+    website: $('fWebsite').value.trim(),
+    notes: $('fNotes').value.trim()
   });
   newItemDraft = {};
   setDirty(true);
