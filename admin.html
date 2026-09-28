@@ -54,12 +54,16 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
 .cat-btn.on{border-color:var(--c,var(--navy));border-right-color:var(--c,var(--navy));background:var(--c-tint,rgba(0,88,111,.06))}
 .cat-btn span{font-size:.75rem;font-weight:700;color:var(--slate)}
 .toolbar{display:flex;gap:10px;margin-bottom:14px}
+.pending-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#eceff5;
+ border:1px solid #c9d1de;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:.88rem}
 .toolbar input{flex:1}
 .item-row{background:#fff;border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;
  gap:12px;cursor:pointer;border:1.5px solid transparent;border-right:6px solid var(--c,var(--navy))}
 .item-row:hover{border-color:var(--c,var(--navy))}
 .item-row b{font-size:.95rem;font-weight:700;flex:1}
 .tag.no-summary{background:#fff3d6;color:#8a5a00;border:1px solid #f0cf8a}
+.tag.pending{background:#eceff5;color:#4A556C;border:1px solid #c9d1de}
+.item-row.is-pending{opacity:.72}
 .tag{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--c-tint,rgba(0,88,111,.1));color:var(--c-deep,var(--navy));white-space:nowrap}
 .tag.sup{background:rgba(252,184,79,.25);color:#7a5200}
 .muted{color:var(--slate);font-size:.8rem}
@@ -136,6 +140,10 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
       <div class="toolbar">
         <input type="search" id="searchInput" placeholder="חיפוש לפי שם, איש קשר, נושא…">
       </div>
+      <div class="pending-bar" id="pendingBar" hidden>
+        <span id="pendingCount"></span>
+        <button class="btn-soft" id="approveAllBtn">אישור כל הממתינים המוצגים</button>
+      </div>
       <div id="itemList"></div>
     </div>
   </div>
@@ -166,6 +174,14 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
         <div class="field"><label for="fCategory">תחום</label><select id="fCategory"></select></div>
         <div class="field"><label for="fType">סוג</label><select id="fType">
           <option value="מסמך המלצות">מסמך המלצות</option><option value="ספק">ספק</option></select></div>
+      </div>
+      <div class="field">
+        <label for="fStatus">מצב פרסום</label>
+        <select id="fStatus">
+          <option value="">מפורסם באתר</option>
+          <option value="ממתין">ממתין לאישור — לא מוצג באתר</option>
+        </select>
+        <div class="hint">פריט שממתין לאישור נשמר כאן ואינו נראה למבקרים באתר.</div>
       </div>
       <div class="row">
         <div class="field"><label for="fAudience">קהל יעד</label><input id="fAudience"></div>
@@ -385,15 +401,33 @@ function visibleItems(){
 function renderItems(){
   const rows = visibleItems();
   $('itemList').innerHTML = rows.length ? rows.map(({item, idx}) => `
-    <div class="item-row" data-idx="${idx}" style="${catVars(item.category)}">
+    <div class="item-row${item.status === 'ממתין' ? ' is-pending' : ''}" data-idx="${idx}" style="${catVars(item.category)}">
       <span class="tag ${item.type === 'ספק' ? 'sup' : ''}">${item.type === 'ספק' ? 'ספק' : 'מסמך'}</span>
       <b>${esc(item.name) || '<span class="muted">(ללא כותרת)</span>'}</b>
+      ${item.status === 'ממתין' ? '<span class="tag pending">ממתין לאישור</span>' : ''}
       ${item.summary ? '' : '<span class="tag no-summary">חסר תקציר</span>'}
       <span class="muted">${(item.files||[]).length} קבצים</span>
     </div>`).join('') : '<div class="empty">אין פריטים להצגה</div>';
   $('itemList').querySelectorAll('.item-row').forEach(r => r.onclick = () => openEditor(+r.dataset.idx));
+
+  const pending = rows.filter(({item}) => item.status === 'ממתין');
+  $('pendingBar').hidden = pending.length === 0;
+  $('pendingCount').textContent = pending.length === 1
+    ? 'פריט אחד ממתין לאישור ואינו מוצג באתר'
+    : `${pending.length} פריטים ממתינים לאישור ואינם מוצגים באתר`;
 }
 $('searchInput').oninput = renderItems;
+
+$('approveAllBtn').onclick = () => {
+  const pending = visibleItems().filter(({item}) => item.status === 'ממתין');
+  if(!pending.length) return;
+  if(!confirm(`לאשר ${pending.length} פריטים ולהציג אותם באתר?`)) return;
+  pending.forEach(({item}) => item.status = '');
+  setDirty(true);
+  renderCats();
+  renderItems();
+  toast(`${pending.length} פריטים אושרו. לחצו "שמירה ועדכון באתר" כדי לפרסם.`);
+};
 
 /* ── EDITOR ─────────────────────────────────────────────── */
 function openEditor(idx){
@@ -406,6 +440,7 @@ function openEditor(idx){
   $('fDesc').value = item.description || '';
   $('fCategory').value = item.category || catsOf()[0];
   $('fType').value = item.type === 'ספק' ? 'ספק' : 'מסמך המלצות';
+  $('fStatus').value = item.status === 'ממתין' ? 'ממתין' : '';
   $('fAudience').value = item.audience || '';
   $('fTopic').value = item.topic || '';
   $('fDept').value = item.dept || '';
@@ -444,7 +479,7 @@ let newItemDraft = {};
 $('newItemBtn').onclick = () => {
   newItemDraft = {name:'', category: activeCat === '__all__' ? catsOf()[0] : activeCat, dept:'', org:'', contactName:'',
     phone:'', email:'', website:'', notes:'', audience:'', topic:'', gafan:'',
-    type:'מסמך המלצות', summary:'', description:'', files:[]};
+    type:'מסמך המלצות', status:'', summary:'', description:'', files:[]};
   data.items.push(newItemDraft);
   openEditor(data.items.length - 1);
 };
@@ -473,6 +508,7 @@ $('applyItemBtn').onclick = () => {
     description: $('fDesc').value.trim(),
     category: $('fCategory').value,
     type: $('fType').value,
+    status: $('fStatus').value,
     audience: $('fAudience').value.trim(),
     topic: $('fTopic').value.trim(),
     dept: $('fDept').value.trim(),
