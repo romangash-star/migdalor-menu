@@ -532,7 +532,7 @@ body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
   </div>
   <div style="margin-bottom:14px">
     לפרטים נוספים אודות המגדלור וכלים נוספים בקידום חינוך פוליטי לדמוקרטיה &mdash;
-    <a href="https://ha-migdalor.co.il" target="_blank">ha-migdalor.co.il</a>
+    <a href="https://ha-migdalor.co.il" target="_blank" rel="noopener">ha-migdalor.co.il</a>
   </div>
   <nav class="footer-nav" aria-label="מידע משפטי">
     <a href="accessibility.html">הצהרת נגישות</a>
@@ -693,7 +693,7 @@ function renderHome(){
     if(i < 0) return '';
     const cat = cats[i];
     return `<polygon class="house-shape" data-idx="${i}" data-order="${order}" points="${s.pts}" fill="${s.color}" style="--op:${s.op}"
-      ${HOVER_ATTRS(i)} onclick="openCategory('${escH(cat)}')"></polygon>`;
+      ${HOVER_ATTRS(i)} data-cat="${escA(cat)}"></polygon>`;
   }).join('');
 
   labels.innerHTML = cats.map((cat, i) => {
@@ -712,7 +712,7 @@ function renderHome(){
     const displayName = CAT_DISPLAY[cat]||cat;
     const desc = CAT_DESC[cat]||'';
     return `<button type="button" class="cat-list-item anim-card" id="catListItem${i}" style="animation-delay:${i*0.08}s"
-      ${HOVER_ATTRS(i)} onclick="openCategory('${escH(cat)}')">
+      ${HOVER_ATTRS(i)} data-cat="${escA(cat)}">
       <span class="cat-list-name" style="color:${color}">${escH(displayName)}</span>
       <span class="cat-list-desc">${escH(desc)}</span>
     </button>`;
@@ -732,7 +732,7 @@ function renderHome(){
     const displayName = CAT_DISPLAY[cat]||cat;
     const whiteText = ['#1e7e90','#075c73'].includes(s.color);
     return `<button type="button" class="house-card" id="houseCard${i}" style="aspect-ratio:${w}/${h}"
-      onclick="openCategory('${escH(cat)}')">
+      data-cat="${escA(cat)}">
       <svg class="badge-shape" viewBox="${minX} ${minY} ${w} ${h}" aria-hidden="true"><polygon points="${s.pts}" fill="${s.color}" fill-opacity="${s.op}"></polygon></svg>
       <span class="house-card-text${whiteText?'':' house-label-dark'}">
         <span class="house-card-name">${escH(displayName)}</span>
@@ -740,6 +740,12 @@ function renderHome(){
       </span>
     </button>`;
   }).join('');
+
+  // מאזין אחד לכל מה שפותח תחום, במקום onclick שמרכיב קוד מתוך הנתונים
+  [svg, list, carousel].forEach(root => root.addEventListener('click', ev => {
+    const el = ev.target.closest('[data-cat]');
+    if(el && root.contains(el)) openCategory(el.dataset.cat);
+  }));
 
   if(IS_TOUCH){
     setActiveCat(0);
@@ -1060,11 +1066,11 @@ function openModal(idx, fromHistory){
     if(item.phone){
       const digits = item.phone.replace(/\D/g,'');
       const wa = digits.startsWith('0') ? '972'+digits.slice(1) : digits;
-      html += `<a href="tel:${escA(item.phone)}" class="contact-btn btn-phone"><span class="emoji" aria-hidden="true">📞</span>${escH(item.phone)}</a>`;
+      html += `<a href="${escA(safeUrl('tel:' + item.phone))}" class="contact-btn btn-phone"><span class="emoji" aria-hidden="true">📞</span>${escH(item.phone)}</a>`;
       html += `<a href="https://wa.me/${wa}" target="_blank" rel="noopener" class="contact-btn btn-whatsapp"><span class="emoji" aria-hidden="true">💬</span>וואטסאפ</a>`;
     }
-    if(item.email) html += `<a href="mailto:${escA(item.email)}" class="contact-btn btn-email"><span class="emoji" aria-hidden="true">✉️</span>${escH(item.email)}</a>`;
-    if(item.website) html += `<a href="${escA(item.website)}" target="_blank" rel="noopener"
+    if(item.email) html += `<a href="${escA(safeUrl('mailto:' + item.email))}" class="contact-btn btn-email"><span class="emoji" aria-hidden="true">✉️</span>${escH(item.email)}</a>`;
+    if(item.website && safeUrl(item.website)) html += `<a href="${escA(safeUrl(item.website))}" target="_blank" rel="noopener"
       class="contact-btn btn-site"><span class="emoji" aria-hidden="true">🔗</span>לאתר הספק</a>`;
     html += `</div></div>`;
   }
@@ -1082,9 +1088,9 @@ function openModal(idx, fromHistory){
       return `<div class="file-card">
         <div class="file-head">
           <div class="file-title">${escH(clean)}</div>
-          <a href="${escA(dlUrl)}" download target="_blank" rel="noopener" class="file-btn file-btn-dl"><span class="emoji" aria-hidden="true">⬇️</span>הורדה</a>
+          <a href="${escA(safeUrl(dlUrl))}" download target="_blank" rel="noopener" class="file-btn file-btn-dl"><span class="emoji" aria-hidden="true">⬇️</span>הורדה</a>
         </div>
-        <div class="file-preview" data-src="${escA(f.localPath||f.url||'')}" data-ext="${escA(ext(f.name))}" id="fp-${idx}-${fi}">
+        <div class="file-preview" data-src="${escA(safeUrl(f.localPath||f.url||''))}" data-ext="${escA(ext(f.name))}" id="fp-${idx}-${fi}">
           <div class="file-note loading-pulse">טוען תצוגה מקדימה…</div>
         </div>
       </div>`;
@@ -1198,7 +1204,7 @@ async function renderPdfPreview(box, url){
 }
 
 function previewMarkup(src, e){
-  if(!src) return '<div class="file-note">אין תצוגה מקדימה לקובץ הזה</div>';
+  if(!safeUrl(src)) return '<div class="file-note">אין תצוגה מקדימה לקובץ הזה</div>';
   const url = /^https?:/i.test(src) ? src : resolveUrl(src);
   if(['jpg','jpeg','png','gif','webp','svg'].includes(e)) return `<img src="${escA(url)}" alt="" loading="lazy">`;
   if(e === 'pdf') return `<iframe src="${escA(url)}#view=FitH&toolbar=0" loading="lazy" title="תצוגה מקדימה"></iframe>`;
@@ -1278,6 +1284,17 @@ function goHome(fromHistory){
 /* ── UTILS ──────────────────────────────────────────────── */
 function escH(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''}
 function escA(s){return s?String(s).replace(/"/g,'&quot;'):''}
+
+// escA חוסם מרכאות בלבד. כתובת שמגיעה מהנתונים יכולה להיות javascript: או
+// data:, ולכן כל כתובת עוברת דרך כאן לפני שהיא הופכת ל-href או ל-src.
+const URL_OK = /^(https?:|mailto:|tel:)/i;
+function safeUrl(u){
+  const v = String(u || '').trim();
+  if(!v) return '';
+  if(/^[a-z][a-z0-9+.-]*:/i.test(v)) return URL_OK.test(v) ? v : '';   // סכמה מפורשת
+  if(/^\s*\/\//.test(v)) return '';                                    // //evil.com
+  return v;                                                            // נתיב יחסי
+}
 
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
