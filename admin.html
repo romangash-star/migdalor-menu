@@ -86,7 +86,11 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
 .item-row b{font-size:.95rem;font-weight:700;flex:1}
 .tag.no-summary{background:#fff3d6;color:#8a5a00;border:1px solid #f0cf8a}
 .tag.pending{background:#eceff5;color:#4A556C;border:1px solid #c9d1de}
+.tag.empty{background:#fdecea;color:#8c1d16;border:1px solid #f0b4ae}
 .item-row.is-pending{opacity:.72}
+.item-row.is-empty{border-color:#f0b4ae;background:#fffaf9}
+.empty-bar{display:flex;align-items:center;gap:10px;background:#fdecea;border:1px solid #f0b4ae;
+ border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:.88rem;color:#8c1d16}
 .tag{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--c-tint,rgba(0,88,111,.1));color:var(--c-deep,var(--navy));white-space:nowrap}
 .tag.sup{background:rgba(252,184,79,.25);color:#7a5200}
 .muted{color:var(--slate);font-size:.8rem}
@@ -181,6 +185,9 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
     <div>
       <div class="toolbar">
         <input type="search" id="searchInput" placeholder="חיפוש לפי שם, איש קשר, נושא…">
+      </div>
+      <div class="empty-bar" id="emptyBar" hidden>
+        <span id="emptyCount"></span>
       </div>
       <div class="pending-bar" id="pendingBar" hidden>
         <span id="pendingCount"></span>
@@ -443,6 +450,10 @@ function renderCats(){
   });
 }
 
+// פריט בלי תקציר, בלי תיאור ובלי קובץ אינו מוצג באתר — אין למבקר מה לראות בו
+const isEmptyItem = i =>
+  !(i.summary || '').trim() && !(i.description || '').trim() && !(i.files || []).length;
+
 function visibleItems(){
   const q = $('searchInput').value.trim().toLowerCase();
   return data.items
@@ -455,14 +466,21 @@ function visibleItems(){
 function renderItems(){
   const rows = visibleItems();
   $('itemList').innerHTML = rows.length ? rows.map(({item, idx}) => `
-    <div class="item-row${item.status === 'ממתין' ? ' is-pending' : ''}" data-idx="${idx}" style="${catVars(item.category)}">
+    <div class="item-row${item.status === 'ממתין' ? ' is-pending' : ''}${isEmptyItem(item) ? ' is-empty' : ''}" data-idx="${idx}" style="${catVars(item.category)}">
       <span class="tag ${item.type === 'ספק' ? 'sup' : ''}">${item.type === 'ספק' ? 'ספק' : 'מסמך'}</span>
       <b>${esc(item.name) || '<span class="muted">(ללא כותרת)</span>'}</b>
       ${item.status === 'ממתין' ? '<span class="tag pending">ממתין לאישור</span>' : ''}
-      ${item.summary ? '' : '<span class="tag no-summary">חסר תקציר</span>'}
+      ${isEmptyItem(item) ? '<span class="tag empty">ריק — נדרש טיפול</span>'
+        : (item.summary ? '' : '<span class="tag no-summary">חסר תקציר</span>')}
       <span class="muted">${(item.files||[]).length} קבצים</span>
     </div>`).join('') : '<div class="empty">אין פריטים להצגה</div>';
   $('itemList').querySelectorAll('.item-row').forEach(r => r.onclick = () => openEditor(+r.dataset.idx));
+
+  const emptyRows = rows.filter(({item}) => isEmptyItem(item));
+  $('emptyBar').hidden = emptyRows.length === 0;
+  $('emptyCount').textContent = emptyRows.length === 1
+    ? 'פריט אחד ריק — אין בו תקציר, תיאור או קובץ, ולכן הוא אינו מוצג באתר'
+    : `${emptyRows.length} פריטים ריקים — אין בהם תקציר, תיאור או קובץ, ולכן הם אינם מוצגים באתר`;
 
   const pending = rows.filter(({item}) => item.status === 'ממתין');
   $('pendingBar').hidden = pending.length === 0;
