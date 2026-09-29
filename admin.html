@@ -88,6 +88,7 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
 .pending-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#eceff5;
  border:1px solid #c9d1de;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:.88rem}
 .toolbar input{flex:1}
+.toolbar select{flex:0 0 auto;width:auto;min-width:150px}
 .item-row{background:#fff;border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;
  gap:12px;cursor:pointer;border:1.5px solid transparent;border-right:6px solid var(--c,var(--navy))}
 .item-row:hover{border-color:var(--c,var(--navy))}
@@ -202,6 +203,13 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
     <div>
       <div class="toolbar">
         <input type="search" id="searchInput" placeholder="חיפוש לפי שם, איש קשר, נושא…">
+        <select id="stateFilter" aria-label="סינון לפי מצב">
+          <option value="">כל הפריטים</option>
+          <option value="empty">רק ריקים</option>
+          <option value="pending">רק ממתינים לאישור</option>
+          <option value="nosummary">רק בלי תקציר</option>
+          <option value="nofiles">רק בלי קבצים</option>
+        </select>
       </div>
       <div class="empty-bar" id="emptyBar" hidden>
         <span id="emptyCount"></span>
@@ -439,7 +447,8 @@ async function gh(path, options = {}){
     try { detail = (await res.json()).message || ''; } catch(e){}
     throw new Error(res.status === 401 ? 'המפתח אינו תקף. יש להתחבר מחדש.'
       : res.status === 403 ? 'המפתח מאפשר קריאה בלבד ולא שמירה. צריך מפתח עם הרשאת כתיבה.' + (detail ? ' (' + detail + ')' : '')
-      : res.status === 409 || res.status === 422 ? 'העדכון נדחה: ' + detail
+      : res.status === 409 || res.status === 422
+        ? 'מישהו אחר שמר שינויים אחריכם. רעננו את העמוד (F5), בצעו את השינוי שוב ושמרו — כדי לא לדרוס את העבודה שלו.'
       : 'שגיאה מול GitHub (' + res.status + ') ' + detail);
   }
   return res.status === 204 ? null : res.json();
@@ -543,7 +552,15 @@ function visibleItems(){
     .map((item, idx) => ({item, idx}))
     .filter(({item}) => activeCat === '__all__' || item.category === activeCat)
     .filter(({item}) => !q || [item.name, item.summary, item.org, item.contactName, item.topic, item.audience, item.dept]
-      .some(v => String(v||'').toLowerCase().includes(q)));
+      .some(v => String(v||'').toLowerCase().includes(q)))
+    .filter(({item}) => {
+      const st = $('stateFilter') ? $('stateFilter').value : '';
+      if(st === 'empty')     return isEmptyItem(item);
+      if(st === 'pending')   return item.status === 'ממתין';
+      if(st === 'nosummary') return !(item.summary || '').trim();
+      if(st === 'nofiles')   return !(item.files || []).length;
+      return true;
+    });
 }
 
 function renderItems(){
@@ -572,6 +589,7 @@ function renderItems(){
     : `${pending.length} פריטים ממתינים לאישור ואינם מוצגים באתר`;
 }
 $('searchInput').oninput = renderItems;
+$('stateFilter').onchange = renderItems;
 
 $('approveAllBtn').onclick = () => {
   const pending = visibleItems().filter(({item}) => item.status === 'ממתין');
