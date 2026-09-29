@@ -39,7 +39,7 @@
   --accent:#fcb84f;--accent-hover:#e8a53a;--whatsapp:#38d1d6;
   --radius:12px;--shadow:0 4px 20px rgba(0,88,111,.15);--shadow-lg:0 8px 36px rgba(0,88,111,.28);
   --t:.22s ease}
-html{font-size:calc(100% * var(--a11y-scale, 1))}
+html{font-size:calc(100% * var(--a11y-scale, 1));scrollbar-gutter:stable}
 body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);color:#1a3340;min-height:100vh;font-size:1rem;line-height:1.6}
 
 /* ── ANIMATIONS ─────────────────────────────────────── */
@@ -194,7 +194,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .modal-header-buttons{display:flex;align-items:center;gap:8px;flex-direction:row-reverse}
 .modal-close{position:static;background:var(--cat-ink,#00303d);border:none;color:var(--white);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background var(--t),transform var(--t)}
 .modal-close:hover{background:var(--cat-ink,#00303d);filter:brightness(1.3);transform:rotate(90deg)}
-.modal-share-btn{background:var(--cat-ink,#00303d);border:1.5px solid rgba(255,255,255,.4);color:#fff;padding:5px 13px;border-radius:20px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:'BrandText','Heebo',sans-serif;transition:background var(--t);display:inline-flex;align-items:center;gap:5px}
+.modal-share-btn{background:var(--cat-ink,#00303d);border:1.5px solid rgba(255,255,255,.4);color:#fff;padding:7px 14px;min-height:30px;border-radius:20px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:'BrandText','Heebo',sans-serif;transition:background var(--t);display:inline-flex;align-items:center;gap:5px}
 .modal-share-btn:hover{filter:brightness(1.3)}
 .modal-body{padding:13px 18px 16px;background:var(--white)}
 .modal-section{margin-bottom:12px}
@@ -209,7 +209,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .tag-navy{background:rgba(0,88,111,.1);color:var(--navy)}
 .tag-green{background:rgba(0,88,111,.1);color:var(--teal)}
 .contact-buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
-.contact-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:9px;font-family:'BrandText','Heebo',sans-serif;font-size:.85rem;font-weight:700;text-decoration:none;transition:transform var(--t),box-shadow var(--t),background var(--t);cursor:pointer;border:none}
+.contact-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;min-height:32px;border-radius:9px;font-family:'BrandText','Heebo',sans-serif;font-size:.85rem;font-weight:700;text-decoration:none;transition:transform var(--t),box-shadow var(--t),background var(--t);cursor:pointer;border:none}
 .contact-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
 .btn-email{background:var(--navy);color:var(--white)}
 .btn-phone{background:var(--teal-mid);color:var(--white)}
@@ -259,7 +259,7 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .file-ext-badge{display:inline-block;padding:1px 6px;border-radius:4px;font-size:.65rem;font-weight:800;margin-top:2px}
 .file-local-badge{display:inline-flex;align-items:center;gap:3px;font-size:.68rem;color:var(--teal);font-weight:600;padding:1px 6px;background:rgba(0,88,111,.1);border-radius:4px;margin-top:2px;margin-right:4px}
 .file-actions{display:flex;gap:6px;flex-shrink:0}
-.file-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;font-family:'BrandText','Heebo',sans-serif;font-size:.8rem;font-weight:700;text-decoration:none;transition:transform var(--t),background var(--t);cursor:pointer;border:none}
+.file-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;min-height:30px;border-radius:6px;font-family:'BrandText','Heebo',sans-serif;font-size:.8rem;font-weight:700;text-decoration:none;transition:transform var(--t),background var(--t);cursor:pointer;border:none}
 .file-btn:hover{transform:translateY(-1px)}
 .file-btn-view{background:var(--cat-ink,var(--navy));color:var(--white)}
 .file-btn-view:hover{background:var(--teal-mid)}
@@ -998,6 +998,17 @@ function renderItems(items){
 }
 
 /* ── MODAL ──────────────────────────────────────────────── */
+// נעילת הגלילה מסתירה את פס הגלילה, והעמוד שמאחור היה קופץ ברוחב הפס.
+// שומרים לו מקום בריפוד, כדי שהתוכן יישאר בדיוק במקומו.
+function lockScroll(on){
+  if(on){
+    const gap = window.innerWidth - document.documentElement.clientWidth;
+    if(gap > 0) document.body.style.paddingInlineEnd = gap + 'px';
+  }else{
+    document.body.style.paddingInlineEnd = '';
+  }
+}
+
 let _currentModalIdx = -1;
 function openModal(idx, fromHistory){
   if(!fromHistory) pushView({view:'item', cat:_currentCat, idx});
@@ -1084,6 +1095,7 @@ function openModal(idx, fromHistory){
 
   document.getElementById('modalBody').innerHTML = html;
   document.getElementById('modalOverlay').classList.add('open');
+  lockScroll(true);
   document.body.classList.add('modal-open');
   if(!_lastFocus) _lastFocus = document.activeElement;
   setDocTitle(item.name);
@@ -1227,6 +1239,7 @@ function closeModal(fromHistory){
   if(!fromHistory && history.state && history.state.view === 'item'){ history.back(); return; }
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.classList.remove('modal-open');
+  lockScroll(false);
   if(_lastFocus && document.contains(_lastFocus)){ _lastFocus.focus(); }
   _lastFocus = null;
   if(_currentCat) setDocTitle(CAT_DISPLAY[_currentCat]||_currentCat);
