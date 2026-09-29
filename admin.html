@@ -77,6 +77,14 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
 .cat-btn.on{border-color:var(--c,var(--navy));border-right-color:var(--c,var(--navy));background:var(--c-tint,rgba(0,88,111,.06))}
 .cat-btn span{font-size:.75rem;font-weight:700;color:var(--slate)}
 .toolbar{display:flex;gap:10px;margin-bottom:14px}
+.sec-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:1rem;color:var(--navy);
+ margin:20px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.sec-title:first-child{margin-top:0}
+.cat-edit{background:#f7faf9;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.cat-edit-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.cat-swatch{width:26px;height:26px;border-radius:7px;border:1px solid rgba(0,0,0,.18);flex:0 0 auto}
+.cat-edit-key{font-size:.78rem;color:var(--slate);font-weight:700}
+.cat-edit input[type=color]{width:46px;height:38px;padding:2px;cursor:pointer}
 .pending-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#eceff5;
  border:1px solid #c9d1de;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:.88rem}
 .toolbar input{flex:1}
@@ -174,6 +182,7 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
     </div>
     <div class="topbar-actions">
       <span class="pill" id="statePill">נטען…</span>
+      <button class="btn-soft" id="siteBtn">תוכן האתר</button>
       <button class="btn-soft" id="newItemBtn">פריט חדש</button>
       <button class="btn-main" id="publishBtn" disabled>שמירה ועדכון באתר</button>
       <button class="btn-soft" id="logoutBtn">יציאה</button>
@@ -208,6 +217,47 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
 </div>
 
 <!-- ── EDITOR ────────────────────────────────────────────── -->
+<div class="overlay" id="siteOverlay">
+  <div class="editor">
+    <div class="editor-head">
+      <h2>תוכן האתר</h2>
+      <button class="btn-soft" id="siteCloseBtn">סגירה</button>
+    </div>
+    <div class="editor-body">
+      <div class="sec-title">ראש העמוד</div>
+      <div class="field"><label for="sHeroTitle">כותרת ראשית</label><input id="sHeroTitle"></div>
+      <div class="field"><label for="sHeroSub">כותרת משנה</label><input id="sHeroSub"></div>
+
+      <div class="sec-title">תקציר הפתיחה</div>
+      <div class="field">
+        <label for="sIntro">פסקאות המבוא</label>
+        <textarea id="sIntro" rows="10"></textarea>
+        <div class="hint">שורה ריקה מפרידה בין פסקאה לפסקה.</div>
+      </div>
+      <div class="field"><label for="sSection">כותרת חטיבת התחומים</label><input id="sSection"></div>
+
+      <div class="sec-title">כותרות התחומים</div>
+      <div id="sCats"></div>
+
+      <div class="sec-title">כותרת תחתונה</div>
+      <div class="row">
+        <div class="field"><label for="sJoinText">טקסט הצטרפות</label><input id="sJoinText"></div>
+        <div class="field"><label for="sJoinEmail">כתובת מייל</label><input id="sJoinEmail" type="email"></div>
+      </div>
+      <div class="field"><label for="sAboutText">טקסט "לפרטים נוספים"</label><input id="sAboutText"></div>
+      <div class="row">
+        <div class="field"><label for="sAboutUrl">כתובת האתר</label><input id="sAboutUrl" type="url"></div>
+        <div class="field"><label for="sAboutLabel">הכיתוב של הקישור</label><input id="sAboutLabel"></div>
+      </div>
+      <div class="field"><label for="sTagline">שורת הסיום</label><input id="sTagline"></div>
+    </div>
+    <div class="editor-foot">
+      <span class="muted">השינויים נשמרים בלחיצה על "שמירה ועדכון באתר"</span>
+      <button class="btn-main" id="siteApplyBtn">אישור</button>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="editorOverlay">
   <div class="editor">
     <div class="editor-head">
@@ -289,6 +339,7 @@ const TOKEN_KEY = 'migdalor_admin_token';
 
 let token = '';
 let data = null;        // {categories, items}
+let site = null;        // טקסטים וצבעים של האתר
 let indexHtml = '';     // full index.html text
 let indexSha = '';      // sha of the loaded index.html — guards against overwriting newer edits
 let dirty = false;
@@ -437,7 +488,15 @@ async function loadSite(){
   const match = indexHtml.match(/const DATA = (\{[\s\S]*?\});/);
   if(!match) throw new Error('לא נמצא מאגר הנתונים בתוך index.html');
   data = JSON.parse(match[1]);
-  readCatColors(indexHtml);
+  const sm = indexHtml.match(/^const SITE = (\{[\s\S]*?\});/m);
+  site = sm ? JSON.parse(sm[1]) : {};
+  site.hero ||= {}; site.footer ||= {}; site.categories ||= {};
+  site.intro = Array.isArray(site.intro) ? site.intro : [];
+  CAT_COLORS = {};                       // הצבעים מגיעים מ-SITE
+  for(const c in site.categories){
+    const v = String(site.categories[c].color || '').trim();
+    if(HEX_COLOR.test(v)) CAT_COLORS[c] = v;
+  }
   setDirty(false);
   renderCats();
   renderItems();
@@ -445,6 +504,11 @@ async function loadSite(){
 
 /* ── LISTS ──────────────────────────────────────────────── */
 function catsOf(){ return data.categories.filter(c => c && c !== 'nan'); }
+// השם שהמבקר רואה באתר, כדי שעמוד הניהול ידבר באותה שפה
+function catLabel(c){
+  const d = ((site && site.categories && site.categories[c]) || {}).display;
+  return (d && d.trim()) || c;
+}
 function countIn(cat){ return data.items.filter(i => i.category === cat).length; }
 
 function renderCats(){
@@ -453,7 +517,7 @@ function renderCats(){
     `<button class="cat-btn${activeCat === '__all__' ? ' on' : ''}" data-cat="__all__" style="--c:var(--navy);--c-tint:rgba(0,88,111,.06)">
        כל הפריטים <span>${data.items.length}</span></button>` +
     cats.map(c => `<button class="cat-btn${activeCat === c ? ' on' : ''}" data-cat="${esc(c)}" style="${esc(catVars(c))}">
-       ${esc(c)} <span>${countIn(c)}</span></button>`).join('');
+       ${esc(catLabel(c))} <span>${countIn(c)}</span></button>`).join('');
   $('catSide').querySelectorAll('.cat-btn').forEach(b => b.onclick = () => {
     activeCat = b.dataset.cat;
     renderCats();
@@ -517,7 +581,7 @@ function openEditor(idx){
   editingIdx = idx;
   const item = data.items[idx];
   $('editorTitle').textContent = idx === -1 ? 'פריט חדש' : 'עריכת פריט';
-  $('fCategory').innerHTML = catsOf().map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  $('fCategory').innerHTML = catsOf().map(c => `<option value="${esc(c)}">${esc(catLabel(c))}</option>`).join('');
   $('fName').value = item.name || '';
   $('fSummary').value = item.summary || '';
   $('fDesc').value = item.description || '';
@@ -557,6 +621,75 @@ function renderFiles(){
     renderFiles();
   });
 }
+
+/* ── עריכת תוכן האתר ──────────────────────── */
+const PARA_SEP = String.fromCharCode(10, 10);          // שורה ריקה בין פסקאות
+const PARA_SPLIT = new RegExp(String.fromCharCode(10) + '\\s*' + String.fromCharCode(10));
+
+function openSiteEditor(){
+  if(!site) return;
+  $('sHeroTitle').value = site.hero.title || '';
+  $('sHeroSub').value   = site.hero.subtitle || '';
+  $('sIntro').value     = (site.intro || []).join(PARA_SEP);
+  $('sSection').value   = site.sectionTitle || '';
+  $('sJoinText').value  = site.footer.joinText || '';
+  $('sJoinEmail').value = site.footer.joinEmail || '';
+  $('sAboutText').value = site.footer.aboutText || '';
+  $('sAboutUrl').value  = site.footer.aboutUrl || '';
+  $('sAboutLabel').value= site.footer.aboutLabel || '';
+  $('sTagline').value   = site.footer.tagline || '';
+
+  $('sCats').innerHTML = catsOf().map(c => {
+    const v = site.categories[c] || {};
+    return `<div class="cat-edit" data-cat="${esc(c)}">
+      <div class="cat-edit-head">
+        <span class="cat-swatch" style="background:${esc(HEX_COLOR.test(v.color||'') ? v.color : '#00586f')}"></span>
+        <span class="cat-edit-key">${esc(c)}</span>
+      </div>
+      <div class="row">
+        <div class="field"><label>כותרת באתר</label><input class="cDisplay" value="${esc(v.display || c)}"></div>
+        <div class="field"><label>צבע הבית</label>
+          <input class="cColor" type="color" value="${esc(HEX_COLOR.test(v.color||'') ? v.color : '#00586f')}"></div>
+      </div>
+      <div class="field"><label>תיאור התחום</label><textarea class="cDesc" rows="3">${esc(v.desc || '')}</textarea></div>
+    </div>`;
+  }).join('');
+  $('sCats').querySelectorAll('.cColor').forEach(inp => inp.oninput = () => {
+    inp.closest('.cat-edit').querySelector('.cat-swatch').style.background = inp.value;
+  });
+  $('siteOverlay').classList.add('open');
+}
+
+function applySiteEditor(){
+  site.hero.title    = $('sHeroTitle').value.trim();
+  site.hero.subtitle = $('sHeroSub').value.trim();
+  site.intro         = $('sIntro').value.split(PARA_SPLIT).map(p => p.trim()).filter(Boolean);
+  site.sectionTitle  = $('sSection').value.trim();
+  site.footer.joinText   = $('sJoinText').value.trim();
+  site.footer.joinEmail  = $('sJoinEmail').value.trim();
+  site.footer.aboutText  = $('sAboutText').value.trim();
+  site.footer.aboutUrl   = $('sAboutUrl').value.trim();
+  site.footer.aboutLabel = $('sAboutLabel').value.trim();
+  site.footer.tagline    = $('sTagline').value.trim();
+
+  $('sCats').querySelectorAll('.cat-edit').forEach(box => {
+    const c = box.dataset.cat;
+    const cur = site.categories[c] || (site.categories[c] = {});
+    cur.display = box.querySelector('.cDisplay').value.trim() || c;
+    cur.desc    = box.querySelector('.cDesc').value.trim();
+    const col   = box.querySelector('.cColor').value.trim();
+    if(HEX_COLOR.test(col)){ cur.color = col; CAT_COLORS[c] = col; }
+  });
+  setDirty(true);
+  $('siteOverlay').classList.remove('open');
+  renderCats();
+  renderItems();
+  toast('תוכן האתר עודכן. לחצו "שמירה ועדכון באתר" כדי לפרסם.');
+}
+
+$('siteBtn').onclick      = openSiteEditor;
+$('siteApplyBtn').onclick = applySiteEditor;
+$('siteCloseBtn').onclick = () => $('siteOverlay').classList.remove('open');
 
 let newItemDraft = {};
 $('newItemBtn').onclick = () => {
@@ -664,8 +797,16 @@ $('publishBtn').onclick = async () => {
       .replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
     // ההחלפה נעשית דרך פונקציה: כמחרוזת, רצף כמו $' בתוך הנתונים היה מורחב
     // על ידי replace עצמו לכל שאר הקובץ, כולל תגית הסגירה של הסקריפט.
-    const updated = indexHtml.replace(/const DATA = \{[\s\S]*?\};/, () => 'const DATA = ' + json + ';');
+    let updated = indexHtml.replace(/const DATA = \{[\s\S]*?\};/, () => 'const DATA = ' + json + ';');
     if(updated === indexHtml) throw new Error('לא ניתן היה לעדכן את הנתונים בקובץ');
+    if(site){
+      const sjson = JSON.stringify(site)
+        .replace(/</g, '\\u003c').replace(/>/g, '\\u003e')
+        .replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
+      const before = updated;
+      updated = updated.replace(/^const SITE = \{[\s\S]*?\};/m, () => 'const SITE = ' + sjson + ';');
+      if(updated === before) throw new Error('לא נמצא בלוק התוכן של האתר בקובץ');
+    }
     const res = await gh('/repos/' + REPO + '/contents/index.html', {
       method: 'PUT',
       body: JSON.stringify({message: 'Admin: update menu data', content: textToB64(updated), sha: indexSha, branch: BRANCH})
