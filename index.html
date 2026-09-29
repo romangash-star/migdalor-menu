@@ -1149,6 +1149,10 @@ function applyFilters(){
   if(sort === 'files') filtered = [...filtered].sort((a,b)=>((b.files||[]).length>0)-((a.files||[]).length>0));
 
   renderItems(filtered);
+  if(words.length){
+    clearTimeout(applyFilters._t);
+    applyFilters._t = setTimeout(() => track(filtered.length ? 'search' : 'search-empty', q), 1200);
+  }
   document.getElementById('resultsCount').textContent = countLabel(filtered.length);
   document.getElementById('emptyState').style.display = filtered.length===0?'block':'none';
   const es = document.getElementById('emptyState');
@@ -1304,7 +1308,8 @@ function openModal(idx, fromHistory){
       return `<div class="file-card">
         <div class="file-head">
           <div class="file-title">${escH(clean)}</div>
-          <a href="${escA(safeUrl(dlUrl))}" download target="_blank" rel="noopener" class="file-btn file-btn-dl"><span class="emoji" aria-hidden="true">⬇️</span>הורדה</a>
+          <a href="${escA(safeUrl(dlUrl))}" download target="_blank" rel="noopener" class="file-btn file-btn-dl"
+             data-track-download="${escA(clean)}"><span class="emoji" aria-hidden="true">⬇️</span>הורדה</a>
         </div>
         <div class="file-preview" data-src="${escA(safeUrl(f.localPath||f.url||''))}" data-ext="${escA(ext(f.name))}" id="fp-${idx}-${fi}">
           <div class="file-note loading-pulse">טוען תצוגה מקדימה…</div>
@@ -1680,6 +1685,50 @@ if(_sc) _sc.onclick = () => {
   const q = document.getElementById('searchInput');
   q.value = ''; q.focus(); applyFilters();
 };
+
+/* ── מדידה ─────────────────────────────────── */
+// שתי השורות הבאות הן כל מה שצריך כדי להפעיל מדידה.
+// כל עוד הן ריקות — האתר לא שולח שום דבר לאף אחד.
+const MEASURE = {
+  cloudflare: '',      // המזהה מ-Cloudflare Web Analytics
+  goatcounter: ''      // כתובת GoatCounter, אם יוחלט להוסיף מדידת אירועים
+};
+
+function initMeasure(){
+  if(MEASURE.cloudflare){
+    // spa:true גורם לו לספור גם מעבר בין תחומים ופריטים,
+    // כי לכל מסך באתר יש כתובת משלו.
+    const b = document.createElement('script');
+    b.defer = true;
+    b.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    b.setAttribute('data-cf-beacon', JSON.stringify({token: MEASURE.cloudflare, spa: true}));
+    document.head.appendChild(b);
+  }
+  if(MEASURE.goatcounter){
+    const g = document.createElement('script');
+    g.async = true;
+    g.src = 'https://gc.zgo.at/count.js';
+    g.setAttribute('data-goatcounter', MEASURE.goatcounter);
+    document.head.appendChild(g);
+  }
+}
+
+// אירוע: הורדת קובץ או חיפוש. נשלח רק לכלי שתומך באירועים.
+// לעולם לא נשלח שם, מזהה או פרט מזהה של מבקר.
+function track(kind, label){
+  if(!MEASURE.goatcounter || !window.goatcounter || !window.goatcounter.count) return;
+  try{
+    window.goatcounter.count({path: kind + '/' + String(label || '').slice(0, 80), event: true});
+  }catch(err){}
+}
+
+initMeasure();
+
+// מאזין אחד לכל הורדה, במקום קוד שמורכב מתוך שם הקובץ
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-track-download]');
+  if(a) track('download', a.dataset.trackDownload);
+});
 
 initA11y();
 initPrivacyBar();
