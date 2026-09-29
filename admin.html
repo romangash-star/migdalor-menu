@@ -119,6 +119,14 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
 .file-line:last-child{border-bottom:none}
 .file-line span{flex:1;font-size:.85rem;word-break:break-all}
 .file-line .muted{font-size:.72rem}
+.file-line-actions{display:flex;gap:8px;flex:0 0 auto}
+.file-prev{display:none;margin:0 0 10px;border:1px solid var(--line);border-radius:8px;
+ overflow:hidden;background:#fff}
+.file-prev.open{display:block}
+.file-prev canvas,.file-prev img{width:100%;height:auto;display:block}
+.file-prev canvas+canvas{border-top:1px solid var(--line)}
+.file-prev .note{padding:14px;font-size:.82rem;color:var(--slate);text-align:center}
+.file-prev .note a{color:var(--navy);font-weight:700}
 .hint{font-size:.78rem;color:var(--slate);margin-top:8px}
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#0d3b46;color:#fff;padding:12px 22px;
  border-radius:10px;font-size:.9rem;z-index:60;display:none;max-width:90vw;text-align:center}
@@ -613,12 +621,27 @@ function renderFiles(){
   $('filesList').innerHTML = files.length ? files.map((f, i) => `
     <div class="file-line">
       <span>${esc(f.name)}<br><span class="muted">${esc(f.localPath || f.url || '')}</span></span>
-      <button class="btn-danger" data-i="${i}">הסרה</button>
-    </div>`).join('') : '<div class="muted">אין קבצים</div>';
-  $('filesList').querySelectorAll('button').forEach(b => b.onclick = () => {
+      <span class="file-line-actions">
+        <button class="btn-soft" data-prev="${i}">תצוגה מקדימה</button>
+        <button class="btn-danger" data-i="${i}">הסרה</button>
+      </span>
+    </div>
+    <div class="file-prev" id="filePrev${i}"></div>`).join('') : '<div class="muted">אין קבצים</div>';
+  $('filesList').querySelectorAll('button[data-i]').forEach(b => b.onclick = () => {
     files.splice(+b.dataset.i, 1);
     if(editingIdx !== -1) setDirty(true);
     renderFiles();
+  });
+  $('filesList').querySelectorAll('button[data-prev]').forEach(b => b.onclick = () => {
+    const i = +b.dataset.prev, box = $('filePrev' + i);
+    if(box.classList.contains('open')){
+      box.classList.remove('open'); box.innerHTML = '';
+      b.textContent = 'תצוגה מקדימה';
+      return;
+    }
+    box.classList.add('open');
+    b.textContent = 'סגירת התצוגה';
+    showFilePreview(box, files[i]);
   });
 }
 
@@ -690,6 +713,92 @@ function applySiteEditor(){
 $('siteBtn').onclick      = openSiteEditor;
 $('siteApplyBtn').onclick = applySiteEditor;
 $('siteCloseBtn').onclick = () => $('siteOverlay').classList.remove('open');
+
+/* ── תצוגה מקדימה של קובץ ──────────────────────────────── */
+// pdf.js נטען רק כשצריך אותו, ומצייר את העמודים הראשונים על קנבס —
+// אותה שיטה שבאתר, כי דפדפן בנייד לא מציג PDF בתוך iframe.
+const PDFJS_VER = '3.11.174';
+const PDFJS_SRI = 'sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e';
+let _pdfjs = null;
+function loadPdfJs(){
+  if(_pdfjs) return _pdfjs;
+  _pdfjs = new Promise((res, rej) => {
+    const sc = document.createElement('script');
+    sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VER + '/pdf.min.js';
+    sc.integrity = PDFJS_SRI;
+    sc.crossOrigin = 'anonymous';
+    sc.onload = () => {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/' + PDFJS_VER + '/pdf.worker.min.js';
+      res(window.pdfjsLib);
+    };
+    sc.onerror = () => rej(new Error('pdf.js failed'));
+    document.head.appendChild(sc);
+  });
+  return _pdfjs;
+}
+
+const FILE_URL_OK = /^(https?:)/i;
+function fileUrl(f){
+  const raw = String((f && (f.localPath || f.url)) || '').trim();
+  if(!raw) return '';
+  if(/^[a-z][a-z0-9+.-]*:/i.test(raw)) return FILE_URL_OK.test(raw) ? raw : '';
+  if(raw.slice(0, 2) === '//') return '';       // //evil.com
+  return new URL(raw, location.href).href;      // נתיב יחסי לאתר
+}
+
+async function showFilePreview(box, f){
+  const url = fileUrl(f);
+  const name = String((f && f.name) || '');
+  const ext = (name.split('.').pop() || '').toLowerCase();
+  if(!url){ box.innerHTML = '<div class="note">אין כתובת להצגה עבור הקובץ הזה.</div>'; return; }
+  const link = '<a href="' + esc(url) + '" target="_blank" rel="noopener">פתיחה בחלון חדש</a>';
+  box.innerHTML = '<div class="note">טוען תצוגה מקדימה…</div>';
+
+  // הקובץ חייב להיות כבר באתר החי. אחרי העלאה הוא מתפרסם תוך כדקה.
+  let head;
+  try { head = await fetch(url, {method: 'HEAD'}); } catch(e){ head = null; }
+  if(!head || !head.ok){
+    box.innerHTML = '<div class="note">הקובץ עדיין לא זמין באתר — אחרי העלאה הפרסום לוקח כדקה. ' + link + '</div>';
+    return;
+  }
+
+  if(['jpg','jpeg','png','gif','webp','svg','avif'].includes(ext)){
+    box.innerHTML = '<img alt="' + esc(name) + '" src="' + esc(url) + '">';
+    return;
+  }
+  if(ext !== 'pdf'){
+    box.innerHTML = '<div class="note">אין תצוגה מקדימה לקובץ מסוג ' + esc(ext || 'לא ידוע') + '. ' + link + '</div>';
+    return;
+  }
+  try {
+    const lib = await loadPdfJs();
+    const pdf = await lib.getDocument(url).promise;
+    const pages = Math.min(pdf.numPages, 3);
+    const width = box.clientWidth || 420;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    box.innerHTML = '';
+    for(let n = 1; n <= pages; n++){
+      const page = await pdf.getPage(n);
+      const base = page.getViewport({scale: 1});
+      const vp = page.getViewport({scale: (width / base.width) * dpr});
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(vp.width); cv.height = Math.round(vp.height);
+      cv.setAttribute('role', 'img');
+      cv.setAttribute('aria-label', 'עמוד ' + n + ' של ' + name);
+      box.appendChild(cv);
+      await page.render({canvasContext: cv.getContext('2d'), viewport: vp}).promise;
+    }
+    if(pdf.numPages > pages){
+      const d = document.createElement('div');
+      d.className = 'note';
+      d.innerHTML = 'במסמך ' + pdf.numPages + ' עמודים. ' + link;
+      box.appendChild(d);
+    }
+  } catch(err){
+    box.innerHTML = '<div class="note">לא הצלחנו להציג את הקובץ כאן. ' + link + '</div>';
+  }
+}
 
 let newItemDraft = {};
 $('newItemBtn').onclick = () => {
