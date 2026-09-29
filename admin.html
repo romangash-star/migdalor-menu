@@ -205,7 +205,7 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
         <input type="search" id="searchInput" placeholder="חיפוש לפי שם, איש קשר, נושא…">
         <select id="stateFilter" aria-label="סינון לפי מצב">
           <option value="">כל הפריטים</option>
-          <option value="empty">רק ריקים</option>
+          <option value="empty">רק אלה שאינם מוצגים באתר</option>
           <option value="pending">רק ממתינים לאישור</option>
           <option value="nosummary">רק בלי תקציר</option>
           <option value="nofiles">רק בלי קבצים</option>
@@ -542,9 +542,15 @@ function renderCats(){
   });
 }
 
-// פריט בלי תקציר, בלי תיאור ובלי קובץ אינו מוצג באתר — אין למבקר מה לראות בו
-const isEmptyItem = i =>
-  !(i.summary || '').trim() && !(i.description || '').trim() && !(i.files || []).length;
+// אותו כלל בדיוק כמו באתר:
+//  - מסמך המלצות בלי קובץ = מסמך שטרם נכתב, ולכן אינו מוצג.
+//  - ספק מוצג כל עוד יש לו תקציר, תיאור או קובץ.
+const hasFiles = i => !!(i.files || []).length;
+const isEmptyItem = i => i.type === 'מסמך המלצות'
+  ? !hasFiles(i)
+  : !(i.summary || '').trim() && !(i.description || '').trim() && !hasFiles(i);
+const emptyReason = i => i.type === 'מסמך המלצות' && !hasFiles(i)
+  ? 'אין מסמך — לא מוצג' : 'ריק — נדרש טיפול';
 
 function visibleItems(){
   const q = $('searchInput').value.trim().toLowerCase();
@@ -570,7 +576,7 @@ function renderItems(){
       <span class="tag ${item.type === 'ספק' ? 'sup' : ''}">${item.type === 'ספק' ? 'ספק' : 'מסמך'}</span>
       <b>${esc(item.name) || '<span class="muted">(ללא כותרת)</span>'}</b>
       ${item.status === 'ממתין' ? '<span class="tag pending">ממתין לאישור</span>' : ''}
-      ${isEmptyItem(item) ? '<span class="tag empty">ריק — נדרש טיפול</span>'
+      ${isEmptyItem(item) ? `<span class="tag empty">${esc(emptyReason(item))}</span>`
         : (item.summary ? '' : '<span class="tag no-summary">חסר תקציר</span>')}
       <span class="muted">${(item.files||[]).length} קבצים</span>
     </div>`).join('') : '<div class="empty">אין פריטים להצגה</div>';
@@ -578,9 +584,12 @@ function renderItems(){
 
   const emptyRows = rows.filter(({item}) => isEmptyItem(item));
   $('emptyBar').hidden = emptyRows.length === 0;
-  $('emptyCount').textContent = emptyRows.length === 1
-    ? 'פריט אחד ריק — אין בו תקציר, תיאור או קובץ, ולכן הוא אינו מוצג באתר'
-    : `${emptyRows.length} פריטים ריקים — אין בהם תקציר, תיאור או קובץ, ולכן הם אינם מוצגים באתר`;
+  const noDoc = emptyRows.filter(({item}) => item.type === 'מסמך המלצות').length;
+  const noContent = emptyRows.length - noDoc;
+  const parts = [];
+  if(noDoc) parts.push(`${noDoc} מסמכי המלצות בלי קובץ מצורף`);
+  if(noContent) parts.push(`${noContent} פריטים בלי תקציר, תיאור או קובץ`);
+  $('emptyCount').textContent = parts.join(' · ') + ' — אינם מוצגים באתר עד שיושלמו';
 
   const pending = rows.filter(({item}) => item.status === 'ממתין');
   $('pendingBar').hidden = pending.length === 0;

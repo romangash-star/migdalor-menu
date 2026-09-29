@@ -849,10 +849,15 @@ const IS_TOUCH = window.matchMedia('(hover:none)').matches;
 // touch we don't wire mouseenter/mouseleave at all.
 const HOVER_ATTRS = idx => IS_TOUCH ? '' : `onmouseenter="setActiveCat(${idx})" onmouseleave="clearActiveCat()"`;
 
-// פריט בלי תקציר, בלי תיאור ובלי קובץ הוא כותרת ריקה — אין מה להראות למבקר.
-// הוא נשאר בקובץ ובעמוד הניהול, ויחזור לאתר ברגע שיתווסף לו תוכן.
-const isEmptyItem = i =>
-  !(i.summary || '').trim() && !(i.description || '').trim() && !(i.files || []).length;
+// מה ראוי להופיע בתפריט:
+//  - מסמך המלצות הוא המסמך עצמו. בלי קובץ מצורף הוא כותרת של משהו שטרם נכתב,
+//    ואין מה להראות למבקר — גם אם יש לו תקציר.
+//  - ספק הוא ההצעה עצמה: התיאור, פרטי הקשר והאתר שלו. קובץ הוא תוספת ולא תנאי.
+// הפריטים נשארים בקובץ ובעמוד הניהול, וחוזרים לאתר ברגע שמתווסף להם מה שחסר.
+const hasFiles = i => !!(i.files || []).length;
+const isEmptyItem = i => i.type === 'מסמך המלצות'
+  ? !hasFiles(i)
+  : !(i.summary || '').trim() && !(i.description || '').trim() && !hasFiles(i);
 
 // פריט שממתין לאישור נשאר בקובץ אבל לא מוצג באתר הציבורי
 const LIVE_ITEMS = DATA.items.filter(i => i.status !== 'ממתין' && !isEmptyItem(i));
