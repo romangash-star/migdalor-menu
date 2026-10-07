@@ -85,8 +85,6 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .hero{background:linear-gradient(150deg,#00586f 0%,#1c7d8f 50%,#2b9eb5 100%);color:var(--white);padding:16px 24px 12px;text-align:center;position:relative;overflow:hidden}
 .hero-beam{position:absolute;inset:0;pointer-events:none;opacity:.38}
 .hero-beam svg{width:100%;height:100%}
-.hero-logo-wrap{display:none}
-.hero-logo-img{display:none}
 .hero h1{position:relative;font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:400;margin-bottom:8px;line-height:1.2;letter-spacing:.01em}
 .hero p{position:relative;font-size:.92rem;opacity:.85;max-width:640px;margin:0 auto;font-family:'BrandText','Heebo',sans-serif}
 /* ── INTRO ───────────────────────────────────────────── */
@@ -140,7 +138,8 @@ body.home-searching .categories-section{display:none}
 .house-shape{opacity:var(--op,.68);transition:opacity .3s ease,filter .3s ease;cursor:pointer;transform-box:fill-box;transform-origin:center}
 .house-shape.active{opacity:1}
 .house-labels{position:absolute;inset:0;pointer-events:none}
-.house-label{position:absolute;transform:translate(-50%,-50%);text-align:center;opacity:0;transition:opacity .25s ease;color:#fff;pointer-events:none;width:130px;letter-spacing:.06em}
+.house-label{position:absolute;transform:translate(-50%,-50%);text-align:center;opacity:0;transition:opacity .25s ease;color:#fff;pointer-events:none;width:130px;letter-spacing:.06em;
+  background:rgba(8,40,52,.82);border-radius:12px;padding:9px 10px;box-shadow:0 4px 14px rgba(0,40,55,.28)}
 .house-label.active{opacity:1}
 .house-label-dark{color:#1a3340;text-shadow:none}
 .house-label-count{display:flex;align-items:center;justify-content:center;gap:5px}
@@ -512,7 +511,7 @@ body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
 <header class="site-header">
   <div class="header-inner">
     <button type="button" class="site-logo" onclick="goHome()" aria-label="המגדלור — חזרה לעמוד הראשי">
-      <img src="logo.png" alt="" class="logo-img">
+      <img src="logo-sm.png" width="480" height="224" alt="" class="logo-img">
     </button>
     <button type="button" class="header-back" id="backBtn" onclick="goHome()">&#8592; חזרה לתפריט הראשי</button>
   </div>
@@ -677,9 +676,6 @@ body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
         <circle cx="1085" cy="255" r="95" fill="#2b9eb5" opacity=".12"/>
         <circle cx="600"  cy="200" r="40" fill="#fcb84f" opacity=".09"/>
       </svg>
-    </div>
-    <div class="hero-logo-wrap">
-      <img src="fonts/logo.png" alt="המגדלור" class="hero-logo-img">
     </div>
     <h1 id="heroTitle"></h1>
     <p id="heroSubtitle"></p>
@@ -985,7 +981,7 @@ function renderHome(){
     const desc = CAT_DESC[cat]||'';
     return `<button type="button" class="cat-list-item anim-card" id="catListItem${i}" style="animation-delay:${i*0.08}s"
       ${HOVER_ATTRS(i)} data-cat="${escA(cat)}">
-      <span class="cat-list-name" style="color:${color}">${escH(displayName)}</span>
+      <span class="cat-list-name" style="color:${escA(readableOn(color, PAGE_BG, 4.5))}">${escH(displayName)}</span>
       <span class="cat-list-desc">${escH(desc)}</span>
     </button>`;
   }).join('');
@@ -1129,6 +1125,21 @@ const relLum = hex => {
   const lin = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
   return 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255);
 };
+// הצבע מוכהה עד שהוא נקרא על רקע העמוד, בלי לשנות את הגוון עצמו
+const PAGE_BG = '#f0f2de';
+const contrast = (a, b) => {
+  const [hi, lo] = [relLum(a), relLum(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+function readableOn(hex, bg, min){
+  const [hh, s, l] = hexToHsl(hex);
+  let out = hex, L = l;
+  for(let i = 0; i < 100 && contrast(out, bg) < min; i++){
+    L = Math.max(0.04, L - 0.01);
+    out = hslHex(hh, Math.min(s, 0.9), L);
+  }
+  return out;
+}
 const bestTextOn = hex => {
   const L = relLum(hex);
   const onWhite = 1.05 / (L + 0.05);

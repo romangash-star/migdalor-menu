@@ -54,3 +54,15 @@ th{background:#eef4f4;color:var(--navy)}
 .callout button#consentDeny{background:transparent;color:#00586f}
 .callout button#consentDeny:hover{background:rgba(0,88,111,.08)}
 .callout button:focus-visible{outline:3px solid #fcb84f;outline-offset:2px}
+
+/* באנר הסכמה למדידה */
+.consent-bar{position:fixed;inset-inline:0;bottom:0;z-index:1300;background:#0e6a7f;color:#fff;
+  padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;
+  font-size:.88rem;line-height:1.5;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+.consent-bar a{color:#fcb84f}
+.consent-actions{display:flex;gap:10px;flex-shrink:0}
+.consent-bar button{font:inherit;font-weight:700;background:#fcb84f;color:#1a3340;border:none;
+  border-radius:9px;padding:8px 22px;cursor:pointer;min-height:36px}
+.consent-bar button.consent-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.65)}
+.consent-bar button.consent-ghost:hover{background:rgba(255,255,255,.12)}
+.consent-bar :focus-visible{outline:3px solid #fff;outline-offset:2px}
