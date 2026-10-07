@@ -1144,6 +1144,7 @@ const contrastWithWhite = hex => {
 // Shades keep the category's own hue — only lightness moves — so a gold page reads
 // gold and a teal page reads teal, instead of both drifting toward one dark colour.
 const BRAND_BLUE = '#00586f';   // אותו כחול שנושא את הפס העליון של האתר
+const HEADER_MID = '#0e6a7f';   // אמצע המעבר של הפס: בין #00586f ל-#1c7d8f
 function catVars(cat){
   const base = CAT_COLORS[cat];
   if(!base) return null;
@@ -1172,7 +1173,9 @@ function catVars(cat){
   // התחום שנושא את כחול המותג עצמו מקבל בבאנר את הגוון של הפס שמעליו,
   // כך ששניהם נקראים כרצף אחד. שאר התחומים אינם מושפעים.
   if(base.toLowerCase() === BRAND_BLUE){
-    out['--cat-banner'] = 'linear-gradient(135deg,#00586f 0%,#1c7d8f 100%)';
+    // הפס העליון הוא מעבר בין שני גוונים, והבאנר גבוה ממנו — אותו מעבר
+    // היה רץ בקצב אחר ויוצר הפרש. צבע אחיד מאמצע הפס מבטל את ההפרש.
+    out['--cat-banner'] = HEADER_MID;
   }
   return out;
 }
