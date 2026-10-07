@@ -114,8 +114,9 @@ body.home-searching .categories-section{display:none}
 .filters-toggle:hover{border-color:var(--navy)}
 .filters-toggle[aria-expanded="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
 .filters-toggle .emoji{font-size:.72rem}
-.home-filters{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-top:8px;
-  max-width:800px;padding:9px 11px;background:var(--white);
+/* הרקע הלבן נעצר בסוף התפריטים במקום להימתח לרוחב קבוע */
+.home-filters{display:inline-flex;flex-wrap:wrap;gap:7px;align-items:center;margin-top:8px;
+  width:fit-content;max-width:100%;padding:9px 11px;background:var(--white);
   border:1.5px solid rgba(0,88,111,.12);border-radius:10px}
 .home-filters[hidden]{display:none}
 .home-filters .filter-label{font-size:.78rem}
@@ -359,7 +360,7 @@ body.home-searching .categories-section{display:none}
   .home-search{padding:12px 16px 0}
   .search-box.home-search-box{flex:1 1 auto;max-width:none}
   .filters-toggle{padding:0 10px}
-  .home-filters{padding:9px 8px;gap:6px}
+  .home-filters{padding:9px 8px;gap:6px;width:auto;display:flex}
   .home-filters .filter-select{flex:1 1 calc(50% - 3px);min-width:0}
   .home-filters .filter-label{flex:1 1 100%}
   .filters-reset{flex:1 1 100%;text-align:center}
