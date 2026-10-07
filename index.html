@@ -95,6 +95,30 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 
 /* ── CATEGORIES ──────────────────────────────────────── */
 .categories-section{max-width:1280px;margin:0 auto;padding:20px 24px 24px}
+body.home-searching .categories-section{display:none}
+
+/* חיפוש בעמוד הבית: רק שורת החיפוש גלויה, והסינון נפתח בלחיצה */
+.home-search{max-width:1200px;margin:0 auto;padding:18px 24px 0}
+.home-search-inner{display:flex;gap:10px;align-items:center}
+.home-search-box{flex:1 1 auto}
+.filters-toggle{display:inline-flex;align-items:center;gap:7px;flex-shrink:0;
+  font:inherit;font-size:.88rem;font-weight:600;color:var(--navy);
+  background:var(--white);border:1.5px solid rgba(0,88,111,.2);border-radius:10px;
+  padding:9px 16px;min-height:38px;cursor:pointer}
+.filters-toggle:hover{border-color:var(--navy)}
+.filters-toggle[aria-expanded="true"]{background:var(--navy);color:#fff;border-color:var(--navy)}
+.filters-toggle .emoji{font-size:.85rem}
+.home-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px;
+  padding:12px 14px;background:var(--white);border:1.5px solid rgba(0,88,111,.12);border-radius:12px}
+.home-filters[hidden]{display:none}
+.filters-reset{font:inherit;font-size:.82rem;font-weight:600;color:var(--slate);
+  background:none;border:none;text-decoration:underline;cursor:pointer;padding:6px 8px;min-height:30px}
+.filters-reset:hover{color:var(--navy)}
+.home-results{margin-top:18px}
+.home-results[hidden]{display:none}
+.home-results-head{display:flex;align-items:center;margin-bottom:14px}
+.home-results .items-grid{padding:0}
+.home-results .empty-state{padding:40px 24px}
 .section-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:2.1rem;font-weight:400;color:var(--navy);margin-bottom:20px;display:flex;align-items:center;gap:16px;letter-spacing:.06em}
 .section-title::after{content:'';flex:1;height:2px;background:linear-gradient(to left,transparent,var(--gold))}
 /* ── HOME SHOWCASE (list + interactive house graphic) ─── */
@@ -321,6 +345,14 @@ body{font-family:'BrandText','Heebo',sans-serif;background:var(--off-white);colo
 .viewer-loading{padding:28px;text-align:center;color:var(--slate);font-size:.9rem}
 
 /* ── EMPTY / UTILS ───────────────────────────────────── */
+@media(max-width:640px){
+  .home-search{padding:14px 16px 0}
+  .filters-toggle{padding:9px 13px}
+  .home-filters{padding:12px 10px;gap:8px}
+  .home-filters .filter-select{flex:1 1 calc(50% - 4px);min-width:0}
+  .home-filters .filter-label{flex:1 1 100%}
+  .filters-reset{flex:1 1 100%;text-align:center}
+}
 .empty-state{text-align:center;padding:64px 24px;color:var(--slate)}
 .empty-state-icon{font-size:3rem;margin-bottom:16px;animation:fadeUp .5s ease both}
 .empty-state h3{font-size:1.2rem;font-weight:700;margin-bottom:8px;color:var(--navy)}
@@ -447,7 +479,12 @@ body.privacy-open .a11y-btn{bottom:calc(var(--bar-h, 64px) + 14px)}
 body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
 .privacy-bar a{color:var(--gold)}
 .privacy-bar button{font:inherit;font-weight:700;background:var(--gold);color:#1a3340;border:none;
-  border-radius:9px;padding:8px 22px;cursor:pointer}
+  border-radius:9px;padding:8px 22px;cursor:pointer;min-height:36px}
+.privacy-actions{display:flex;gap:10px;flex-shrink:0}
+.privacy-bar button.btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.65)}
+.privacy-bar button.btn-ghost:hover{background:rgba(255,255,255,.12)}
+.footer-consent{font:inherit;background:none;border:none;padding:0;cursor:pointer;
+  color:inherit;text-decoration:underline;min-height:24px}
 
 /* קישורי חובה בתחתית */
 .footer-nav{display:flex;gap:2px 12px;justify-content:center;flex-wrap:wrap}
@@ -637,6 +674,51 @@ body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
   <div class="intro-section anim-title">
     <div class="intro-inner" id="introText"></div>
   </div>
+  <div class="home-search anim-title" id="homeSearchBar">
+    <div class="home-search-inner">
+      <label class="search-box home-search-box">
+        <span class="sr-only">חיפוש בכל התפריט</span>
+        <span class="emoji" aria-hidden="true">🔍</span>
+        <input type="search" id="homeSearch" autocomplete="off"
+               placeholder="חיפוש בכל התפריט — שם, ארגון, נושא…">
+        <button type="button" id="homeSearchClear" aria-label="ניקוי החיפוש" hidden>✕</button>
+      </label>
+      <button type="button" id="homeFiltersToggle" class="filters-toggle"
+              aria-expanded="false" aria-controls="homeFilters">
+        <span class="emoji" aria-hidden="true">☰</span>סינון
+      </button>
+    </div>
+    <div class="home-filters" id="homeFilters" hidden>
+      <span class="filter-label">סנן לפי:</span>
+      <select class="filter-select" id="homeCat" aria-label="סינון לפי תחום"><option value="">כל התחומים</option></select>
+      <select class="filter-select" id="homeDept" aria-label="סינון לפי מחלקה"><option value="">כל המחלקות</option></select>
+      <select class="filter-select" id="homeTopic" aria-label="סינון לפי נושא"><option value="">כל הנושאים</option></select>
+      <select class="filter-select" id="homeAudience" aria-label="סינון לפי קהל יעד"><option value="">כל קהלי היעד</option></select>
+      <select class="filter-select" id="homeType" aria-label="סינון לפי סוג הפריט">
+        <option value="">כל הסוגים</option>
+        <option value="ספק">ספקים</option>
+        <option value="מסמך המלצות">מסמכים</option>
+      </select>
+      <select class="filter-select" id="homeSort" aria-label="סדר התצוגה">
+        <option value="">סדר מקורי</option>
+        <option value="az">לפי א־ב</option>
+        <option value="files">קודם עם קבצים</option>
+      </select>
+      <button type="button" id="homeReset" class="filters-reset">ניקוי הכול</button>
+    </div>
+    <div class="home-results" id="homeResults" hidden>
+      <div class="home-results-head">
+        <span class="results-count" id="homeResultsCount" role="status" aria-live="polite"></span>
+      </div>
+      <div class="items-grid" id="homeGrid" role="list"></div>
+      <div class="empty-state" id="homeEmptyState" style="display:none">
+        <div class="empty-state-icon" aria-hidden="true">🔍</div>
+        <h3>לא נמצאו פריטים</h3>
+        <p>נסו מילה אחרת או נקו את החיפוש</p>
+      </div>
+    </div>
+  </div>
+
   <div class="categories-section">
     <h2 class="section-title anim-title" id="sectionTitle"></h2>
     <div class="showcase anim-grid">
@@ -661,13 +743,6 @@ body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
   </div>
   <div class="filters-bar anim-filters">
     <div class="filters-bar-inner">
-      <label class="search-box">
-        <span class="sr-only">חיפוש בתוך התחום</span>
-        <span class="emoji" aria-hidden="true">🔍</span>
-        <input type="search" id="searchInput" placeholder="חיפוש לפי שם, ארגון, נושא…"
-               autocomplete="off" oninput="applyFilters()">
-        <button type="button" id="searchClear" aria-label="ניקוי החיפוש" hidden>✕</button>
-      </label>
       <span class="filter-label" id="filterLabel">סנן לפי:</span>
       <select class="filter-select" id="filterDept" aria-label="סינון לפי מחלקה" onchange="applyFilters()"><option value="">כל המחלקות</option></select>
       <select class="filter-select" id="filterTopic" aria-label="סינון לפי נושא" onchange="applyFilters()"><option value="">כל הנושאים</option></select>
@@ -727,6 +802,7 @@ body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
       <a href="accessibility.html">נגישות</a>
       <a href="privacy.html">פרטיות</a>
       <a href="terms.html">תנאי שימוש</a>
+      <button type="button" class="footer-consent" id="consentReopen">הגדרות מדידה</button>
     </nav>
   </div>
 </footer>
@@ -747,10 +823,14 @@ body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
   </div>
 </div>
 
-<div class="privacy-bar" id="privacyBar" data-open="0" role="region" aria-label="הודעה על פרטיות ועוגיות">
-  <span>האתר אינו משתמש בעוגיות מעקב ואינו אוסף מידע אישי.
+<div class="privacy-bar" id="privacyBar" data-open="0" role="region" aria-label="בחירת הסכמה למדידה">
+  <span>אנחנו מודדים את השימוש בתפריט כדי לשפר אותו, בעזרת Google Analytics שמשתמש בעוגיות.
+    אפשר לדחות — האתר יעבוד בדיוק אותו דבר.
     <a href="privacy.html">להצהרת הפרטיות המלאה</a></span>
-  <button type="button" id="privacyOk">הבנתי</button>
+  <span class="privacy-actions">
+    <button type="button" id="privacyDeny" class="btn-ghost">דחייה</button>
+    <button type="button" id="privacyOk">אישור</button>
+  </span>
 </div>
 
 <script>
@@ -1057,10 +1137,9 @@ const contrastWithWhite = hex => {
 
 // Shades keep the category's own hue — only lightness moves — so a gold page reads
 // gold and a teal page reads teal, instead of both drifting toward one dark colour.
-function applyCatTheme(cat){
-  const root = document.documentElement.style;
+function catVars(cat){
   const base = CAT_COLORS[cat];
-  if(!base){ clearCatTheme(); return; }
+  if(!base) return null;
   const [h, sat, l] = hexToHsl(base);
   const s2 = clamp(sat, 0.35, 0.8);
   const rgb = parseInt(base.slice(1), 16);
@@ -1070,17 +1149,33 @@ function applyCatTheme(cat){
   const blended = '#' + [r, g, b].map(c =>
     Math.round(c * ALPHA + 255 * (1 - ALPHA)).toString(16).padStart(2, '0')).join('');
   const softL = clamp(l * 1.15, 0.58, 0.85);
-  root.setProperty('--cat', `rgba(${r}, ${g}, ${b}, ${ALPHA})`);
-  root.setProperty('--cat-solid', base);
-  root.setProperty('--cat-fg', bestTextOn(blended));
-  root.setProperty('--cat-ink', hsl(h, s2, clamp(l * 0.5, 0.2, 0.34)));
   // צבע התג נבחר יחד עם צבע הטקסט שעליו, לפי יחס הניגודיות בפועל
   // ככל שמבהירים צבע יותר, כך הוא נושא פחות רוויה בלי להפוך לניאון.
   // בלי זה, בסיס כהה ורווי — כמו כחול המותג — מתבהיר לתכלת זוהרת.
   const softS = clamp(sat * (1 - Math.max(0, softL - l)), 0.4, 0.95);
   const softHex = hslHex(h, softS, softL);
-  root.setProperty('--cat-soft', softHex);
-  root.setProperty('--cat-soft-fg', bestTextOn(softHex));
+  return {
+    '--cat': `rgba(${r}, ${g}, ${b}, ${ALPHA})`,
+    '--cat-solid': base,
+    '--cat-fg': bestTextOn(blended),
+    '--cat-ink': hsl(h, s2, clamp(l * 0.5, 0.2, 0.34)),
+    '--cat-soft': softHex,
+    '--cat-soft-fg': bestTextOn(softHex)
+  };
+}
+
+function applyCatTheme(cat){
+  const v = catVars(cat);
+  if(!v){ clearCatTheme(); return; }
+  const root = document.documentElement.style;
+  Object.keys(v).forEach(k => root.setProperty(k, v[k]));
+}
+
+// בתוצאות החיפוש בעמוד הבית מעורבבים תחומים, ולכן כל כרטיס נושא את צבעי
+// התחום שלו בעצמו במקום לרשת אותם מהעמוד.
+function catVarsCss(cat){
+  const v = catVars(cat);
+  return v ? Object.keys(v).map(k => k + ':' + v[k]).join(';') : '';
 }
 function clearCatTheme(){
   ['--cat','--cat-solid','--cat-fg','--cat-ink','--cat-soft','--cat-soft-fg']
@@ -1120,12 +1215,8 @@ function buildFilters(){
   fillSel('filterTopic', topics, 'כל הנושאים');
   fillSel('filterAudience', auds, 'כל קהלי היעד');
   document.getElementById('filterType').value = '';
-  const q = document.getElementById('searchInput');
-  if(q) q.value = '';
   const so = document.getElementById('sortBy');
   if(so) so.value = '';
-  const cl = document.getElementById('searchClear');
-  if(cl) cl.hidden = true;
 }
 
 function fillSel(id,opts,ph){
@@ -1180,10 +1271,107 @@ function applyFilters(){
                                          : 'נסו לשנות את הפילטרים';
 }
 
+
+/* ── HOME SEARCH ────────────────────────────────────────── */
+// חיפוש רוחבי על כל התפריט. שורת הסינון נפתחת רק כשנוגעים בחיפוש,
+// כדי שבמצב הרגיל הבלוק יתפוס שורה אחת בלבד.
+const HOME_IDS = ['homeSearch','homeCat','homeDept','homeTopic','homeAudience','homeType','homeSort'];
+
+function buildHomeFilters(){
+  const all = LIVE_ITEMS;
+  const cats = DATA.categories.filter(c => all.some(i => i.category === c));
+  document.getElementById('homeCat').innerHTML = '<option value="">כל התחומים</option>' +
+    cats.map(c => `<option value="${escA(c)}">${escH(CAT_DISPLAY[c] || c)}</option>`).join('');
+  fillSel('homeDept',  [...new Set(all.map(i => i.dept).filter(Boolean))].sort(), 'כל המחלקות');
+  fillSel('homeTopic', [...new Set(all.map(i => i.topic).filter(Boolean))].sort(), 'כל הנושאים');
+  fillSel('homeAudience',
+    [...new Set(all.flatMap(i => (i.audience || '').split(',').map(a => a.trim())).filter(Boolean))].sort(),
+    'כל קהלי היעד');
+}
+
+function applyHomeFilters(){
+  const val = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+  const raw = val('homeSearch');
+  const q = searchNorm(raw);
+  const words = q ? q.split(' ').filter(Boolean) : [];
+  const cat = val('homeCat'), dept = val('homeDept'), topic = val('homeTopic');
+  const aud = val('homeAudience'), type = val('homeType'), sort = val('homeSort');
+
+  const cl = document.getElementById('homeSearchClear');
+  if(cl) cl.hidden = !raw;
+
+  const active = !!(words.length || cat || dept || topic || aud || type || sort);
+  document.body.classList.toggle('home-searching', active);
+  document.getElementById('homeResults').hidden = !active;
+  if(!active){ renderItems([], 'homeGrid'); return; }
+
+  let filtered = LIVE_ITEMS.filter(i => {
+    if(cat   && i.category !== cat) return false;
+    if(dept  && i.dept !== dept) return false;
+    if(topic && i.topic !== topic) return false;
+    if(aud   && !(i.audience || '').split(',').map(a => a.trim()).includes(aud)) return false;
+    if(type  && i.type !== type) return false;
+    if(words.length){
+      const hay = itemHaystack(i);
+      if(!words.every(word => hay.includes(word))) return false;   // כל המילים, בכל סדר
+    }
+    return true;
+  });
+  if(sort === 'az')    filtered = [...filtered].sort((a,b) => a.name.localeCompare(b.name,'he'));
+  if(sort === 'files') filtered = [...filtered].sort((a,b) => ((b.files||[]).length>0)-((a.files||[]).length>0));
+
+  renderItems(filtered, 'homeGrid');
+  document.getElementById('homeResultsCount').textContent = countLabel(filtered.length);
+  document.getElementById('homeEmptyState').style.display = filtered.length ? 'none' : 'block';
+  if(words.length){
+    clearTimeout(applyHomeFilters._t);
+    applyHomeFilters._t = setTimeout(() => track(filtered.length ? 'search' : 'search-empty', q), 1200);
+  }
+}
+
+function openHomeFilters(){
+  const panel  = document.getElementById('homeFilters');
+  const toggle = document.getElementById('homeFiltersToggle');
+  if(!panel || !panel.hidden) return;
+  panel.hidden = false;
+  toggle.setAttribute('aria-expanded', 'true');
+}
+
+function initHomeSearch(){
+  buildHomeFilters();
+  HOME_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', applyHomeFilters);
+  });
+  const search = document.getElementById('homeSearch');
+  // נגיעה בחיפוש פותחת גם את שורת הסינון, כפי שהתבקש
+  if(search) search.addEventListener('focus', openHomeFilters);
+
+  const panel  = document.getElementById('homeFilters');
+  const toggle = document.getElementById('homeFiltersToggle');
+  if(toggle && panel) toggle.onclick = () => {
+    const opening = panel.hidden;
+    panel.hidden = !opening;
+    toggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    if(opening){ const first = panel.querySelector('select'); if(first) first.focus(); }
+  };
+
+  const cl = document.getElementById('homeSearchClear');
+  if(cl) cl.onclick = () => { search.value = ''; search.focus(); applyHomeFilters(); };
+
+  const rs = document.getElementById('homeReset');
+  if(rs) rs.onclick = () => {
+    HOME_IDS.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    applyHomeFilters();
+    if(search) search.focus();
+  };
+}
+
 /* ── ITEMS ──────────────────────────────────────────────── */
-function renderItems(items){
+function renderItems(items, gridId){
   _renderedItems = items;
-  const grid = document.getElementById('itemsGrid');
+  const grid = document.getElementById(gridId || 'itemsGrid');
+  const ownColours = gridId === 'homeGrid';
   if(!items.length){grid.innerHTML='';return;}
   grid.innerHTML = items.map((item,idx) => {
     const isS = item.type==='ספק';
@@ -1214,7 +1402,8 @@ function renderItems(items){
       ${item.contactName?`<div class="item-contact-row"><span class="cname${org?' cname-small':''}">${org?'איש קשר: ':''}${escH(item.contactName)}</span>${item.phone?`<span>${escH(item.phone)}</span>`:''}</div>`:(item.phone?`<div class="item-contact-row"><span>${escH(item.phone)}</span></div>`:'')}
     </div>` : '';
 
-    return `<div class="item-card anim-card" role="listitem" style="animation-delay:${idx*0.05}s" onclick="openModal(${idx})">
+    const cardStyle = `animation-delay:${idx*0.05}s` + (ownColours ? ';' + catVarsCss(item.category) : '');
+    return `<div class="item-card anim-card" role="listitem" style="${escA(cardStyle)}" onclick="openModal(${idx})">
       <div class="item-card-top">
         <div class="item-type-badge ${isS?'badge-supplier':'badge-doc'}">
           <svg class="badge-roof" viewBox="0 0 74 22" preserveAspectRatio="none"><polygon points="37,0 74,22 0,22"/></svg>
@@ -1251,10 +1440,14 @@ function lockScroll(on){
 
 let _currentModalIdx = -1;
 function openModal(idx, fromHistory){
-  if(!fromHistory) pushView({view:'item', cat:_currentCat, idx, name:(_renderedItems[idx]||{}).name});
+  const _it = _renderedItems[idx] || {};
+  if(!fromHistory) pushView({view:'item', cat:_it.category || _currentCat, idx, name:_it.name});
   _currentModalIdx = idx;
   const item = _renderedItems[idx];
   if(!item) return;
+  track('item', item.name);
+  // נפתח מתוך תוצאות החיפוש בעמוד הבית — החלון לוקח את צבעי התחום של הפריט
+  if(!document.body.classList.contains('in-category')) applyCatTheme(item.category);
   const isS = item.type==='ספק';
 
   const badge = document.getElementById('modalBadge');
@@ -1496,7 +1689,12 @@ function closeModal(fromHistory){
   lockScroll(false);
   if(_lastFocus && document.contains(_lastFocus)){ _lastFocus.focus(); }
   _lastFocus = null;
-  if(_currentCat) setDocTitle(CAT_DISPLAY[_currentCat]||_currentCat);
+  if(document.body.classList.contains('in-category') && _currentCat){
+    setDocTitle(CAT_DISPLAY[_currentCat]||_currentCat);
+  }else{
+    setDocTitle('');
+    clearCatTheme();
+  }
   document.querySelectorAll('.file-viewer.open').forEach(v=>{
     v.classList.remove('open');v.dataset.loaded='';
     v.innerHTML='<div class="viewer-loading loading-pulse">⏳ טוען מסמך...</div>';
@@ -1520,6 +1718,7 @@ function viewUrl(st){
 function pushView(state){
   if(!history.state) history.replaceState({view:'home'}, '', viewUrl({view:'home'}));
   if(JSON.stringify(history.state) !== JSON.stringify(state)) history.pushState(state, '', viewUrl(state));
+  trackPage();
 }
 
 // פתיחת פריט לפי שם — זה מה שקישור חיצוני מביא איתו
@@ -1555,6 +1754,7 @@ window.addEventListener('popstate', e => {
   if(modalOpen) closeModal(true);
   if(st.view === 'category'){ openCategory(st.cat, true); }
   else { goHome(true); }
+  trackPage();
 });
 
 /* ── NAV ────────────────────────────────────────────────── */
@@ -1566,6 +1766,9 @@ function goHome(fromHistory){
   clearCatTheme();
   document.body.classList.remove('in-category');
   document.getElementById('backBtn').classList.remove('visible');
+  // אחרי ביקור בתחום, _renderedItems מצביע על פריטי התחום. רענון התוצאות
+  // מחזיר אותו לרשימה שבאמת מוצגת בעמוד הבית.
+  applyHomeFilters();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1681,23 +1884,24 @@ function initA11y(){
 }
 
 /* הודעת הפרטיות מוצגת פעם אחת; האישור נשמר במכשיר, לא בשרת */
-const PRIVACY_KEY = 'migdalor_privacy_seen';
+const CONSENT_KEY = 'migdalor_consent_v1';
+// '' = טרם נשאל, 'granted' = אישר, 'denied' = דחה.
+// דפדפן שחוסם אחסון מקומי נחשב כמי שלא אישר.
+function consentState(){ try{ return localStorage.getItem(CONSENT_KEY) || ''; }catch(err){ return 'denied'; } }
+function consentSave(v){ try{ localStorage.setItem(CONSENT_KEY, v); }catch(err){} }
 function initPrivacyBar(){
   const bar = document.getElementById('privacyBar');
-  let seen = false;
-  try{ seen = localStorage.getItem(PRIVACY_KEY) === '1'; }catch(err){ seen = true; }
   const lift = () => document.documentElement.style.setProperty('--bar-h', bar.offsetHeight + 'px');
-  if(!seen){
-    bar.dataset.open = '1';
-    document.body.classList.add('privacy-open');
-    lift();
-    window.addEventListener('resize', lift);
-  }
-  document.getElementById('privacyOk').onclick = () => {
-    bar.dataset.open = '0';
-    document.body.classList.remove('privacy-open');
-    try{ localStorage.setItem(PRIVACY_KEY, '1'); }catch(err){}
-  };
+  const show = () => { bar.dataset.open = '1'; document.body.classList.add('privacy-open'); lift(); };
+  const hide = () => { bar.dataset.open = '0'; document.body.classList.remove('privacy-open'); };
+  // דחייה נשמרת בדיוק כמו אישור, כדי שלא נשאל שוב בכל כניסה.
+  const choose = v => { consentSave(v); hide(); if(v === 'granted') loadGA(); };
+  window.addEventListener('resize', () => { if(bar.dataset.open === '1') lift(); });
+  document.getElementById('privacyOk').onclick   = () => choose('granted');
+  document.getElementById('privacyDeny').onclick = () => choose('denied');
+  const re = document.getElementById('consentReopen');
+  if(re) re.onclick = () => { show(); bar.scrollIntoView({block:'nearest'}); };
+  if(!consentState()) show();
 }
 
 // מיקוד במקלדת על אחד התחומים מדגיש אותו, בדיוק כמו מעבר עכבר
@@ -1708,56 +1912,88 @@ document.getElementById('catList').addEventListener('focusin', e => {
   if(idx >= 0) setActiveCat(idx);
 });
 
-const _sc = document.getElementById('searchClear');
-if(_sc) _sc.onclick = () => {
-  const q = document.getElementById('searchInput');
-  q.value = ''; q.focus(); applyFilters();
-};
-
 /* ── מדידה ─────────────────────────────────── */
 // שתי השורות הבאות הן כל מה שצריך כדי להפעיל מדידה.
 // כל עוד הן ריקות — האתר לא שולח שום דבר לאף אחד.
 const MEASURE = {
-  cloudflare: 'ffc9122d2c14416cb735e79f02d65d76',   // מזהה האתר ב-Cloudflare Web Analytics (מזהה ציבורי, לא סוד)
-  goatcounter: ''      // כתובת GoatCounter, אם יוחלט להוסיף מדידת אירועים
+  cloudflare: 'ffc9122d2c14416cb735e79f02d65d76',   // מזהה ציבורי, לא סוד
+  ga4: ''                                            // G-XXXXXXXXXX מתוך Google Analytics
 };
 
+// Cloudflare נטען תמיד: הוא לא משתמש בעוגיות ולא מזהה מבקרים, ולכן אינו טעון
+// הסכמה. Google Analytics נטען רק אחרי אישור מפורש בבאנר.
 function initMeasure(){
   if(MEASURE.cloudflare){
-    // spa:true גורם לו לספור גם מעבר בין תחומים ופריטים,
-    // כי לכל מסך באתר יש כתובת משלו.
     const b = document.createElement('script');
     b.defer = true;
     b.src = 'https://static.cloudflareinsights.com/beacon.min.js';
     b.setAttribute('data-cf-beacon', JSON.stringify({token: MEASURE.cloudflare, spa: true}));
     document.head.appendChild(b);
   }
-  if(MEASURE.goatcounter){
-    const g = document.createElement('script');
-    g.async = true;
-    g.src = 'https://gc.zgo.at/count.js';
-    g.setAttribute('data-goatcounter', MEASURE.goatcounter);
-    document.head.appendChild(g);
-  }
+  if(consentState() === 'granted') loadGA();
 }
 
-// אירוע: הורדת קובץ או חיפוש. נשלח רק לכלי שתומך באירועים.
-// לעולם לא נשלח שם, מזהה או פרט מזהה של מבקר.
-function track(kind, label){
-  if(!MEASURE.goatcounter || !window.goatcounter || !window.goatcounter.count) return;
-  try{
-    window.goatcounter.count({path: kind + '/' + String(label || '').slice(0, 80), event: true});
-  }catch(err){}
+let _gaLoaded = false;
+function loadGA(){
+  if(_gaLoaded || !MEASURE.ga4) return;
+  _gaLoaded = true;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){ window.dataLayer.push(arguments); };
+  gtag('js', new Date());
+  // send_page_view כבוי: לכל מסך באתר יש כתובת משלו, ואנחנו שולחים אותה בעצמנו
+  gtag('config', MEASURE.ga4, {send_page_view: false, anonymize_ip: true});
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(MEASURE.ga4);
+  document.head.appendChild(s);
+  trackPage();
+}
+
+// צפייה במסך. הכותרת נקראת בהשהיה קצרה, אחרי שהמסך סיים להיבנות.
+let _lastTrackedUrl = '';
+function trackPage(){
+  if(!window.gtag) return;
+  clearTimeout(trackPage._t);
+  trackPage._t = setTimeout(() => {
+    const url = location.href;
+    if(url === _lastTrackedUrl) return;
+    _lastTrackedUrl = url;
+    try{ gtag('event', 'page_view', {page_title: document.title, page_location: url}); }catch(err){}
+  }, 80);
+}
+
+// אירוע באתר. לעולם לא נשלח שם, מזהה או פרט מזהה של מבקר —
+// רק מה נלחץ בתפריט עצמו.
+function track(kind, label, extra){
+  if(!window.gtag) return;
+  const name = String(label || '').slice(0, 100);
+  const ev = kind === 'download'     ? ['file_download',     {file_name: name}]
+           : kind === 'search'       ? ['search',            {search_term: name}]
+           : kind === 'search-empty' ? ['search_no_results', {search_term: name}]
+           : kind === 'contact'      ? ['contact_click',     Object.assign({method: name}, extra || {})]
+           : kind === 'item'         ? ['view_item',         {item_name: name}]
+           : null;
+  if(!ev) return;
+  try{ gtag('event', ev[0], ev[1]); }catch(err){}
 }
 
 initMeasure();
 
-// מאזין אחד לכל הורדה, במקום קוד שמורכב מתוך שם הקובץ
+// מאזין אחד לכל ההורדות ולכל כפתורי יצירת הקשר
 document.addEventListener('click', e => {
-  const a = e.target.closest('[data-track-download]');
-  if(a) track('download', a.dataset.trackDownload);
+  const dl = e.target.closest('[data-track-download]');
+  if(dl){ track('download', dl.dataset.trackDownload); return; }
+  const c = e.target.closest('.contact-btn');
+  if(c){
+    const method = c.classList.contains('btn-phone')    ? 'phone'
+                 : c.classList.contains('btn-whatsapp') ? 'whatsapp'
+                 : c.classList.contains('btn-email')    ? 'email'
+                 : c.classList.contains('btn-site')     ? 'website' : 'other';
+    track('contact', method, {item_name: (_renderedItems[_currentModalIdx] || {}).name || ''});
+  }
 });
 
+initHomeSearch();
 initA11y();
 initPrivacyBar();
 

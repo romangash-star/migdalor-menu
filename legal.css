@@ -45,3 +45,12 @@ th{background:#eef4f4;color:var(--navy)}
 .site-footer a{color:var(--gold)}
 .footer-nav{margin-bottom:10px;display:flex;gap:4px 14px;justify-content:center;flex-wrap:wrap}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* כפתורי בחירת הסכמה למדידה */
+.callout button{font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;
+  background:#00586f;color:#fff;border:1.5px solid #00586f;border-radius:9px;
+  padding:9px 18px;margin-inline-end:8px;margin-block-start:4px;min-height:40px}
+.callout button:hover{background:#00465a;border-color:#00465a}
+.callout button#consentDeny{background:transparent;color:#00586f}
+.callout button#consentDeny:hover{background:rgba(0,88,111,.08)}
+.callout button:focus-visible{outline:3px solid #fcb84f;outline-offset:2px}
