@@ -933,16 +933,21 @@ $('publishBtn').onclick = async () => {
       .replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
     // ההחלפה נעשית דרך פונקציה: כמחרוזת, רצף כמו $' בתוך הנתונים היה מורחב
     // על ידי replace עצמו לכל שאר הקובץ, כולל תגית הסגירה של הסקריפט.
-    let updated = indexHtml.replace(/const DATA = \{[\s\S]*?\};/, () => 'const DATA = ' + json + ';');
-    if(updated === indexHtml) throw new Error('לא ניתן היה לעדכן את הנתונים בקובץ');
+    // נבדק אם הבלוק קיים בקובץ, ולא אם הטקסט השתנה: עריכה שלא נגעה
+    // באחד הבלוקים מייצרת טקסט זהה, וזה נראה בטעות כאילו הבלוק חסר.
+    const dataRe = /const DATA = \{[\s\S]*?\};/;
+    const siteRe = /^const SITE = \{[\s\S]*?\};/m;
+    if(!dataRe.test(indexHtml)) throw new Error('לא נמצא בלוק הנתונים (DATA) בקובץ index.html');
+    let updated = indexHtml.replace(dataRe, () => 'const DATA = ' + json + ';');
     if(site){
       const sjson = JSON.stringify(site)
         .replace(/</g, '\\u003c').replace(/>/g, '\\u003e')
         .replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
-      const before = updated;
-      updated = updated.replace(/^const SITE = \{[\s\S]*?\};/m, () => 'const SITE = ' + sjson + ';');
-      if(updated === before) throw new Error('לא נמצא בלוק התוכן של האתר בקובץ');
+      if(!siteRe.test(updated)) throw new Error('לא נמצא בלוק התוכן של האתר (SITE) בקובץ index.html');
+      updated = updated.replace(siteRe, () => 'const SITE = ' + sjson + ';');
     }
+    // שום שינוי בפועל — אין טעם לפתוח קומיט ריק
+    if(updated === indexHtml){ setDirty(false); return toast('אין שינויים לפרסום', 'ok'); }
     const res = await gh('/repos/' + REPO + '/contents/index.html', {
       method: 'PUT',
       body: JSON.stringify({message: 'Admin: update menu data', content: textToB64(updated), sha: indexSha, branch: BRANCH})
