@@ -701,7 +701,6 @@ body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
     </div>
     <div class="home-filters" id="homeFilters" hidden>
       <span class="filter-label">סנן לפי:</span>
-      <select class="filter-select" id="homeCat" aria-label="סינון לפי תחום"><option value="">כל התחומים</option></select>
       <select class="filter-select" id="homeDept" aria-label="סינון לפי מחלקה"><option value="">כל המחלקות</option></select>
       <select class="filter-select" id="homeTopic" aria-label="סינון לפי נושא"><option value="">כל הנושאים</option></select>
       <select class="filter-select" id="homeAudience" aria-label="סינון לפי קהל יעד"><option value="">כל קהלי היעד</option></select>
@@ -709,11 +708,6 @@ body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
         <option value="">כל הסוגים</option>
         <option value="ספק">ספקים</option>
         <option value="מסמך המלצות">מסמכים</option>
-      </select>
-      <select class="filter-select" id="homeSort" aria-label="סדר התצוגה">
-        <option value="">סדר מקורי</option>
-        <option value="az">לפי א־ב</option>
-        <option value="files">קודם עם קבצים</option>
       </select>
       <button type="button" id="homeReset" class="filters-reset">ניקוי הכול</button>
     </div>
@@ -1286,13 +1280,10 @@ function applyFilters(){
 /* ── HOME SEARCH ────────────────────────────────────────── */
 // חיפוש רוחבי על כל התפריט. שורת הסינון נפתחת רק כשנוגעים בחיפוש,
 // כדי שבמצב הרגיל הבלוק יתפוס שורה אחת בלבד.
-const HOME_IDS = ['homeSearch','homeCat','homeDept','homeTopic','homeAudience','homeType','homeSort'];
+const HOME_IDS = ['homeSearch','homeDept','homeTopic','homeAudience','homeType'];
 
 function buildHomeFilters(){
   const all = LIVE_ITEMS;
-  const cats = DATA.categories.filter(c => all.some(i => i.category === c));
-  document.getElementById('homeCat').innerHTML = '<option value="">כל התחומים</option>' +
-    cats.map(c => `<option value="${escA(c)}">${escH(CAT_DISPLAY[c] || c)}</option>`).join('');
   fillSel('homeDept',  [...new Set(all.map(i => i.dept).filter(Boolean))].sort(), 'כל המחלקות');
   fillSel('homeTopic', [...new Set(all.map(i => i.topic).filter(Boolean))].sort(), 'כל הנושאים');
   fillSel('homeAudience',
@@ -1305,19 +1296,18 @@ function applyHomeFilters(){
   const raw = val('homeSearch');
   const q = searchNorm(raw);
   const words = q ? q.split(' ').filter(Boolean) : [];
-  const cat = val('homeCat'), dept = val('homeDept'), topic = val('homeTopic');
-  const aud = val('homeAudience'), type = val('homeType'), sort = val('homeSort');
+  const dept = val('homeDept'), topic = val('homeTopic');
+  const aud = val('homeAudience'), type = val('homeType');
 
   const cl = document.getElementById('homeSearchClear');
   if(cl) cl.hidden = !raw;
 
-  const active = !!(words.length || cat || dept || topic || aud || type || sort);
+  const active = !!(words.length || dept || topic || aud || type);
   document.body.classList.toggle('home-searching', active);
   document.getElementById('homeResults').hidden = !active;
   if(!active){ renderItems([], 'homeGrid'); return; }
 
-  let filtered = LIVE_ITEMS.filter(i => {
-    if(cat   && i.category !== cat) return false;
+  const filtered = LIVE_ITEMS.filter(i => {
     if(dept  && i.dept !== dept) return false;
     if(topic && i.topic !== topic) return false;
     if(aud   && !(i.audience || '').split(',').map(a => a.trim()).includes(aud)) return false;
@@ -1328,9 +1318,6 @@ function applyHomeFilters(){
     }
     return true;
   });
-  if(sort === 'az')    filtered = [...filtered].sort((a,b) => a.name.localeCompare(b.name,'he'));
-  if(sort === 'files') filtered = [...filtered].sort((a,b) => ((b.files||[]).length>0)-((a.files||[]).length>0));
-
   renderItems(filtered, 'homeGrid');
   document.getElementById('homeResultsCount').textContent = countLabel(filtered.length);
   document.getElementById('homeEmptyState').style.display = filtered.length ? 'none' : 'block';
