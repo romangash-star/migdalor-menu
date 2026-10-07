@@ -159,7 +159,7 @@ body.home-searching .categories-section{display:none}
 .cat-page-desc{margin-top:6px;font-size:.85rem;line-height:1.6;max-width:820px}
 
 /* ── CATEGORY PAGE ───────────────────────────────────── */
-.cat-page-header{background:var(--cat-banner,var(--navy));color:#fff;padding:16px 0 18px;position:relative;overflow:hidden}
+.cat-page-header{background:var(--cat-banner,var(--cat,var(--navy)));color:var(--cat-fg,var(--white));padding:16px 0 18px;position:relative;overflow:hidden}
 .cat-page-header::after{content:'';position:absolute;top:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(252,184,79,.15) 0%,transparent 70%);pointer-events:none}
 .cat-page-header-inner{max-width:1200px;margin:0 auto;padding:0 24px;position:relative}
 .cat-page-title{font-family:'BrandTitle','Secular One',sans-serif;font-size:clamp(1.35rem,2.6vw,1.9rem);font-weight:400;margin-bottom:6px;letter-spacing:.07em}
@@ -1128,8 +1128,6 @@ const relLum = hex => {
   const lin = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
   return 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255);
 };
-// יחס הניגודיות של טקסט לבן על הצבע הנתון
-const contrastOnWhite = hex => 1.05 / (relLum(hex) + 0.05);
 const bestTextOn = hex => {
   const L = relLum(hex);
   const onWhite = 1.05 / (L + 0.05);
@@ -1145,6 +1143,7 @@ const contrastWithWhite = hex => {
 
 // Shades keep the category's own hue — only lightness moves — so a gold page reads
 // gold and a teal page reads teal, instead of both drifting toward one dark colour.
+const BRAND_BLUE = '#00586f';   // אותו כחול שנושא את הפס העליון של האתר
 function catVars(cat){
   const base = CAT_COLORS[cat];
   if(!base) return null;
@@ -1162,16 +1161,7 @@ function catVars(cat){
   // בלי זה, בסיס כהה ורווי — כמו כחול המותג — מתבהיר לתכלת זוהרת.
   const softS = clamp(sat * (1 - Math.max(0, softL - l)), 0.4, 0.95);
   const softHex = hslHex(h, softS, softL);
-  // הבאנר נושא טקסט לבן תמיד, ולכן הצבע מוכהה עד שהניגודיות מול לבן עומדת
-  // בתקן. כחול המותג כבר עומד בו, ולכן הוא נשאר בדיוק כפי שהוא ונצמד
-  // לצבע הפס שמעליו. צבעי הכרטיסים והבתים אינם מושפעים.
-  let bl = l, banner = base;
-  for(let i = 0; i < 60 && contrastOnWhite(banner) < 4.5; i++){
-    bl = Math.max(0.04, bl - 0.02);
-    banner = hslHex(h, sat, bl);
-  }
-  return {
-    '--cat-banner': banner,
+  const out = {
     '--cat': `rgba(${r}, ${g}, ${b}, ${ALPHA})`,
     '--cat-solid': base,
     '--cat-fg': bestTextOn(blended),
@@ -1179,11 +1169,20 @@ function catVars(cat){
     '--cat-soft': softHex,
     '--cat-soft-fg': bestTextOn(softHex)
   };
+  // התחום שנושא את כחול המותג עצמו מקבל בבאנר את הגוון של הפס שמעליו,
+  // כך ששניהם נקראים כרצף אחד. שאר התחומים אינם מושפעים.
+  if(base.toLowerCase() === BRAND_BLUE){
+    out['--cat-banner'] = 'linear-gradient(135deg,#00586f 0%,#1c7d8f 100%)';
+  }
+  return out;
 }
 
 function applyCatTheme(cat){
   const v = catVars(cat);
-  if(!v){ clearCatTheme(); return; }
+  // מנקים קודם: תחום אחד יכול להגדיר משתנה שהתחום הבא אינו מגדיר,
+  // ובלי הניקוי הוא היה נדבק גם לעמוד הבא.
+  clearCatTheme();
+  if(!v) return;
   const root = document.documentElement.style;
   Object.keys(v).forEach(k => root.setProperty(k, v[k]));
 }
