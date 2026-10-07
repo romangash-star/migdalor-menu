@@ -1894,7 +1894,11 @@ function initPrivacyBar(){
   const show = () => { bar.dataset.open = '1'; document.body.classList.add('privacy-open'); lift(); };
   const hide = () => { bar.dataset.open = '0'; document.body.classList.remove('privacy-open'); };
   // דחייה נשמרת בדיוק כמו אישור, כדי שלא נשאל שוב בכל כניסה.
-  const choose = v => { consentSave(v); hide(); if(v === 'granted') loadGA(); };
+  const choose = v => {
+    consentSave(v);
+    hide();
+    if(v === 'granted') loadGA(); else denyGA();
+  };
   window.addEventListener('resize', () => { if(bar.dataset.open === '1') lift(); });
   document.getElementById('privacyOk').onclick   = () => choose('granted');
   document.getElementById('privacyDeny').onclick = () => choose('denied');
@@ -1930,6 +1934,25 @@ function initMeasure(){
     document.head.appendChild(b);
   }
   if(consentState() === 'granted') loadGA();
+  else if(consentState() === 'denied') denyGA();   // מנקה שאריות מאישור קודם
+}
+
+// חזרה מאישור: מכבים את השליחה ומוחקים את העוגיות שגוגל כבר הספיק לכתוב,
+// כך שההבטחה בהצהרת הפרטיות מתקיימת בפועל ולא רק בדפדפן נקי.
+function denyGA(){
+  if(MEASURE.ga4) window['ga-disable-' + MEASURE.ga4] = true;
+  const names = document.cookie.split(';')
+    .map(c => c.split('=')[0].trim())
+    .filter(n => /^_ga/.test(n) || /^_gid$/.test(n) || /^_gat/.test(n));
+  if(!names.length) return;
+  // גוגל כותב את העוגייה על דומיין האב, ולכן המחיקה מנסה כל צורה אפשרית
+  const host = location.hostname;
+  const parts = host.split('.');
+  const domains = ['', host, '.' + host];
+  if(parts.length > 2) domains.push('.' + parts.slice(-2).join('.'));
+  names.forEach(n => domains.forEach(d => {
+    document.cookie = n + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : '');
+  }));
 }
 
 let _gaLoaded = false;
