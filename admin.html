@@ -800,7 +800,8 @@ async function showFilePreview(box, f){
   }
   try {
     const lib = await loadPdfJs();
-    const pdf = await lib.getDocument(url).promise;
+    // אותה סיבה כמו באתר: התקנת הגופן המוטמע משבשת אותיות עבריות
+    const pdf = await lib.getDocument({url: url, disableFontFace: true}).promise;
     const pages = Math.min(pdf.numPages, 3);
     const width = box.clientWidth || 420;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
