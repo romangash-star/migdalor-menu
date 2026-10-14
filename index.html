@@ -1154,41 +1154,35 @@ const contrastWithWhite = hex => {
 
 // Shades keep the category's own hue — only lightness moves — so a gold page reads
 // gold and a teal page reads teal, instead of both drifting toward one dark colour.
-const BRAND_BLUE = '#00586f';   // אותו כחול שנושא את הפס העליון של האתר
-const HEADER_MID = '#0e6a7f';   // אמצע המעבר של הפס: בין #00586f ל-#1c7d8f
+const HEADER_MID = '#0e6a7f';   // גוון הפס העליון, זה שהלוגו יושב עליו
+// גוון כהה יותר מאותו הפס, להדגשות קטנות כמו מסגרת שדה חיפוש בפוקוס
+const BRAND_INK = (() => {
+  const [hh, ss, ll] = hexToHsl(HEADER_MID);
+  return hslHex(hh, Math.min(ss, 0.8), Math.max(0.18, ll * 0.62));
+})();
+
+// כל עמודי התחום לובשים את גוון הפס העליון, כך שהאתר נקרא כיחידה אחת.
+// היוצא מן הכלל הוא הבית הקטן שמעל כל פריט: הוא ממשיך לשאת את צבע התחום
+// שלו, וזה מה שמבדיל בין התחומים. איור הבתים ורשימת התחומים בעמוד הבית
+// אינם עוברים דרך כאן ונשארים צבעוניים.
 function catVars(cat){
   const base = CAT_COLORS[cat];
   if(!base) return null;
   const [h, sat, l] = hexToHsl(base);
-  const s2 = clamp(sat, 0.35, 0.8);
-  const rgb = parseInt(base.slice(1), 16);
-  const [r, g, b] = [(rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255];
-  const ALPHA = 0.8;                                   // שקיפות כמו באיור הבתים
-  // הצבע נראה בהיר יותר אחרי המיזוג עם הרקע, ולכן הניגודיות נמדדת על התוצאה
-  const blended = '#' + [r, g, b].map(c =>
-    Math.round(c * ALPHA + 255 * (1 - ALPHA)).toString(16).padStart(2, '0')).join('');
   const softL = clamp(l * 1.15, 0.58, 0.85);
-  // צבע התג נבחר יחד עם צבע הטקסט שעליו, לפי יחס הניגודיות בפועל
+  // צבע התג נבחר יחד עם צבע הטקסט שעליו, לפי יחס הניגודיות בפועל.
   // ככל שמבהירים צבע יותר, כך הוא נושא פחות רוויה בלי להפוך לניאון.
-  // בלי זה, בסיס כהה ורווי — כמו כחול המותג — מתבהיר לתכלת זוהרת.
   const softS = clamp(sat * (1 - Math.max(0, softL - l)), 0.4, 0.95);
   const softHex = hslHex(h, softS, softL);
-  const out = {
-    '--cat': `rgba(${r}, ${g}, ${b}, ${ALPHA})`,
-    '--cat-solid': base,
-    '--cat-fg': bestTextOn(blended),
-    '--cat-ink': hsl(h, s2, clamp(l * 0.5, 0.2, 0.34)),
+  return {
+    '--cat': HEADER_MID,
+    '--cat-banner': HEADER_MID,
+    '--cat-solid': HEADER_MID,
+    '--cat-fg': '#fff',
+    '--cat-ink': BRAND_INK,
     '--cat-soft': softHex,
     '--cat-soft-fg': bestTextOn(softHex)
   };
-  // התחום שנושא את כחול המותג עצמו מקבל בבאנר את הגוון של הפס שמעליו,
-  // כך ששניהם נקראים כרצף אחד. שאר התחומים אינם מושפעים.
-  if(base.toLowerCase() === BRAND_BLUE){
-    // הפס העליון הוא מעבר בין שני גוונים, והבאנר גבוה ממנו — אותו מעבר
-    // היה רץ בקצב אחר ויוצר הפרש. צבע אחיד מאמצע הפס מבטל את ההפרש.
-    out['--cat-banner'] = HEADER_MID;
-  }
-  return out;
 }
 
 function applyCatTheme(cat){
