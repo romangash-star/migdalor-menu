@@ -309,7 +309,12 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
       </div>
       <div class="row">
         <div class="field"><label for="fAudience">קהל יעד</label><input id="fAudience"></div>
-        <div class="field"><label for="fTopic">נושא</label><input id="fTopic"></div>
+        <div class="field"><label for="fTopic">נושאים</label>
+          <input id="fTopic" list="topicList" autocomplete="off">
+          <datalist id="topicList"></datalist>
+          <small class="hint">אפשר כמה נושאים, מופרדים בפסיק. הראשון הוא הנושא הראשי, ושאר התיוגים
+            נועדו לכך שסינון באתר יעלה את הפריט. סינון באתר מוצא פריט לפי כל אחד מהם.</small>
+        </div>
       </div>
       <div class="row">
         <div class="field"><label for="fDept">מחלקה</label><input id="fDept"></div>
@@ -625,6 +630,10 @@ function openEditor(idx){
   $('fStatus').value = item.status === 'ממתין' ? 'ממתין' : '';
   $('fAudience').value = item.audience || '';
   $('fTopic').value = item.topic || '';
+  // רשימת הנושאים שכבר בשימוש, כדי שלא ייווצרו וריאציות כתיב של אותו נושא
+  const known = [...new Set(data.items.flatMap(i =>
+    String(i.topic || '').split(',').map(t => t.trim()).filter(Boolean)))].sort();
+  $('topicList').innerHTML = known.map(t => `<option value="${esc(t)}"></option>`).join('');
   $('fDept').value = item.dept || '';
   $('fGafan').value = item.gafan === 'כן' ? 'כן' : '';
   $('fOrg').value = item.org || '';
