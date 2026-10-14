@@ -509,7 +509,7 @@ body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
 <a class="skip-link" href="#mainContent">דילוג לתוכן המרכזי</a>
 <header class="site-header">
   <div class="header-inner">
-    <button type="button" class="site-logo" onclick="goHome()" aria-label="המגדלור — חזרה לעמוד הראשי">
+    <button type="button" class="site-logo" onclick="goHomeFresh()" aria-label="המגדלור — חזרה לעמוד הראשי וניקוי החיפוש">
       <img src="logo-sm.png" width="480" height="224" alt="" class="logo-img">
     </button>
     <button type="button" class="header-back" id="backBtn" onclick="goHome()">&#8592; חזרה לתפריט הראשי</button>
@@ -1357,6 +1357,21 @@ function applyHomeFilters(){
   }
 }
 
+// מרוקן את החיפוש ואת הסינון בעמוד הבית ומצייר מחדש
+function clearHomeFilters(){
+  HOME_IDS.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  applyHomeFilters();
+}
+
+// לחיצה על הלוגו = לחזור להתחלה. גם מעמוד תחום וגם כשכבר בבית עם סינון פעיל.
+function goHomeFresh(){
+  clearHomeFilters();
+  const panel = document.getElementById('homeFilters');
+  const toggle = document.getElementById('homeFiltersToggle');
+  if(panel && !panel.hidden){ panel.hidden = true; toggle.setAttribute('aria-expanded', 'false'); }
+  goHome();
+}
+
 function openHomeFilters(){
   const panel  = document.getElementById('homeFilters');
   const toggle = document.getElementById('homeFiltersToggle');
@@ -1389,8 +1404,7 @@ function initHomeSearch(){
 
   const rs = document.getElementById('homeReset');
   if(rs) rs.onclick = () => {
-    HOME_IDS.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
-    applyHomeFilters();
+    clearHomeFilters();
     if(search) search.focus();
   };
 }
