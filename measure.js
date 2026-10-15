@@ -70,7 +70,7 @@
     bar.innerHTML =
       '<span>אנחנו מודדים את השימוש באתר כדי לשפר אותו, בעזרת Google Analytics שמשתמש בעוגיות. ' +
       'אפשר לדחות — האתר יעבוד בדיוק אותו דבר. ' +
-      '<a href="privacy.html">להצהרת הפרטיות המלאה</a></span>' +
+      '<a href="privacy.html">למדיניות הפרטיות המלאה</a></span>' +
       '<span class="consent-actions">' +
       '<button type="button" data-consent="denied" class="consent-ghost">דחייה</button>' +
       '<button type="button" data-consent="granted">אישור</button>' +

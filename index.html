@@ -828,14 +828,14 @@ body.privacy-open .a11y-panel{bottom:calc(var(--bar-h, 64px) + 76px)}
   <button type="button" id="a11yReset">איפוס ההגדרות</button>
   <div class="a11y-links-row">
     <a href="accessibility.html">הצהרת נגישות</a>
-    <a href="privacy.html">הצהרת פרטיות</a>
+    <a href="privacy.html">מדיניות פרטיות</a>
   </div>
 </div>
 
 <div class="privacy-bar" id="privacyBar" data-open="0" role="region" aria-label="בחירת הסכמה למדידה">
   <span>אנחנו מודדים את השימוש בתפריט כדי לשפר אותו, בעזרת Google Analytics שמשתמש בעוגיות.
     אפשר לדחות — האתר יעבוד בדיוק אותו דבר.
-    <a href="privacy.html">להצהרת הפרטיות המלאה</a></span>
+    <a href="privacy.html">למדיניות הפרטיות המלאה</a></span>
   <span class="privacy-actions">
     <button type="button" id="privacyDeny" class="btn-ghost">דחייה</button>
     <button type="button" id="privacyOk">אישור</button>
@@ -2042,7 +2042,7 @@ function initMeasure(){
 }
 
 // חזרה מאישור: מכבים את השליחה ומוחקים את העוגיות שגוגל כבר הספיק לכתוב,
-// כך שההבטחה בהצהרת הפרטיות מתקיימת בפועל ולא רק בדפדפן נקי.
+// כך שההבטחה במדיניות הפרטיות מתקיימת בפועל ולא רק בדפדפן נקי.
 function denyGA(){
   if(MEASURE.ga4) window['ga-disable-' + MEASURE.ga4] = true;
   // דפדפן שחוסם עוגיות זורק כבר בקריאה. בלי השמירה הזו כל שאר הקובץ לא היה רץ,
