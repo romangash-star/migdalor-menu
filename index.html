@@ -1242,9 +1242,9 @@ function openCategory(cat, fromHistory){
 }
 
 function buildFilters(){
-  const depts  = [...new Set(currentItems.map(i=>i.dept).filter(Boolean))].sort();
+  const depts  = [...new Set(currentItems.flatMap(deptsOf))].sort();
   const topics = [...new Set(currentItems.flatMap(topicsOf))].sort();
-  const auds   = [...new Set(currentItems.flatMap(i=>(i.audience||'').split(',').map(a=>a.trim())).filter(Boolean))].sort();
+  const auds   = [...new Set(currentItems.flatMap(audsOf))].sort();
   fillSel('filterDept', depts, 'כל המחלקות');
   fillSel('filterTopic', topics, 'כל הנושאים');
   fillSel('filterAudience', auds, 'כל קהלי היעד');
@@ -1260,7 +1260,10 @@ function fillSel(id,opts,ph){
 
 // לפריט יכול להיות יותר מנושא אחד. הראשון הוא הנושא הראשי שנקבע בלוח,
 // והשאר תיוגים נוספים שנועדו לכך שסינון לפי נושא יעלה כל מה שרלוונטי.
-const topicsOf = i => String(i.topic || '').split(',').map(t => t.trim()).filter(Boolean);
+const listOf = v => String(v || '').split(',').map(t => t.trim()).filter(Boolean);
+const topicsOf = i => listOf(i.topic);
+const deptsOf  = i => listOf(i.dept);
+const audsOf   = i => listOf(i.audience);
 
 // חיפוש חופשי: מתעלם ממקפים, גרשיים ורווחים כפולים, כדי ש"צה״ל" ו"צהל" יימצאו זה את זה
 const searchNorm = t => String(t || '').toLowerCase()
@@ -1268,7 +1271,7 @@ const searchNorm = t => String(t || '').toLowerCase()
   .replace(/\s+/g, ' ').trim();
 
 const itemHaystack = i => searchNorm([i.name, i.summary, i.description, i.org, i.contactName,
-  topicsOf(i).join(' '), i.dept, i.audience, i.notes,
+  topicsOf(i).join(' '), deptsOf(i).join(' '), audsOf(i).join(' '), i.notes,
   (i.files || []).map(f => f.name).join(' ')].join(' '));
 
 function applyFilters(){
@@ -1284,9 +1287,9 @@ function applyFilters(){
   if(clear) clear.hidden = !(qEl && qEl.value);
 
   let filtered = currentItems.filter(i=>{
-    if(dept  && i.dept!==dept) return false;
+    if(dept  && !deptsOf(i).includes(dept)) return false;
     if(topic && !topicsOf(i).includes(topic)) return false;
-    if(aud   && !(i.audience||'').split(',').map(a=>a.trim()).includes(aud)) return false;
+    if(aud   && !audsOf(i).includes(aud)) return false;
     if(type  && i.type!==type) return false;
     if(words.length){
       const hay = itemHaystack(i);
@@ -1318,11 +1321,9 @@ const HOME_IDS = ['homeSearch','homeDept','homeTopic','homeAudience','homeType']
 
 function buildHomeFilters(){
   const all = LIVE_ITEMS;
-  fillSel('homeDept',  [...new Set(all.map(i => i.dept).filter(Boolean))].sort(), 'כל המחלקות');
+  fillSel('homeDept',  [...new Set(all.flatMap(deptsOf))].sort(), 'כל המחלקות');
   fillSel('homeTopic', [...new Set(all.flatMap(topicsOf))].sort(), 'כל הנושאים');
-  fillSel('homeAudience',
-    [...new Set(all.flatMap(i => (i.audience || '').split(',').map(a => a.trim())).filter(Boolean))].sort(),
-    'כל קהלי היעד');
+  fillSel('homeAudience', [...new Set(all.flatMap(audsOf))].sort(), 'כל קהלי היעד');
 }
 
 function applyHomeFilters(){
@@ -1342,9 +1343,9 @@ function applyHomeFilters(){
   if(!active){ renderItems([], 'homeGrid'); return; }
 
   const filtered = LIVE_ITEMS.filter(i => {
-    if(dept  && i.dept !== dept) return false;
+    if(dept  && !deptsOf(i).includes(dept)) return false;
     if(topic && !topicsOf(i).includes(topic)) return false;
-    if(aud   && !(i.audience || '').split(',').map(a => a.trim()).includes(aud)) return false;
+    if(aud   && !audsOf(i).includes(aud)) return false;
     if(type  && i.type !== type) return false;
     if(words.length){
       const hay = itemHaystack(i);
@@ -1422,7 +1423,7 @@ function renderItems(items, gridId){
   grid.innerHTML = items.map((item,idx) => {
     const isS = item.type==='ספק';
     const tags = [
-      item.dept  ? `<span class="meta-tag">${escH(item.dept)}</span>` : '',
+      deptsOf(item).map(dp => `<span class="meta-tag">${escH(dp)}</span>`).join(''),
       topicsOf(item).map(t => `<span class="meta-tag topic">${escH(t)}</span>`).join('')
     ].filter(Boolean).join('');
 
@@ -1516,12 +1517,13 @@ function openModal(idx, fromHistory){
   const chip = (label, value) => `<div class="info-chip"><b>${escH(label)}</b><span>${escH(value)}</span></div>`;
   const details = [
     item.category ? chip('תחום', item.category) : '',
-    item.dept     ? chip('מחלקה', item.dept)    : '',
+    item.dept     ? chip(deptsOf(item).length > 1 ? 'מחלקות' : 'מחלקה',
+                          deptsOf(item).join(' · '))       : '',
     item.topic    ? chip(topicsOf(item).length > 1 ? 'נושאים' : 'נושא',
                           topicsOf(item).join(' · '))      : '',
     item.gafan==='כן' ? chip('גפ"ן', '✓ קיים')  : ''
   ].join('');
-  const auds = (item.audience||'').split(',').map(a=>a.trim()).filter(Boolean);
+  const auds = audsOf(item);
 
   let html = '';
   if(details || auds.length){
