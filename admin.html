@@ -158,6 +158,10 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
   .login-box{padding:26px 22px 24px}
   .login-watermark{left:-90px;bottom:-90px;width:70vw}
 }
+.checks{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 10px;border:1.5px solid #dbe3e6;border-radius:9px;background:#fafcfc}
+.check{display:inline-flex;align-items:center;gap:6px;font-size:.88rem;cursor:pointer;min-height:30px}
+.check input{width:16px;height:16px;accent-color:#0e6a7f;cursor:pointer;flex-shrink:0}
+.check:hover span{color:#0e6a7f}
 </style>
 </head>
 <body>
@@ -255,6 +259,15 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
       </div>
       <div class="field"><label for="sSection">כותרת חטיבת התחומים</label><input id="sSection"></div>
 
+      <div class="sec-title">נושאי העל</div>
+      <div class="field">
+        <label for="sTopics">רשימת הנושאים</label>
+        <textarea id="sTopics" rows="12"></textarea>
+        <div class="hint">נושא אחד בכל שורה, לפי הסדר שבו יופיעו בתפריט הסינון באתר.
+          מחיקת נושא מכאן מוציאה אותו מהתפריט; בפריטים שנושאים אותו הוא יהפוך לתיוג חופשי
+          וימשיך להימצא בחיפוש.</div>
+      </div>
+
       <div class="sec-title">כותרות התחומים</div>
       <div id="sCats"></div>
 
@@ -316,14 +329,20 @@ label{display:block;font-size:.78rem;font-weight:700;color:var(--slate);margin-b
           <datalist id="audList"></datalist>
           <small class="hint">אפשר כמה קהלים, מופרדים בפסיק. סינון באתר מוצא את הפריט לפי כל אחד מהם.</small>
         </div>
-        <div class="field"><label for="fTopic">נושאים</label>
-          <input id="fTopic" list="topicList" autocomplete="off">
-          <datalist id="topicList"></datalist>
-          <small class="hint">אפשר כמה נושאים, מופרדים בפסיק. הראשון הוא הנושא הראשי, ושאר התיוגים
-            נועדו לכך שסינון באתר יעלה את הפריט. סינון באתר מוצא פריט לפי כל אחד מהם.</small>
+        <div class="field">
+          <label id="fTopicLabel">נושאי על</label>
+          <div id="fTopics" class="checks" role="group" aria-labelledby="fTopicLabel"></div>
+          <small class="hint">רשימה קבועה. רק נושאים מכאן מופיעים בתפריט הסינון באתר.
+            לעריכת הרשימה עצמה — &quot;תוכן האתר&quot; למעלה.</small>
         </div>
       </div>
       <div class="row">
+        <div class="field"><label for="fTags">תיוגים חופשיים</label>
+          <input id="fTags" list="tagList" autocomplete="off">
+          <datalist id="tagList"></datalist>
+          <small class="hint">מילים נוספות שיעזרו למצוא את הפריט בחיפוש, מופרדות בפסיק —
+            למשל סיור, השתלמות, להט&quot;ב. אינן נכנסות לתפריט הסינון.</small>
+        </div>
         <div class="field"><label for="fDept">מחלקות</label>
           <input id="fDept" list="deptList" autocomplete="off">
           <datalist id="deptList"></datalist>
@@ -372,6 +391,8 @@ const TOKEN_KEY = 'migdalor_admin_token';
 let token = '';
 let data = null;        // {categories, items}
 let site = null;        // טקסטים וצבעים של האתר
+const splitList = v => String(v || '').split(',').map(t => t.trim()).filter(Boolean);
+const siteTopics = () => (site && Array.isArray(site.topics)) ? site.topics : [];
 let indexHtml = '';     // full index.html text
 let indexSha = '';      // sha of the loaded index.html — guards against overwriting newer edits
 let dirty = false;
@@ -640,14 +661,22 @@ function openEditor(idx){
   $('fType').value = item.type === 'ספק' ? 'ספק' : 'מסמך המלצות';
   $('fStatus').value = item.status === 'ממתין' ? 'ממתין' : '';
   $('fAudience').value = item.audience || '';
-  $('fTopic').value = item.topic || '';
+  // נושאי העל מסומנים בתיבות; כל ערך נושא שאינו ברשימה הרשמית מוצג בשדה
+  // התיוגים החופשיים, כך שהעורך רואה בדיוק מה יישמר ושום תיוג לא נעלם.
+  const official = siteTopics();
+  const onItem   = splitList(item.topic);
+  $('fTopics').innerHTML = official.map((t, n) => `<label class="check">
+      <input type="checkbox" value="${esc(t)}"${onItem.includes(t) ? ' checked' : ''}>
+      <span>${esc(t)}</span></label>`).join('');
+  const strays = onItem.filter(t => !official.includes(t));
+  $('fTags').value = [...new Set(splitList(item.tags).concat(strays))].join(', ');
+
   // הערכים שכבר בשימוש, כדי שלא ייווצרו שני כתיבים לאותו תיוג
-  const used = f => [...new Set(data.items.flatMap(i =>
-    String(i[f] || '').split(',').map(t => t.trim()).filter(Boolean)))].sort();
+  const used = f => [...new Set(data.items.flatMap(i => splitList(i[f])))].sort();
   const fillList = (listId, field) => {
     $(listId).innerHTML = used(field).map(t => `<option value="${esc(t)}"></option>`).join('');
   };
-  fillList('topicList', 'topic');
+  fillList('tagList', 'tags');
   fillList('deptList', 'dept');
   fillList('audList', 'audience');
   $('fDept').value = item.dept || '';
@@ -707,6 +736,7 @@ function openSiteEditor(){
   $('sHeroSub').value   = site.hero.subtitle || '';
   $('sIntro').value     = (site.intro || []).join(PARA_SEP);
   $('sSection').value   = site.sectionTitle || '';
+  $('sTopics').value    = siteTopics().join('\n');
   $('sJoinText').value  = site.footer.joinText || '';
   $('sJoinEmail').value = site.footer.joinEmail || '';
   $('sAboutText').value = site.footer.aboutText || '';
@@ -740,6 +770,8 @@ function applySiteEditor(){
   site.hero.subtitle = $('sHeroSub').value.trim();
   site.intro         = $('sIntro').value.split(PARA_SPLIT).map(p => p.trim()).filter(Boolean);
   site.sectionTitle  = $('sSection').value.trim();
+  site.topics        = [...new Set($('sTopics').value.split('\n')
+                        .map(t => t.trim()).filter(Boolean))];
   site.footer.joinText   = $('sJoinText').value.trim();
   site.footer.joinEmail  = $('sJoinEmail').value.trim();
   site.footer.aboutText  = $('sAboutText').value.trim();
@@ -856,7 +888,7 @@ async function showFilePreview(box, f){
 let newItemDraft = {};
 $('newItemBtn').onclick = () => {
   newItemDraft = {name:'', category: activeCat === '__all__' ? catsOf()[0] : activeCat, dept:'', org:'', contactName:'',
-    phone:'', email:'', website:'', notes:'', audience:'', topic:'', gafan:'',
+    phone:'', email:'', website:'', notes:'', audience:'', topic:'', tags:'', gafan:'',
     type:'מסמך המלצות', status:'', summary:'', description:'', files:[]};
   data.items.push(newItemDraft);
   openEditor(data.items.length - 1);
@@ -888,7 +920,8 @@ $('applyItemBtn').onclick = () => {
     type: $('fType').value,
     status: $('fStatus').value,
     audience: $('fAudience').value.trim(),
-    topic: $('fTopic').value.trim(),
+    topic: [...$('fTopics').querySelectorAll('input:checked')].map(c => c.value).join(', '),
+    tags: $('fTags').value.trim(),
     dept: $('fDept').value.trim(),
     gafan: $('fGafan').value,
     org: $('fOrg').value.trim(),
